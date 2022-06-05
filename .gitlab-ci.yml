@@ -3,19 +3,22 @@
 
 stages:
   - build
+  - test
+
+image: maven:latest
 
 variables:
   GIT_STRATEGY: clone
   HEROKU_APP_NAME: asdcprojectexpensify
   HEROKU_API_KEY: 13b45a4d-c3cd-41e9-b0e4-4df19d76afbe
 
-maven-build-stage:
+build-job:
   stage: build
   tags:
-    - grad
+    - dalfcs_docker_kvm
   script:
-    - $MAVEN_HOME/bin/mvn clean
-    - mvn clean install
+    - echo "building maven project."
+    - mvn compile
 
 deploy-test:
   stage:deploy
