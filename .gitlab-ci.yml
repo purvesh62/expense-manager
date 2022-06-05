@@ -1,9 +1,7 @@
-
-
-
 stages:
   - build
   - test
+  - deploy
 
 image: maven:latest
 
@@ -21,9 +19,9 @@ build-job:
     - mvn compile
 
 deploy-test:
-  stage:deploy
+  stage: deploy
   tags:
-    -  dalfcs_gitlab_docker_ci
+    - dalfcs_docker_kvm
   image: ruby:2.6
   script:
     - apt-get update -qy
@@ -33,6 +31,7 @@ deploy-test:
     key=$HEROKU_API_KEY
     only:
       - develop
+
 #stages:
 #  - build
 #  - test
