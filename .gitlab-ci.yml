@@ -1,8 +1,13 @@
+
+
+
 stages:
   - build
 
 variables:
   GIT_STRATEGY: clone
+  HEROKU_APP_NAME: asdcprojectexpensify
+  HEROKU_API_KEY: 13b45a4d-c3cd-41e9-b0e4-4df19d76afbe
 
 maven-build-stage:
   stage: build
@@ -12,6 +17,19 @@ maven-build-stage:
     - $MAVEN_HOME/bin/mvn clean
     - mvn clean install
 
+deploy-test:
+  stage:deploy
+  tags:
+    -  dalfcs_gitlab_docker_ci
+  image: ruby:2.6
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dp
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-
+    key=$HEROKU_API_KEY
+    only:
+      - develop
 #stages:
 #  - build
 #  - test
