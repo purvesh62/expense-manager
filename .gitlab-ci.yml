@@ -1,14 +1,37 @@
-# The stages define the steps for the CI/CD deployment
 stages:
   - build
-  - test
-  - deploy
 
-# Build maven
-maven-build:
-  image: maven:3-jdk-18
+variables:
+  GIT_STRATEGY: clone
+
+maven-build-stage:
   stage: build
-  script: "mvn package -B"
-  artifacts:
-    paths:
-      - target/gitlab-ci-build.jar
+  tags:
+    - dalfcs_docker_kvm
+  script: mvn clean install
+
+#stages:
+#  - build
+#  - test
+#
+#variables:
+#  GIT_STRATEGY: clone
+#
+#build:
+#  stage: build
+#  script:
+#    - java -jar target/mywebserviceapp-0.0.1-SNAPSHOT.jar
+#  tags:
+#    - dalfcs_docker_kvm
+#
+#test:
+#  stage: test
+#  script:
+#    - ./gradlew -S -g /cache/.gradle -Dorg.gradle.java.home=${JAVA_HOME} clean test
+#  tags:
+#    - dalfcs_gitlab_docker_ci
+#
+#
+#
+#after_script:
+#  - echo "End CI"
