@@ -4,13 +4,13 @@ stages:
 variables:
   GIT_STRATEGY: clone
 
-maven-build-stage:
+build-spring-stage:
   stage: build
   tags:
     - grad
   script:
     - $MAVEN_HOME/bin/mvn clean
-    - mvn clean install
+    - mvn package
 
 #stages:
 #  - build
