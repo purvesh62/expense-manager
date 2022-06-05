@@ -22,6 +22,9 @@ test-job:
   stage: test
   tags:
     - dalfcs_docker_kvm
+  script:
+    - echo "Execute test case"
+    - mvn clean test
 
 
 deploy-job:
