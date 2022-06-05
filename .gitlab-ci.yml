@@ -18,11 +18,17 @@ build-job:
     - echo "building maven project."
     - mvn compile
 
+test-job:
+  stage: test
+  tags:
+    - dalfcs_docker_kvm
+
+
 deploy-job:
   stage: deploy
   tags:
     - dalfcs_docker_kvm
-  image: ruby:2.6
+  image: ruby
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
