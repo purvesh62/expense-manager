@@ -8,7 +8,9 @@ maven-build-stage:
   stage: build
   tags:
     - dalfcs_docker_kvm
-  script: mvn clean install
+  script:
+    - $MAVEN_HOME/bin/mvn clean
+    - mvn clean install
 
 #stages:
 #  - build
