@@ -1,16 +1,19 @@
 stages:
   - build
+  - test
+
+image: maven:latest
 
 variables:
   GIT_STRATEGY: clone
 
-build-spring-stage:
+build-job:
   stage: build
   tags:
-    - grad
+    - dalfcs_docker_kvm
   script:
-    - $MAVEN_HOME/bin/mvn clean
-    - mvn package
+    - echo "building maven project."
+    - mvn compile
 
 #stages:
 #  - build
