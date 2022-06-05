@@ -31,7 +31,7 @@ deploy-job:
   stage: deploy
   tags:
     - dalfcs_docker_kvm
-  image: ruby :latest
+  image: ruby :2.6
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
