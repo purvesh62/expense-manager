@@ -16,7 +16,7 @@ build-job:
     - dalfcs_docker_kvm
   script:
     - echo "building maven project."
-    - mvn compile
+    - mvn clean compile
 
 test-job:
   stage: test
