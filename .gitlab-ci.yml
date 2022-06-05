@@ -18,22 +18,16 @@ build-job:
     - echo "building maven project."
     - mvn compile
 
-test-job:
-  stage: test
-  tags:
-    - dalfcs_docker_kvm
-
-
 deploy-job:
   stage: deploy
   tags:
     - dalfcs_docker_kvm
-  image: ruby
+  image: ruby:2.6
   script:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dp
-    - dpl --provider=heroku --app=${HEROKU_APP_NAME} --api-key=${HEROKU_API_KEY}
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only:
     - main
 
