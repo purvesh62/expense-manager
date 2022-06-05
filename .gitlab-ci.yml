@@ -1,0 +1,14 @@
+# The stages define the steps for the CI/CD deployment
+stages:
+  - build
+  - test
+  - deploy
+
+# Build maven
+maven-build:
+  image: maven:3-jdk-18
+  stage: build
+  script: "mvn package -B"
+  artifacts:
+    paths:
+      - target/gitlab-ci-build.jar
