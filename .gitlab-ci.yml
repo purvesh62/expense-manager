@@ -7,8 +7,7 @@ image: maven:latest
 
 variables:
   GIT_STRATEGY: clone
-  HEROKU_APP_NAME: asdcprojectexpensify
-  HEROKU_API_KEY: 13b45a4d-c3cd-41e9-b0e4-4df19d76afbe
+
 
 build-job:
   stage: build
@@ -26,6 +25,18 @@ test-job:
     - echo "Execute test case"
     - mvn clean test
 
+deploy-test-env-job:
+  stage: deploy
+  tags:
+    - dalfcs_docker_kvm
+  image: ruby:2.6
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_TEST_ENV_APP_NAME --api-key=$HEROKU_TEST_ENV_API_KEY
+  only:
+    - test
 
 deploy-job:
   stage: deploy
@@ -39,71 +50,3 @@ deploy-job:
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only:
     - main
-
-  stages:
-  - build
-  - test
-  - deploy
-
-image: maven:latest
-
-variables:
-  GIT_STRATEGY: clone
-  HEROKU_APP_NAME: budget-manager12
-  HEROKU_API_KEY: b54b4cfb-0359-4af8-a8d6-502613fde888
-
-build-job:
-  stage: build
-  tags:
-    - dalfcs_docker_kvm
-  script:
-    - echo "building maven project."
-    - mvn clean compile
-
-test-job:
-  stage: test
-  tags:
-    - dalfcs_docker_kvm
-  script:
-    - echo "Execute test case"
-    - mvn clean test
-
-
-deploy-job:
-  stage: deploy
-  tags:
-    - dalfcs_docker_kvm
-  image: ruby:2.6
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
-  only:
-    - test  
-
-#stages:
-#  - build
-#  - test
-#
-#variables:
-#  GIT_STRATEGY: clone
-#
-#build:
-#  stage: build
-#  script:
-#    - java -jar target/mywebserviceapp-0.0.1-SNAPSHOT.jar
-#  tags:
-#    - dalfcs_docker_kvm
-#
-#test:
-#  stage: test
-#  script:
-#    - ./gradlew -S -g /cache/.gradle -Dorg.gradle.java.home=${JAVA_HOME} clean test
-#  tags:
-#    - dalfcs_gitlab_docker_ci
-#
-#
-#
-#after_script:
-#  - echo "End CI"
