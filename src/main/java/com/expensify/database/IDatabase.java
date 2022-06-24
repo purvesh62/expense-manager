@@ -1,4 +1,4 @@
 package com.expensify.database;
 
-public class IDatabase {
+public interface IDatabase {
 }
