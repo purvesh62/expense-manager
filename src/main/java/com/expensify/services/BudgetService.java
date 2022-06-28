@@ -1,7 +1,7 @@
 package com.expensify.services;
 
 import com.expensify.model.Budget;
-import com.expensify.persistenceLayer.BudgetDAO;
+import com.expensify.persistenceLayer.BudgetDAOService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,14 +10,26 @@ import java.util.List;
 
 @Service
 public class BudgetService {
-    private final BudgetDAO budgetDAO;
+    private final BudgetDAOService budgetDAOService;
 
     @Autowired
-    public BudgetService(BudgetDAO budgetDAO) {
-        this.budgetDAO = budgetDAO;
+    public BudgetService(BudgetDAOService budgetDAOService) {
+        this.budgetDAOService = budgetDAOService;
     }
 
     public List<Budget> getAllBudgetDetailsService(int user_id) throws SQLException {
-        return budgetDAO.getAllBudgetDetails(user_id);
+        return budgetDAOService.getAllBudgetDetails(user_id);
+    }
+
+    public void saveBudget(Budget newBudget) throws SQLException {
+         budgetDAOService.addNewBudget(newBudget);
+    }
+
+    public void updateBudget(Budget budget) throws SQLException {
+        budgetDAOService.updateBudget(budget);
+    }
+
+    public void deleteBudget(int budgetId) throws SQLException {
+        budgetDAOService.deleteBudget(budgetId);
     }
 }
