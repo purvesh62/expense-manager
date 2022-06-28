@@ -1,13 +1,16 @@
 package com.expensify.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-
-@Controller
+//@Controller
 public class HomeController {
-    @GetMapping("/")
-    public String home(){
-        System.out.println("Home Controller");
-        return "index";
-    }
+//    private BudgetService budgetService;
+//
+//    @Autowired
+//    public HomeController(BudgetService budgetService) {
+//        this.budgetService = budgetService;
+//    }
+
+//    @GetMapping("/")
+//    private List<Budget> getAllBudgetDetails(@RequestParam("user_id") int user_id) throws SQLException {
+//        return this.budgetService.getAllBudgetDetails(user_id);
+//    }
 }

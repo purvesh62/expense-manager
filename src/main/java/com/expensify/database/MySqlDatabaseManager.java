@@ -1,18 +1,25 @@
 package com.expensify.database;
 
-import java.sql.*;
+import org.springframework.stereotype.Component;
 
+import java.sql.*;
+import java.util.List;
+
+@Component
 public class MySqlDatabaseManager implements IDatabase {
 
-    private final String dbURL = "jdbc:mysql://localhost:3306/CSCI5308_7_DEVINT";
-    private final String username = "root";
-    private final String password = "root";
+    private final String dbURL = "jdbc:mysql://db-5308.cs.dal.ca/CSCI5308_7_DEVINT";
+    private final String username = "CSCI5308_7_DEVINT_USER";
+    private final String password = "4KhAVapdN5";
 
+    private Connection conn = null;
+    public MySqlDatabaseManager(){
+
+    }
     @Override
     public Connection connectDB() {
         try {
-            Connection conn = DriverManager.getConnection(dbURL, username, password);
-
+             conn = DriverManager.getConnection(dbURL, username, password);
             if (conn != null) {
                 return conn;
             }
@@ -23,19 +30,28 @@ public class MySqlDatabaseManager implements IDatabase {
     }
 
     @Override
-    public ResultSet executeProcedure(String procQuery) {
+    public ResultSet executeProcedure(String procQuery, List<Object> parameterList) throws SQLException {
         ResultSet resultSet = null;
-        try (Connection conn = connectDB()) {
+        try{
+            conn = connectDB();
             CallableStatement statement = conn.prepareCall("{" + procQuery + "}");
-            statement.setString(1, "purvesh@gmail.com");
+            for(int i= 0;i<parameterList.size();i++) {
+                statement.setObject(i+1,parameterList.get(i));
+            }
             boolean result = statement.execute();
             if (result) {
                 resultSet = statement.getResultSet();
             }
-            System.out.println("Executed");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch(Exception e){
+            e.printStackTrace();
         }
         return resultSet;
+    }
+
+    @Override
+    public void closeConnection() throws SQLException {
+        if(!conn.isClosed()){
+            conn.close();
+        }
     }
 }
