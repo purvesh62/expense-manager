@@ -11,14 +11,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+
 public class BudgetDAOService {
     private final IDatabase mySqlDatabaseManager;
 
-    @Autowired
-    public BudgetDAOService(MySqlDatabaseManager mySqlDatabaseManager) {
-        this.mySqlDatabaseManager = mySqlDatabaseManager;
+    public BudgetDAOService(){
+        this.mySqlDatabaseManager = new MySqlDatabaseManager();
     }
+//    @Autowired
+//    public BudgetDAOService(MySqlDatabaseManager mySqlDatabaseManager) {
+//        this.mySqlDatabaseManager = mySqlDatabaseManager;
+//    }
 
     public List<Budget> getAllBudgetDetails(int userId) throws SQLException {
         List<Budget> budgetList = new ArrayList<>(10);
