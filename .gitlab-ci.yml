@@ -16,6 +16,10 @@ build-job:
   script:
     - echo "building maven project."
     - mvn clean compile
+  only:
+    - develop
+    - test
+    - production
 
 test-job:
   stage: test
@@ -24,6 +28,10 @@ test-job:
   script:
     - echo "Execute test case"
     - mvn clean test
+  only:
+    - develop
+    - test
+    - production
 
 #deploy-test-env-job:
 #  stage: deploy

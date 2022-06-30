@@ -1,22 +1,29 @@
 package com.expensify.model;
 
+import com.expensify.persistenceLayer.ExpenseDAO;
+
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 public class Expense {
     private int expenseID;
     private int userID;
     private String title;
     private String description;
+
     private Float amount;
     private int expenseCategory;
     private int walletID;
-    private Date expenseDate;
+    private String expenseDate;
+
+    private ExpenseDAO expenseDAO;
 
     public Expense() {
-
+        expenseDAO = new ExpenseDAO();
     }
 
-    public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, Date expenseDate) {
+    public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate) {
         this.expenseID = expenseID;
         this.userID = userID;
         this.title = title;
@@ -25,6 +32,11 @@ public class Expense {
         this.expenseCategory = expenseCategory;
         this.walletID = walletID;
         this.expenseDate = expenseDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" + "expenseID=" + expenseID + ", userID=" + userID + ", title='" + title + '\'' + ", description='" + description + '\'' + ", amount=" + amount + ", expenseCategory=" + expenseCategory + ", walletID=" + walletID + ", expenseDate=" + expenseDate + '}';
     }
 
     public int getExpenseID() {
@@ -83,11 +95,20 @@ public class Expense {
         this.walletID = walletID;
     }
 
-    public Date getExpenseDate() {
+    public String getExpenseDate() {
         return expenseDate;
     }
 
-    public void setExpenseDate(Date expenseDate) {
+    public void setExpenseDate(String expenseDate) {
         this.expenseDate = expenseDate;
+    }
+
+    public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {
+        return expenseDAO.getAllUserExpenses(userID, startDate, endDate);
+    }
+
+    public Expense addUserExpense() {
+        expenseDAO.addUserExpenses(this);
+        return this;
     }
 }

@@ -3,24 +3,23 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabaseManager;
 import com.expensify.model.Expense;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Component
+
 public class ExpenseDAO {
     private final IDatabase mySqlDatabaseManager;
+    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    @Autowired
-    public ExpenseDAO(MySqlDatabaseManager mySqlDatabaseManager) {
-        this.mySqlDatabaseManager = mySqlDatabaseManager;
+    public ExpenseDAO() {
+        this.mySqlDatabaseManager = new MySqlDatabaseManager();
     }
 
     public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {
@@ -28,7 +27,6 @@ public class ExpenseDAO {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userID);
-            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
             Date start = formatter.parse(startDate);
             java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
@@ -51,7 +49,7 @@ public class ExpenseDAO {
                     expense.setAmount(resultSet.getFloat("amount"));
                     expense.setExpenseCategory(resultSet.getInt("c_id"));
                     expense.setWallet(resultSet.getInt("w_id"));
-                    expense.setExpenseDate(resultSet.getDate("expense_date"));
+                    expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
 
                     userExpenseList.add(expense);
                 }
@@ -63,5 +61,27 @@ public class ExpenseDAO {
             mySqlDatabaseManager.closeConnection();
         }
         return userExpenseList;
+    }
+
+    public void addUserExpenses(Expense expense) {
+        List<Object> parameterList = new ArrayList<>();
+        try {
+            parameterList.add(expense.getTitle());
+            parameterList.add(expense.getDescription());
+            parameterList.add(expense.getUserID());
+            parameterList.add(expense.getAmount());
+            parameterList.add(expense.getExpenseCategory());
+            parameterList.add(expense.getWallet());
+
+            Date expenseDate = formatter.parse(expense.getExpenseDate());
+            parameterList.add(expenseDate);
+
+            ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL add_expense(?, ?, ?, ?, ?, ?, ?)", parameterList);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
