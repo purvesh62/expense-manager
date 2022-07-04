@@ -14,20 +14,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/expense")
 public class ExpenseController {
-    private final ExpenseService expenseService;
+//    private final ExpenseService expenseService;
 
-    @Autowired
-    public ExpenseController(ExpenseService expenseService) {
-        this.expenseService = expenseService;
-    }
-
-    @GetMapping
-    private List<Expense> get(
-            @RequestParam(value = "user_id") int userName,
-            @RequestParam(value = "start_date") String startDate,
-            @RequestParam(value = "end_date") String endDate
-    ) throws SQLException {
-
-        return this.expenseService.getAllUserExpenses(userName, startDate, endDate);
-    }
+//    @Autowired
+//    public ExpenseController(ExpenseService expenseService) {
+//        this.expenseService = expenseService;
+//    }
+//
+//    @GetMapping
+//    private List<Expense> get(
+//            @RequestParam(value = "user_id") int userName,
+//            @RequestParam(value = "start_date") String startDate,
+//            @RequestParam(value = "end_date") String endDate
+//    ) throws SQLException {
+//
+//        return this.expenseService.getAllUserExpenses(userName, startDate, endDate);
+//    }
 }

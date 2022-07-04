@@ -10,15 +10,15 @@ import java.util.List;
 
 @Service
 public class ExpenseService {
-    private final ExpenseDAO expenseDAO;
-
-    @Autowired
-    public ExpenseService(ExpenseDAO expenseDAO) {
-        this.expenseDAO = expenseDAO;
-    }
-
-    public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {
-        return expenseDAO.getAllUserExpenses(userID, startDate, endDate);
-    }
+//    private final ExpenseDAO expenseDAO;
+//
+//    @Autowired
+//    public ExpenseService(ExpenseDAO expenseDAO) {
+//        this.expenseDAO = expenseDAO;
+//    }
+//
+//    public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {
+//        return expenseDAO.getAllUserExpenses(userID, startDate, endDate);
+//    }
 }
 

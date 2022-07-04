@@ -9,28 +9,28 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/budget")
 public class BudgetController {
-    private final Budget budget;
-
-    public BudgetController() {
-        this.budget = new Budget();
-    }
-
     @GetMapping
     private List<Budget> getAllBudgetDetails(@RequestParam("user_id") int userId) throws SQLException {
+        Budget budget = new Budget();
         return budget.getAllBudgetDetailsService(userId);
     }
     @PostMapping
-    private void addBudget(@RequestBody Budget newBudget) throws SQLException {
-        budget.saveBudget(newBudget);
+    private Budget addBudget(@RequestBody Budget budgetObj) throws SQLException {
+        Budget budget = new Budget();
+        budget.saveBudget(budgetObj);
+        return budget;
     }
 
     @PutMapping
-    private void updateBudget(@RequestBody Budget budget) throws SQLException {
-        budget.updateBudget(budget);
+    private Budget updateBudget(@RequestBody Budget budgetObj) throws SQLException {
+        Budget budget = new Budget();
+        budget.updateBudget(budgetObj);
+        return budget;
     }
 
     @DeleteMapping
-    private void addBudget(@RequestParam("budget_id") int budgetId) throws SQLException {
+    private void deleteBudget(@RequestParam("budget_id") int budgetId) throws SQLException {
+        Budget budget = new Budget();
         budget.deleteBudget(budgetId);
     }
 }
