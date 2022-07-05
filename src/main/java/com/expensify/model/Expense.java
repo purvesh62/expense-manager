@@ -1,9 +1,8 @@
 package com.expensify.model;
 
-import com.expensify.persistenceLayer.ExpenseDAO;
+import com.expensify.persistenceLayer.ExpenseDAOService;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 public class Expense {
@@ -17,10 +16,10 @@ public class Expense {
     private int walletID;
     private String expenseDate;
 
-    private ExpenseDAO expenseDAO;
+    private ExpenseDAOService expenseDAO;
 
     public Expense() {
-        expenseDAO = new ExpenseDAO();
+        expenseDAO = new ExpenseDAOService();
     }
 
     public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate) {
@@ -108,7 +107,6 @@ public class Expense {
     }
 
     public Expense addUserExpense() {
-        expenseDAO.addUserExpenses(this);
-        return this;
+        return expenseDAO.addUserExpenses(this);
     }
 }

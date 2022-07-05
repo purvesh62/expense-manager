@@ -27,7 +27,6 @@ public class ExpenseController {
 
     @PostMapping
     Expense post(@RequestBody Expense expense) {
-        expense.addUserExpense();
-        return expense;
+        return expense.addUserExpense();
     }
 }
