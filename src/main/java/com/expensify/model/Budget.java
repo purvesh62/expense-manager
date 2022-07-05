@@ -1,6 +1,12 @@
 package com.expensify.model;
+import com.expensify.persistenceLayer.BudgetDAOService;
+import java.sql.SQLException;
+import java.util.List;
+
 
 public class Budget {
+    private final BudgetDAOService budgetDAOService;
+
     private int budgetId;
     private int walletId;
 
@@ -8,6 +14,10 @@ public class Budget {
     private int userId;
     private float budgetLimit;
 
+    public Budget() {
+
+        budgetDAOService = new BudgetDAOService();
+    }
     public int getBudgetId() {
         return budgetId;
     }
@@ -46,5 +56,23 @@ public class Budget {
 
     public void setBudgetLimit(float budgetLimit) {
         this.budgetLimit = budgetLimit;
+    }
+
+    public  List<Budget> getAllBudgetDetailsService(int user_id) throws SQLException {
+        return budgetDAOService.getAllBudgetDetails(user_id);
+    }
+
+    public Budget saveBudget(Budget newBudget) throws SQLException {
+        budgetDAOService.addNewBudget(newBudget);
+        return this;
+    }
+
+    public Budget updateBudget(Budget budget) throws SQLException {
+        budgetDAOService.updateBudget(budget);
+        return this;
+    }
+
+    public void deleteBudget(int budgetId) throws SQLException {
+        budgetDAOService.deleteBudget(budgetId);
     }
 }
