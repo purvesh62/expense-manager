@@ -16,6 +16,10 @@ build-job:
   script:
     - echo "building maven project."
     - mvn clean compile
+  only:
+    - develop
+    - test
+    - production
 
 test-job:
   stage: test
@@ -24,19 +28,23 @@ test-job:
   script:
     - echo "Execute test case"
     - mvn clean test
+  only:
+    - develop
+    - test
+    - production
 
-deploy-test-env-job:
- stage: deploy
- tags:
-   - dalfcs_docker_kvm
- image: ruby:2.6
- script:
-   - apt-get update -qy
-   - apt-get install -y ruby-dev
-   - gem install dpl
-   - dpl --provider=heroku --app=$HEROKU_TEST_ENV_APP_NAME --api-key=$HEROKU_TEST_ENV_API_KEY
- only:
-   - test
+#deploy-test-env-job:
+# stage: deploy
+# tags:
+#   - dalfcs_docker_kvm
+# image: ruby:2.6
+# script:
+#   - apt-get update -qy
+#   - apt-get install -y ruby-dev
+#   - gem install dpl
+#   - dpl --provider=heroku --app=$HEROKU_TEST_ENV_APP_NAME --api-key=$HEROKU_TEST_ENV_API_KEY
+# only:
+#   - test
 
 deploy-job:
   stage: deploy

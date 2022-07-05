@@ -1,10 +1,8 @@
 package com.expensify.persistenceLayer;
 
+import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabaseManager;
 import com.expensify.model.Budget;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,13 +13,9 @@ import java.util.List;
 public class BudgetDAOService {
     private final IDatabase mySqlDatabaseManager;
 
-    public BudgetDAOService(){
-        this.mySqlDatabaseManager = new MySqlDatabaseManager();
+    public BudgetDAOService() {
+        this.mySqlDatabaseManager = Database.getInstance();
     }
-//    @Autowired
-//    public BudgetDAOService(MySqlDatabaseManager mySqlDatabaseManager) {
-//        this.mySqlDatabaseManager = mySqlDatabaseManager;
-//    }
 
     public List<Budget> getAllBudgetDetails(int userId) throws SQLException {
         List<Budget> budgetList = new ArrayList<>(10);
@@ -93,7 +87,6 @@ public class BudgetDAOService {
             parameterList.add(budgetId);
 
             mySqlDatabaseManager.executeProcedure("CALL delete_budget(?)", parameterList);
-
         }
         catch (Exception e) {
             e.printStackTrace();

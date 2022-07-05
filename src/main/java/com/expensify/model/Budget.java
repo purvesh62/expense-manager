@@ -62,12 +62,14 @@ public class Budget {
         return budgetDAOService.getAllBudgetDetails(user_id);
     }
 
-    public void saveBudget(Budget newBudget) throws SQLException {
+    public Budget saveBudget(Budget newBudget) throws SQLException {
         budgetDAOService.addNewBudget(newBudget);
+        return this;
     }
 
-    public void updateBudget(Budget budget) throws SQLException {
+    public Budget updateBudget(Budget budget) throws SQLException {
         budgetDAOService.updateBudget(budget);
+        return this;
     }
 
     public void deleteBudget(int budgetId) throws SQLException {
