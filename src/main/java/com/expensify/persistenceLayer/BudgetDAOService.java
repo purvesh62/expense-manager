@@ -23,7 +23,7 @@ public class BudgetDAOService {
             List<Object> parameterList = new ArrayList<>(10);
             parameterList.add(userId);
             ResultSet resultSet = database.executeProcedure("CALL get_all_budget(?)", parameterList);
-            if(resultSet!=null){
+            if (resultSet != null) {
                 while (resultSet.next()) {
                     Budget budget = new Budget();
 
@@ -37,8 +37,7 @@ public class BudgetDAOService {
                 }
             }
             return budgetList;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
@@ -56,8 +55,7 @@ public class BudgetDAOService {
 
             database.executeProcedure("CALL add_budget(?,?,?)", parameterList);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
@@ -73,8 +71,7 @@ public class BudgetDAOService {
 
             database.executeProcedure("CALL update_budget(?,?,?)", parameterList);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
@@ -87,8 +84,7 @@ public class BudgetDAOService {
             parameterList.add(budgetId);
 
             database.executeProcedure("CALL delete_budget(?)", parameterList);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
