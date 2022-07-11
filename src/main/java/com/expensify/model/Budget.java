@@ -14,6 +14,8 @@ public class Budget {
     private int userId;
     private float budgetLimit;
 
+    private float totalExpenses;
+
     public Budget() {
 
         budgetDAOService = new BudgetDAOService();
@@ -58,8 +60,16 @@ public class Budget {
         this.budgetLimit = budgetLimit;
     }
 
-    public  List<Budget> getAllBudgetDetailsService(int user_id) throws SQLException {
-        return budgetDAOService.getAllBudgetDetails(user_id);
+    public float getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(float totalExpenses) {
+        this.totalExpenses = totalExpenses;
+    }
+
+    public  List<Budget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
+        return budgetDAOService.getAllBudgetDetails(user_id,startDate,endDate);
     }
 
     public Budget saveBudget(Budget newBudget) throws SQLException {

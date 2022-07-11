@@ -13,15 +13,17 @@
 <!--    <span th:text="List of budget"></span>-->
 </p>
 
-<div >
-    <div class="card" style="width: 18rem;">
-<!--        <img class="card-img-top" src="..." alt="Card image cap">-->
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div class="row">
+        <div class="col-4" th:each="budget : ${budgetList}">
+            <div class="card" >
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${budget.walletName}">Dummy Title</h5>
+                    <p>Limit: $<span th:text="${budget.budgetLimit}">Dummy Limit</span></p>
+                    <p>Total Expenses: $<span th:text="${budget.totalExpenses}">Dummy Expenses</span></p>
+                    <a href="#" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>

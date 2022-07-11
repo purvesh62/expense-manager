@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -44,8 +45,12 @@ public class BudgetController {
 
     @GetMapping(value="/api/v1/budget/{user_id}", produces="text/html")
     public String getAllBudgetDetails(@PathVariable("user_id") int userId, Model model) throws SQLException {
-        List<Budget> budget1 = budget.getAllBudgetDetailsService(userId);
-        model.addAttribute("budget" , budget1);
-        return "budget";
+        LocalDate currentdate = LocalDate.now();
+        String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
+        String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
+        System.out.println(startDate + endDate);
+        List<Budget> budgetList = budget.getAllBudgetDetailsService(userId,startDate,endDate);
+        model.addAttribute("budgetList" , budgetList);
+        return "Budget/budget";
     }
 }
