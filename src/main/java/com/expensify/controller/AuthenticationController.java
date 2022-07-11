@@ -28,10 +28,14 @@ public class AuthenticationController {
     @PostMapping("/login")
     @ResponseBody
     public void authenticateUser(@RequestBody Authentication authentication, HttpSession session) throws SQLException {
-        JSONObject userCache = SessionManager.getSession(session);
-        if (userCache.containsKey("userId")) {
-            boolean authenticated = authentication.authenticateUser();
+        int userId = authentication.authenticateUser();
+        if (userId > 0) {
+            JSONObject userCache = new JSONObject();
+            userCache.put("email", authentication.getEmail());
+            userCache.put("userId", userId);
+            SessionManager.setSession(session, userCache);
+        } else {
+            // User already exists
         }
-        System.out.println("authenticated");
     }
 }

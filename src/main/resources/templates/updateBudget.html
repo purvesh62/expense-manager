@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home page</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="../js/budget.js"></script>
+</head>
+<body>
+<form action="#" th:action="@{/api/v1/budget}" th:object="${budget}" method="POST">
+    <div class="p-4">
+        <div class="form-group">
+            <label>Limit</label>
+            <input type="text" th:field="${budget.budgetLimit}"/>
+            <input type="hidden" th:field="${budget.budgetId}"/>
+            <input type="hidden" th:field="${budget.walletId}"/>
+            <input type="hidden" th:field="${budget.walletName}"/>
+            <input type="hidden" th:field="${budget.userId}"/>
+            <input type="hidden" th:field="${budget.totalExpenses}"/>
+        </div>
+<!--        <div class="form-group">-->
+<!--            <label >Choose Wallet</label>-->
+<!--            <select class="form-control selectpicker" th:field="${budget}" id="pizza">-->
+<!--                <option value="">Nothing selected</option>-->
+<!--                <option th:each="pizza : ${T(com.frontbackend.thymeleaf.bootstrap.model.Pizza).values()}"-->
+<!--                        th:value="${pizza}"-->
+<!--                        th:text="${pizza}">pizza-->
+<!--                </option>-->
+
+<!--            </select>-->
+<!--        </div>-->
+        <button type="submit" class="btn btn-primary">Update</button>
+    </div>
+</form>
+
+</body>
+</html>
