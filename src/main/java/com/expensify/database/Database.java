@@ -1,25 +1,41 @@
 package com.expensify.database;
 
-import org.springframework.stereotype.Component;
-
 import java.sql.*;
 import java.util.List;
 
-@Component
-public class MySqlDatabaseManager implements IDatabase {
+public class Database implements  IDatabase{
 
-    private final String dbURL = "jdbc:mysql://db-5308.cs.dal.ca/CSCI5308_7_DEVINT";
-    private final String username = "CSCI5308_7_DEVINT_USER";
-    private final String password = "4KhAVapdN5";
+    private static Database instance;
+    private static String dbHost;
+    private static String dbName;
+    private static String dbPort;
 
-    private Connection conn = null;
-    public MySqlDatabaseManager(){
+    private static String dbUrl;
+    private static String dbUser;
+    private static String dbPassword;
 
+    private Connection conn;
+
+    private Database() {
+        dbHost = System.getenv("DB_HOST");
+        dbName = System.getenv("DB_NAME");
+        dbPort = System.getenv("DB_PORT");
+        dbUser = System.getenv("DB_USER");
+        dbPassword = System.getenv("DB_PASSWORD");
+        dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
     }
+    public static Database getInstance() {
+        if(Database.instance == null){
+            Database.instance = new Database();
+        }
+        return Database.instance;
+    }
+
+
     @Override
     public Connection connectDB() {
         try {
-             conn = DriverManager.getConnection(dbURL, username, password);
+            conn = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
             if (conn != null) {
                 return conn;
             }
@@ -30,9 +46,9 @@ public class MySqlDatabaseManager implements IDatabase {
     }
 
     @Override
-    public ResultSet executeProcedure(String procQuery, List<Object> parameterList) throws SQLException {
+    public ResultSet executeProcedure(String procQuery, List<Object> parameterList) {
         ResultSet resultSet = null;
-        try{
+        try {
             conn = connectDB();
             CallableStatement statement = conn.prepareCall("{" + procQuery + "}");
             for(int i= 0;i<parameterList.size();i++) {
