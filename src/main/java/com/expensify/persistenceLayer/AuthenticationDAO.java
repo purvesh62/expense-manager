@@ -46,8 +46,9 @@ public class AuthenticationDAO {
         return userId;
     }
 
-    public boolean verifyUser(Authentication authentication) throws SQLException {
+    public int verifyUser(Authentication authentication) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
+        int userId = 0;
         try {
             parameterList.add(authentication.getEmail());
 
@@ -55,7 +56,7 @@ public class AuthenticationDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     if (resultSet.getString("password").equals(authentication.getPassword())) {
-                        return true;
+                        userId = resultSet.getInt("user_id");
                     }
                 }
             }
@@ -65,6 +66,6 @@ public class AuthenticationDAO {
         } finally {
             database.closeConnection();
         }
-        return false;
+        return userId;
     }
 }

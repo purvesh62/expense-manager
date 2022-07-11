@@ -1,13 +1,16 @@
 package com.expensify.controller;
 
+import com.expensify.SessionManager;
 import com.expensify.model.Budget;
 import com.expensify.model.BudgetFactory;
 import com.expensify.model.IBudgetFactory;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -51,15 +54,23 @@ public class BudgetController {
 //        budget.deleteBudget(budgetId);
 //    }
 //
-    @GetMapping(value="/api/v1/budget/{user_id}", produces="text/html")
-    public String getAllBudgetDetails(@PathVariable("user_id") int userId, Model model) throws SQLException {
-        LocalDate currentdate = LocalDate.now();
-        String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
-        String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
-        System.out.println(startDate + endDate);
-        List<Budget> budgetList = budget.getAllBudgetDetailsService(userId,startDate,endDate);
-        model.addAttribute("budgetList" , budgetList);
-        return "budget";
+    @GetMapping(value="/api/v1/budget", produces="text/html")
+    public String getAllBudgetDetails(Model model, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+
+        if(userCache.containsKey("userId")) {
+            int userId = (Integer)userCache.get("userId");
+            LocalDate currentdate = LocalDate.now();
+            String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
+            String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
+            System.out.println(startDate + endDate);
+            List<Budget> budgetList = budget.getAllBudgetDetailsService(userId,startDate,endDate);
+            model.addAttribute("budgetList" , budgetList);
+            return "budget";
+        } else {
+            return "index";
+        }
+
     }
 
     @GetMapping(value="/api/v1/budget/budgetId/{budget_id}", produces="text/html")
