@@ -4,7 +4,6 @@ import com.expensify.persistenceLayer.AuthenticationDAO;
 
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class Authentication {
     private final AuthenticationDAO authenticationDAO;
@@ -75,7 +74,7 @@ public class Authentication {
 
     }
 
-    public boolean authenticateUser() throws SQLException {
+    public int authenticateUser() throws SQLException {
         return authenticationDAO.verifyUser(this);
     }
 
