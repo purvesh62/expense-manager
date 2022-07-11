@@ -1,35 +1,48 @@
 package com.expensify.model;
 
+import com.expensify.persistenceLayer.AuthenticationDAO;
+
+
+import java.sql.SQLException;
+import java.util.List;
+
 public class Authentication {
-    private int user_id;
-    private String firstname;
-    private String lastname;
+    private final AuthenticationDAO authenticationDAO;
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    private String firstName;
+    private String lastName;
     private String email;
     private String password;
     private String contact;
 
-    public int getUser_id() {
-        return user_id;
-    }
+    public Authentication() {
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+        this.authenticationDAO = new AuthenticationDAO();
     }
 
     public String getEmail() {
@@ -54,6 +67,22 @@ public class Authentication {
 
     public void setContact(String contact) {
         this.contact = contact;
+    }
+
+    public int registerUser() throws SQLException {
+        return authenticationDAO.saveUser(this);
+
+
+    }
+
+    public boolean authenticateUser() throws SQLException {
+        return authenticationDAO.verifyUser(this);
+    }
+
+    public class BCryptPasswordEncoder {
+        public String encode(String password) {
+            return password;
+        }
     }
 }
 
