@@ -1,10 +1,8 @@
 package com.expensify.persistenceLayer;
-
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.Authentication;
 import org.springframework.stereotype.Component;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
