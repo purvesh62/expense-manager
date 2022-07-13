@@ -80,6 +80,7 @@ public class BudgetDAOService {
     public void updateBudget(Budget budget) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>(10);
+            System.out.println(budget.getBudgetId() + budget.getWalletId() + budget.getBudgetLimit());
             parameterList.add(budget.getBudgetId());
             parameterList.add(budget.getWalletId());
             parameterList.add(budget.getBudgetLimit());
@@ -104,5 +105,32 @@ public class BudgetDAOService {
         } finally {
             database.closeConnection();
         }
+    }
+
+    public Budget getBudgetById(int budgetId) throws SQLException {
+        Budget budget = new Budget();
+        try {
+            List<Object> parameterList = new ArrayList<>(10);
+            parameterList.add(budgetId);
+
+
+            ResultSet resultSet =  database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+
+                    budget.setBudgetId(resultSet.getInt("budget_id"));
+                    budget.setUserId(resultSet.getInt("user_id"));
+                    budget.setWalletId(resultSet.getInt("wallet_id"));
+                    budget.setBudgetLimit(resultSet.getFloat("budget_limit"));
+                    budget.setWalletName(resultSet.getString("wallet_label"));
+                }
+            }
+            return budget;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return budget;
     }
 }

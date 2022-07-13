@@ -77,12 +77,16 @@ public class Budget {
         return this;
     }
 
-    public Budget updateBudget(Budget budget) throws SQLException {
-        budgetDAOService.updateBudget(budget);
+    public Budget updateBudget() throws SQLException {
+        budgetDAOService.updateBudget(this);
         return this;
     }
 
     public void deleteBudget(int budgetId) throws SQLException {
         budgetDAOService.deleteBudget(budgetId);
+    }
+
+    public Budget getBudgetById(int budgetId) throws SQLException {
+       return budgetDAOService.getBudgetById(budgetId);
     }
 }
