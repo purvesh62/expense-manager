@@ -2,9 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
-import com.expensify.model.Budget;
 import com.expensify.model.Wallet;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -15,7 +13,6 @@ import java.util.List;
 @Component
 public class WalletDAOService {
     private final IDatabase database;
-
     public WalletDAOService() {
         this.database = Database.getInstance();
     }
@@ -85,15 +82,8 @@ public class WalletDAOService {
             parameterList.add(newWallet.getWalletId());
             parameterList.add(newWallet.getAmount());
             parameterList.add(newWallet.getWalletLabel());
-            ResultSet resultSet = database.executeProcedure("CALL update_wallet(?,?,?)", parameterList);
-            if (resultSet != null) {
-                while (resultSet.next()) {
-//                    newWallet.setWalletId(1);
-//                    newWallet.setAmount(5000);
-//                    newWallet.setWalletLabel("dbc");
-                }
+            database.executeProcedure("CALL update_wallet(?,?,?)", parameterList);
 
-            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

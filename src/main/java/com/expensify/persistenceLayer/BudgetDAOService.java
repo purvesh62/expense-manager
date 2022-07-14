@@ -114,7 +114,7 @@ public class BudgetDAOService {
             parameterList.add(budgetId);
 
 
-            ResultSet resultSet =  database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
+             ResultSet resultSet =  database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
 
