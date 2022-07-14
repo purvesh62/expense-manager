@@ -5,6 +5,7 @@ import com.expensify.model.Expense;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -36,33 +37,37 @@ public class ExpenseController {
         return null;
     }
 
-    @RequestMapping(value = "expense", method = RequestMethod.POST, produces = "application/json")
-    @ResponseBody
-    Expense post(@RequestBody Expense expense, HttpSession session) {
+    @PostMapping(value = "/expense")
+    public String post(@ModelAttribute("expense") Expense expense, BindingResult result, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             expense.setUserID(userId);
-            return expense.addUserExpense();
+            return "redirect:/expense";
         }
         return null;
     }
 
 
     @GetMapping(path = "/expense", produces = "text/html")
-    public String userExpenses(@PathVariable int userID, Model model, HttpSession session) throws SQLException {
-        JSONObject userCache = SessionManager.getSession(session);
-        if (userCache.containsKey("userId")) {
-            LocalDate currentdate = LocalDate.now();
-            String startDate = currentdate.getYear() + "-01-" + currentdate.lengthOfMonth();
-            String endDate = currentdate.getYear() + "-" + currentdate.getMonth().ordinal() + "-" + currentdate.lengthOfMonth();
+    public String userExpenses(Model model, HttpSession session) {
+        try {
+            JSONObject userCache = SessionManager.getSession(session);
+            if (userCache.containsKey("userId")) {
+                LocalDate currentdate = LocalDate.now();
+                String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
+                String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
 
-            List<Expense> expenses = new ArrayList<>();
-            expenses = this.expense.getAllUserExpenses(userID, startDate, endDate);
-            model.addAttribute("expenses", expenses);
-            return "temp";
-        } else {
-            return "redirect:/login";
+                List<Expense> expenses = this.expense.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
+                model.addAttribute("expense", new Expense());
+                model.addAttribute("expenseData", expenses);
+                return "index";
+            } else {
+                return "redirect:/login";
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
+        return "error";
     }
 }
