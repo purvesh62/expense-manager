@@ -19,9 +19,7 @@ import java.util.List;
 @Controller
 public class BudgetController {
 
-//   To be asked :  private final IBudgetFactory budget  = new BudgetFactory();
-    private final Budget budget = new Budget();
-
+    private final IBudgetFactory budgetFactory  = new BudgetFactory();
 
 //    @RequestMapping(value="/api/v1/budget", method=RequestMethod.GET, produces="application/json")
 //    @ResponseBody
@@ -64,7 +62,7 @@ public class BudgetController {
             String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
             String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
             System.out.println(startDate + endDate);
-            List<Budget> budgetList = budget.getAllBudgetDetailsService(userId,startDate,endDate);
+            List<Budget> budgetList = budgetFactory.createBudget().getAllBudgetDetailsService(userId,startDate,endDate);
             model.addAttribute("budgetList" , budgetList);
             return "budget";
         } else {
@@ -75,8 +73,7 @@ public class BudgetController {
 
     @GetMapping(value="/api/v1/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
-       Budget b = budget.getBudgetById(budgetId);
-
+       Budget b = budgetFactory.createBudget().getBudgetById(budgetId);
        model.addAttribute("budget",b);
        return "updateBudget";
     }
