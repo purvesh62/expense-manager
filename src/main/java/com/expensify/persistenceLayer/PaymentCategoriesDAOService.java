@@ -17,18 +17,18 @@ public class PaymentCategoriesDAOService {
     public PaymentCategoriesDAOService() {
         this.database = Database.getInstance();
     }
-    public List<PaymentCategory> getAllExpenseCategoriesList() {
+    public List<PaymentCategory> getAllPaymentCategoriesList() {
         List<PaymentCategory> paymentCategoryList = new ArrayList<>();
 
         try {
             List<Object> parameterList = new ArrayList<>();
-            ResultSet resultSet = database.executeProcedure("CALL get_all_expense_categories()",parameterList);
+            ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    PaymentCategory category= new PaymentCategory();
-                    category.setPaymentId(resultSet.getInt("c_id"));
-                    category.setPaymentCategory(resultSet.getString("expense_category"));
-                    paymentCategoryList.add(category);
+                    PaymentCategory paymentCategory= new PaymentCategory();
+                    paymentCategory.setPaymentId(resultSet.getInt("p_id"));
+                    paymentCategory.setPaymentCategory(resultSet.getString("payment_category"));
+                    paymentCategoryList.add(paymentCategory);
                 }
             }
             return paymentCategoryList;
