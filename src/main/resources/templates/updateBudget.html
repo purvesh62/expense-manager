@@ -16,22 +16,17 @@
             <label>Limit</label>
             <input type="text" th:field="${budget.budgetLimit}"/>
             <input type="hidden" th:field="${budget.budgetId}"/>
-            <input type="hidden" th:field="${budget.walletId}"/>
+            <!--            <input type="hidden" th:field="${budget.walletId}"/>-->
             <input type="hidden" th:field="${budget.walletName}"/>
             <input type="hidden" th:field="${budget.userId}"/>
             <input type="hidden" th:field="${budget.totalExpenses}"/>
         </div>
-<!--        <div class="form-group">-->
-<!--            <label >Choose Wallet</label>-->
-<!--            <select class="form-control selectpicker" th:field="${budget}" id="pizza">-->
-<!--                <option value="">Nothing selected</option>-->
-<!--                <option th:each="pizza : ${T(com.frontbackend.thymeleaf.bootstrap.model.Pizza).values()}"-->
-<!--                        th:value="${pizza}"-->
-<!--                        th:text="${pizza}">pizza-->
-<!--                </option>-->
-
-<!--            </select>-->
-<!--        </div>-->
+        <div class="form-group">
+            <label>Choose Wallet</label>
+            <select class="form-control" id="walletId">
+                <option th:each="i : ${wallet}" th:value="${i.walletId}" th:text="${i.walletLabel}"></option>
+            </select>
+        </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </div>
 </form>

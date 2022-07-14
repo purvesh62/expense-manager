@@ -4,6 +4,7 @@ import com.expensify.SessionManager;
 import com.expensify.model.Budget;
 import com.expensify.model.BudgetFactory;
 import com.expensify.model.IBudgetFactory;
+import com.expensify.model.Wallet;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,12 +53,12 @@ public class BudgetController {
 //        budget.deleteBudget(budgetId);
 //    }
 //
-    @GetMapping(value="/api/v1/budget", produces="text/html")
-    public String getAllBudgetDetails(Model model, HttpSession session) throws SQLException {
-        JSONObject userCache = SessionManager.getSession(session);
-
-        if(userCache.containsKey("userId")) {
-            int userId = (Integer)userCache.get("userId");
+    @GetMapping(value="/api/v1/budget/{user_id}", produces="text/html")
+    public String getAllBudgetDetails(@PathVariable("user_id") int userId, Model model, HttpSession session) throws SQLException {
+//        JSONObject userCache = SessionManager.getSession(session);
+//
+//        if(userCache.containsKey("userId")) {
+//            int userId = (Integer)userCache.get("userId");
             LocalDate currentdate = LocalDate.now();
             String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
             String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
@@ -65,16 +66,18 @@ public class BudgetController {
             List<Budget> budgetList = budgetFactory.createBudget().getAllBudgetDetailsService(userId,startDate,endDate);
             model.addAttribute("budgetList" , budgetList);
             return "budget";
-        } else {
-            return "index";
-        }
+//        } else {
+//            return "index";
+//        }
 
     }
 
     @GetMapping(value="/api/v1/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
        Budget b = budgetFactory.createBudget().getBudgetById(budgetId);
+       List<Wallet> w = new Wallet().getAllWalletDetails(1);
        model.addAttribute("budget",b);
+       model.addAttribute("wallet",w);
        return "updateBudget";
     }
 }
