@@ -1,10 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expensify</title>
+    <link href="../static/css/expenses.css" th:href="@{/css/expenses.css}" rel="stylesheet"/>
 </head>
+
 <body>
-Hello World!!
+<div id="container">
+    <div id="header">
+        <div id="monthDisplay"></div>
+        <div>
+            <button id="backButton">Back</button>
+            <button id="nextButton">Next</button>
+        </div>
+    </div>
+
+    <div id="weekdays">
+        <div>Sunday</div>
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+        <div>Saturday</div>
+    </div>
+
+    <div id="calendar"></div>
+</div>
+<script th:inline="javascript">
+    var localExpenseData = [[${expenseData}]];
+</script>
+
+<div id="newEventModal">
+    <form th:action="@{/expense}" th:object="${expense}" method="POST">
+        <h2>Expense</h2>
+        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title">
+
+        <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
+            <option value="1">Debit Card</option>
+            <option value="2">Credit Card</option>
+            <option value="3">Cash</option>
+            <option value="4">Saving Account</option>
+        </select>
+        <input id="expenseAccountNameInput" type="number" th:field="*{amount}" placeholder="Amount" min="1"/>
+        <textarea id="expenseNoteInput" th:field="*{description}" placeholder="Note"></textarea>
+        <input type="hidden" th:field="*{expenseID}"/>
+        <input type="hidden" th:field="*{userID}"/>
+        <input id="expenseDate" type="hidden" th:value="*{expenseDate}" name="expenseDate" value="getTodaysDate()"/>
+        <button id="saveButton" type="submit">Save</button>
+        <button id="cancelButton" type="cancel" onclick="window.location.reload()">Cancel</button>
+    </form>
+</div>
+
+<div id="deleteEventModal">
+    <h2>Expense</h2>
+
+    <p id="eventText"></p>
+
+    <button id="deleteButton">Delete</button>
+    <button id="closeButton">Close</button>
+</div>
+
+<div id="modalBackDrop"></div>
+
+<script src="../js/expenses.js"></script>
 </body>
+
 </html>
