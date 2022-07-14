@@ -1,6 +1,6 @@
 package com.expensify.model;
 
-public class PaymentCategories {
+public class PaymentCategory {
     private int paymentId;
     private String paymentCategory;
 
