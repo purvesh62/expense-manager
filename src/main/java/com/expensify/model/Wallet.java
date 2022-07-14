@@ -59,7 +59,7 @@ public class Wallet {
     }
 
     public List<Wallet> getAllWalletDetails(int userId) throws SQLException {
-        return walletDAOService.getAllWalletDetails(this.userId);
+        return walletDAOService.getAllWalletDetails(userId);
     }
 
     public void saveWallet(Wallet newWallet) throws SQLException {
