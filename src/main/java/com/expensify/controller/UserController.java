@@ -2,7 +2,7 @@ package com.expensify.controller;
 
 
 import com.expensify.SessionManager;
-import com.expensify.model.Authentication;
+import com.expensify.model.User;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -11,27 +11,27 @@ import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 
 @Controller
-public class AuthenticationController {
+public class UserController {
 
-    private final Authentication authentication = new Authentication();
+    private final User user = new User();
 
     @PostMapping("/register")
     @ResponseBody
-    public void registerUser(@RequestBody Authentication authentication, HttpSession session) throws SQLException {
-        int userId = authentication.registerUser();
+    public void registerUser(@RequestBody User user, HttpSession session) throws SQLException {
+        int userId = user.registerUser();
         JSONObject userCache = new JSONObject();
-        userCache.put("email", authentication.getEmail());
+        userCache.put("email", user.getEmail());
         userCache.put("userId", userId);
         SessionManager.setSession(session, userCache);
     }
 
     @PostMapping("/login")
     @ResponseBody
-    public void authenticateUser(@RequestBody Authentication authentication, HttpSession session) throws SQLException {
-        int userId = authentication.authenticateUser();
+    public void authenticateUser(@RequestBody User user, HttpSession session) throws SQLException {
+        int userId = user.authenticateUser();
         if (userId > 0) {
             JSONObject userCache = new JSONObject();
-            userCache.put("email", authentication.getEmail());
+            userCache.put("email", user.getEmail());
             userCache.put("userId", userId);
             SessionManager.setSession(session, userCache);
         } else {

@@ -1,12 +1,12 @@
 package com.expensify.model;
 
-import com.expensify.persistenceLayer.AuthenticationDAO;
+import com.expensify.persistenceLayer.UserDAOService;
 
 
 import java.sql.SQLException;
 
-public class Authentication {
-    private final AuthenticationDAO authenticationDAO;
+public class User {
+    private final UserDAOService authenticationDAO;
     private int userId;
 
     public int getUserId() {
@@ -39,9 +39,9 @@ public class Authentication {
     private String password;
     private String contact;
 
-    public Authentication() {
+    public User() {
 
-        this.authenticationDAO = new AuthenticationDAO();
+        this.authenticationDAO = new UserDAOService();
     }
 
     public String getEmail() {
