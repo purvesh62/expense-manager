@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class BudgetController {
@@ -47,6 +48,14 @@ public class BudgetController {
         return "redirect:/api/v1/budget/1";
     }
 
+    @PostMapping(value="/api/v1/budget/add")
+    private String addBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
+        System.out.println(budget);
+        budget.setUserId(1);
+        budget.saveBudget();
+        return "redirect:/api/v1/budget/1";
+    }
+
 //    @RequestMapping(value="/api/v1/budget", method=RequestMethod.DELETE, produces="application/json")
 //    @ResponseBody
 //    private void deleteBudget(@RequestParam("budget_id") int budgetId) throws SQLException {
@@ -54,17 +63,40 @@ public class BudgetController {
 //    }
 //
     @GetMapping(value="/api/v1/budget/{user_id}", produces="text/html")
-    public String getAllBudgetDetails(@PathVariable("user_id") int userId, Model model, HttpSession session) throws SQLException {
+    public String getAllBudgetDetails(@PathVariable("user_id") int userId, @RequestParam("month") Optional<String> month, Model model, HttpSession session) throws SQLException {
 //        JSONObject userCache = SessionManager.getSession(session);
 //
 //        if(userCache.containsKey("userId")) {
 //            int userId = (Integer)userCache.get("userId");
-            LocalDate currentdate = LocalDate.now();
-            String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
-            String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
-            System.out.println(startDate + endDate);
+
+            String monthNumber = month.orElse("");
+            String startDate = null;
+            String endDate = null;
+            String dateToDisplay = null;
+            int currentMonth = 0;
+
+            if(monthNumber.length() > 0) {
+                LocalDate currentDate = LocalDate.now();
+                LocalDate newDate = LocalDate.of(currentDate.getYear(),Integer.parseInt(monthNumber),01);
+
+                startDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-01";
+                endDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-" + newDate.lengthOfMonth();
+
+                dateToDisplay = newDate.getMonth().toString() + "," + newDate.getYear();
+                currentMonth = newDate.getMonth().ordinal() + 1;
+            }else {
+                LocalDate currentdate = LocalDate.now();
+                startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
+                endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
+                System.out.println(startDate + endDate);
+                dateToDisplay = currentdate.getMonth().toString() + "," + currentdate.getYear();
+                currentMonth = currentdate.getMonth().ordinal() + 1;
+            }
+
             List<Budget> budgetList = budgetFactory.createBudget().getAllBudgetDetailsService(userId,startDate,endDate);
             model.addAttribute("budgetList" , budgetList);
+            model.addAttribute("dateToDisplay",dateToDisplay);
+            model.addAttribute("currentMonth",currentMonth);
             return "budget";
 //        } else {
 //            return "index";
@@ -74,10 +106,19 @@ public class BudgetController {
 
     @GetMapping(value="/api/v1/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
-       Budget b = budgetFactory.createBudget().getBudgetById(budgetId);
-       List<Wallet> w = new Wallet().getAllWalletDetails(1);
-       model.addAttribute("budget",b);
-       model.addAttribute("wallet",w);
+       Budget budgetDetails = budgetFactory.createBudget().getBudgetById(budgetId);
+       List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+       model.addAttribute("budget",budgetDetails);
+       model.addAttribute("wallet",walletList);
        return "updateBudget";
+    }
+
+    @GetMapping(value="/api/v1/budget/add", produces="text/html")
+    private String addBudgetPage(Model model) throws SQLException {
+        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+        Budget budget = budgetFactory.createBudget();
+        model.addAttribute("wallet",walletList);
+        model.addAttribute("budget",budget);
+        return "addBudget";
     }
 }

@@ -5,9 +5,7 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="../js/budget.js"></script>
+    <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
 </head>
 <body>
 <form action="#" th:action="@{/api/v1/budget}" th:object="${budget}" method="POST">
@@ -18,18 +16,21 @@
             <input type="hidden" th:field="${budget.budgetId}"/>
             <!--            <input type="hidden" th:field="${budget.walletId}"/>-->
             <input type="hidden" th:field="${budget.walletName}"/>
+            <input type="hidden" th:field="${budget.month}"/>
             <input type="hidden" th:field="${budget.userId}"/>
             <input type="hidden" th:field="${budget.totalExpenses}"/>
         </div>
         <div class="form-group">
             <label>Choose Wallet</label>
-            <select class="form-control" id="walletId">
+            <select class="form-control" id="walletId" th:field="${budget.walletId}">
                 <option th:each="i : ${wallet}" th:value="${i.walletId}" th:text="${i.walletLabel}"></option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
+        <button type="submit" class="btn">Update</button>
     </div>
 </form>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="../js/budget.js"></script>
 </body>
 </html>

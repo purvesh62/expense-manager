@@ -5,16 +5,18 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="../js/budget.js"></script>
+    <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
 </head>
 <body>
-<p>
-<!--    <span th:text="List of budget"></span>-->
-</p>
+<div id="header">
+    <div th:text="${dateToDisplay}">Dummy Date</div>
+    <div>
+        <button class="btn" id="backButton" th:onclick="|window.location.href='/api/v1/budget/1?month='+${currentMonth-1}|">Back</button>
+        <button class="btn" id="nextButton" th:onclick="|window.location.href='/api/v1/budget/1?month='+${currentMonth+1}|">Next</button>
+    </div>
+</div>
 <div class="p-4">
-    <div><button type="button" class="btn btn-primary mb-2"  data-toggle="modal" data-target="#addBudgetModal" >Add Budget</button></div>
+    <div><button type="button" class="btn mb-2"  th:onclick="|window.location.href='/api/v1/budget/add'|">Add Budget</button></div>
     <div class="row">
         <div class="col-4" th:each="budget : ${budgetList}">
             <div class="card" >
@@ -22,51 +24,16 @@
                     <h5 class="card-title" th:text="${budget.walletName}">Dummy Title</h5>
                     <p>Limit: $<span th:text="${budget.budgetLimit}">Dummy Limit</span></p>
                     <p>Total Expenses: $<span th:text="${budget.totalExpenses}">Dummy Expenses</span></p>
-                    <a th:href="@{'/api/v1/budget/budgetId/' + ${budget.budgetId}}" class="btn btn-primary">Edit</a>
-<!--                    <button data-toggle="modal" data-target="#editBudgetModal" th:data-budget="${budget}" class="btn btn-primary">Edit</button>-->
+                    <a th:href="@{'/api/v1/budget/budgetId/' + ${budget.budgetId}}" class="btn">Edit</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="../js/budget.js"></script>
 
-<!-- Modal -->
-<!--<div class="modal fade" id="addBudgetModal" tabindex="-1" role="dialog" aria-labelledby="addBudgetModal" aria-hidden="true">-->
-<!--    <div class="modal-dialog" role="document">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="addBudgetModalLabel">Add Budget</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<!--    <div class="modal fade" id="editBudgetModal" tabindex="-1" role="dialog" aria-labelledby="editBudgetModal" aria-hidden="true">-->
-<!--        <div class="modal-dialog" role="document">-->
-<!--            <div class="modal-content">-->
-<!--                <div class="modal-header">-->
-<!--                    <h5 class="modal-title" id="exampleModalLabel">Edit Budget</h5>-->
-<!--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                        <span aria-hidden="true">&times;</span>-->
-<!--                    </button>-->
-<!--                </div>-->
-<!--                <div class="modal-body">-->
-<!--                    <form action="#" th:action="@{/api/v1/budget}" th:object="${budget}" method="PUT">-->
-<!--                        <p>Limit: <input type="text" th:field="*{budgetLimit}"  name="budgetLimit"/></p>-->
-<!--                        <div class="modal-footer">-->
-<!--                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-<!--                            <button type="submit" class="btn btn-primary">Update</button>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </body>
 </html>

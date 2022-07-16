@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Home page</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
+</head>
+<body>
+<form action="#" th:action="@{/api/v1/budget/add}" th:object="${budget}" method="POST">
+    <div class="p-4">
+        <div class="form-group">
+            <label>Limit</label>
+            <input type="text" th:field="${budget.budgetLimit}"/>
+            <input type="hidden" th:field="${budget.budgetId}"/>
+            <input type="hidden" th:field="${budget.walletName}"/>
+            <input type="hidden" th:field="${budget.userId}"/>
+            <input type="hidden" th:field="${budget.totalExpenses}"/>
+        </div>
+        <div class="form-group">
+            <label>Choose Wallet</label>
+            <select class="form-control" id="walletId" th:field="${budget.walletId}">
+                <option th:each="i : ${wallet}" th:value="${i.walletId}" th:text="${i.walletLabel}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Month</label>
+            <select class="form-control" id="month" th:field="${budget.month}">
+
+                <option th:value="1" th:text="Jan"></option>
+                <option th:value="2" th:text="Feb"></option>
+                <option th:value="3" th:text="Mar"></option>
+                <option th:value="4" th:text="Apr"></option>
+                <option th:value="5" th:text="May"></option>
+                <option th:value="6" th:text="June"></option>
+                <option th:value="7" th:text="Jul"></option>
+                <option th:value="8" th:text="Aug"></option>
+                <option th:value="9" th:text="Sept"></option>
+                <option th:value="10" th:text="Oct"></option>
+                <option th:value="11" th:text="Nov"></option>
+                <option th:value="12" th:text="Dec"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn">Add</button>
+    </div>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="../js/budget.js"></script>
+</body>
+</html>
