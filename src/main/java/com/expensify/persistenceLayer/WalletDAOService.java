@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -33,8 +34,11 @@ public class WalletDAOService {
                     wallet.setPaymentType(resultSet.getInt("p_type"));
                     wallet.setAmount(resultSet.getFloat("amount"));
                     walletList.add(wallet);
+
                 }
+
             }
+            Collections.sort(walletList);
             return walletList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,6 +64,7 @@ public class WalletDAOService {
     }
 
     public void addNewWallet(Wallet newWallet) throws SQLException {
+        System.out.println("NEW WALLET"+newWallet.getWalletLabel()+" "+ newWallet.getPaymentType()+" " + newWallet.getAmount());
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(newWallet.getUserId());
@@ -67,7 +72,7 @@ public class WalletDAOService {
             parameterList.add(newWallet.getPaymentType());
             parameterList.add(newWallet.getAmount());
             database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList);
-
+            System.out.println("Wallet Added");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
