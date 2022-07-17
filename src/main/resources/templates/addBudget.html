@@ -8,7 +8,8 @@
     <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
 </head>
 <body>
-<form action="#" th:action="@{/api/v1/budget/add}" th:object="${budget}" method="POST">
+<header th:insert ="fragments/header :: header"></header>
+<form action="#" th:action="@{/budget/add}" th:object="${budget}" method="POST">
     <div class="p-4">
         <div class="form-group">
             <label>Limit</label>

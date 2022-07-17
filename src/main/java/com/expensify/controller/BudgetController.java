@@ -42,18 +42,18 @@ public class BudgetController {
 //        return budget;
 //    }
 
-    @PostMapping(value="/api/v1/budget")
+    @PostMapping(value="/budget")
     private String updateBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
         budget.updateBudget();
-        return "redirect:/api/v1/budget/1";
+        return "redirect:/budget/1";
     }
 
-    @PostMapping(value="/api/v1/budget/add")
+    @PostMapping(value="/budget/add")
     private String addBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
         System.out.println(budget);
         budget.setUserId(1);
         budget.saveBudget();
-        return "redirect:/api/v1/budget/1";
+        return "redirect:/budget/1";
     }
 
 //    @RequestMapping(value="/api/v1/budget", method=RequestMethod.DELETE, produces="application/json")
@@ -62,7 +62,7 @@ public class BudgetController {
 //        budget.deleteBudget(budgetId);
 //    }
 //
-    @GetMapping(value="/api/v1/budget/{user_id}", produces="text/html")
+    @GetMapping(value="/budget/{user_id}", produces="text/html")
     public String getAllBudgetDetails(@PathVariable("user_id") int userId, @RequestParam("month") Optional<String> month, Model model, HttpSession session) throws SQLException {
 //        JSONObject userCache = SessionManager.getSession(session);
 //
@@ -104,7 +104,7 @@ public class BudgetController {
 
     }
 
-    @GetMapping(value="/api/v1/budget/budgetId/{budget_id}", produces="text/html")
+    @GetMapping(value="/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
        Budget budgetDetails = budgetFactory.createBudget().getBudgetById(budgetId);
        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
@@ -113,7 +113,7 @@ public class BudgetController {
        return "updateBudget";
     }
 
-    @GetMapping(value="/api/v1/budget/add", produces="text/html")
+    @GetMapping(value="/budget/add", produces="text/html")
     private String addBudgetPage(Model model) throws SQLException {
         List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
         Budget budget = budgetFactory.createBudget();

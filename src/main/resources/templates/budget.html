@@ -8,15 +8,16 @@
     <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
 </head>
 <body>
+<header th:insert ="fragments/header :: header"></header>
 <div id="header">
     <div th:text="${dateToDisplay}">Dummy Date</div>
     <div>
-        <button class="btn" id="backButton" th:onclick="|window.location.href='/api/v1/budget/1?month='+${currentMonth-1}|">Back</button>
-        <button class="btn" id="nextButton" th:onclick="|window.location.href='/api/v1/budget/1?month='+${currentMonth+1}|">Next</button>
+        <button class="btn" id="backButton" th:onclick="|window.location.href='/budget/1?month='+${currentMonth-1}|">Back</button>
+        <button class="btn" id="nextButton" th:onclick="|window.location.href='/budget/1?month='+${currentMonth+1}|">Next</button>
     </div>
 </div>
 <div class="p-4">
-    <div><button type="button" class="btn mb-2"  th:onclick="|window.location.href='/api/v1/budget/add'|">Add Budget</button></div>
+    <div><button type="button" class="btn mb-2"  th:onclick="|window.location.href='/budget/add'|">Add Budget</button></div>
     <div class="row">
         <div class="col-4" th:each="budget : ${budgetList}">
             <div class="card" >
@@ -24,7 +25,7 @@
                     <h5 class="card-title" th:text="${budget.walletName}">Dummy Title</h5>
                     <p>Limit: $<span th:text="${budget.budgetLimit}">Dummy Limit</span></p>
                     <p>Total Expenses: $<span th:text="${budget.totalExpenses}">Dummy Expenses</span></p>
-                    <a th:href="@{'/api/v1/budget/budgetId/' + ${budget.budgetId}}" class="btn">Edit</a>
+                    <a th:href="@{'/budget/budgetId/' + ${budget.budgetId}}" class="btn">Edit</a>
                 </div>
             </div>
         </div>
