@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Expensify</title>
     <link href="../static/css/expenses.css" th:href="@{/css/expenses.css}" rel="stylesheet"/>
 </head>
@@ -34,10 +35,13 @@
 </script>
 
 <div id="newEventModal">
-    <form th:action="@{/expense}" th:object="${expense}" method="POST">
-        <h2>Expense</h2>
-        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title">
-
+    <form th:action="@{/add-expense}" th:object="${expense}" method="POST">
+        <div id="modelHeader">
+            <h2>Expense</h2>
+            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
+        </div>
+        <input type="text" id="expenseTitleInput" th:field="*{expenseTitle}" placeholder="Title" />
+<!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title">-->
         <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
             <option value="1">Debit Card</option>
             <option value="2">Credit Card</option>
@@ -50,17 +54,42 @@
         <input type="hidden" th:field="*{userID}"/>
         <input id="expenseDate" type="hidden" th:value="*{expenseDate}" name="expenseDate" value="getTodaysDate()"/>
         <button id="saveButton" type="submit">Save</button>
-        <button id="cancelButton" type="cancel" onclick="window.location.reload()">Cancel</button>
+        <!--        <input id="cancelButton" type="button" onclick="window.location.reload()" value="Cancel"/>-->
+<!--        <button class="closeButton" type="cancel">Close</button>-->
     </form>
 </div>
 
 <div id="deleteEventModal">
-    <h2>Expense</h2>
+    <div style="display: flex;">
+        <h2>Expense</h2>
+        <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
+    </div>
 
-    <p id="eventText"></p>
+    <div>
+        <table id="modalTable">
+            <tr>
+                <td>Title</td>
+                <td id="eventText"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td id="eventDescription"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>
+            </tr>
+            <tr>
+                <td>Amount</td>
+                <td id="eventAmount"></td>
+            </tr>
+        </table>
+    </div>
 
     <button id="deleteButton">Delete</button>
-    <button id="closeButton">Close</button>
+<!--    <button class="closeButton">Close</button>-->
 </div>
 
 <div id="modalBackDrop"></div>

@@ -15,10 +15,29 @@ function openModal(date) {
     //yyyy-MM-dd
     document.getElementById("expenseDate").value = clicked.split("/")[2] + "-" + clicked.split("/")[0] + "-" + clicked.split("/")[1];
 
-    const eventForDay = events.find(e => e.date === clicked);
+    const eventForDay = events.find(e => e.expenseDate === dateFormatter(clicked));
 
     if (eventForDay) {
-        document.getElementById('eventText').innerText = eventForDay.title;
+        document.getElementById('eventText').innerText = eventForDay.expenseTitle;
+        document.getElementById('eventDescription').innerText = eventForDay.description;
+        document.getElementById('eventAmount').innerText = eventForDay.amount;
+        deleteEventModal.style.display = 'block';
+    } else {
+        newEventModal.style.display = 'block';
+    }
+
+    backDrop.style.display = 'block';
+}
+
+function openExpense(date) {
+    clicked = date;
+    //yyyy-MM-dd
+    document.getElementById("expenseDate").value = clicked.split("/")[2] + "-" + clicked.split("/")[0] + "-" + clicked.split("/")[1];
+
+    const eventForDay = events.find(e => e.expenseDate === dateFormatter(clicked));
+
+    if (eventForDay) {
+        document.getElementById('eventText').innerText = eventForDay.expenseTitle;
         deleteEventModal.style.display = 'block';
     } else {
         newEventModal.style.display = 'block';
@@ -81,6 +100,7 @@ function load(events) {
                 const eventDiv = document.createElement('div');
                 eventDiv.classList.add('event');
                 eventDiv.innerText = eventForDay.expenseTitle;
+                eventDiv.addEventListener('click', () => openExpense(dayString));
                 daySquare.appendChild(eventDiv);
             }
 
@@ -119,11 +139,16 @@ function saveEvent() {
     }
 }
 
+
 function deleteEvent() {
-    events = events.filter(e => e.date !== clicked);
+    let selectedEvent = events.filter(e => e.expenseDate == dateFormatter(clicked))[0];
+    events = events.filter(e => e.expenseDate !== dateFormatter(clicked));
     localStorage.setItem('events', JSON.stringify(events));
-    closeModal();
+    fetch('http://localhost:8080/expense?expense_id=' + selectedEvent.expenseID, {
+        method: 'DELETE',
+    }).then(closeModal()) // or res.json()
 }
+
 
 function initButtons() {
     document.getElementById('nextButton').addEventListener('click', () => {
@@ -169,12 +194,24 @@ function initButtons() {
             .then(response => response.json())
             .then(data => load(data));
     });
+    var eventElement = document.getElementById('event');
+    if (eventElement) {
+        eventElement.addEventListener('click', () => {
+            openExpense(date)
+        });
+    }
+
 
     document.getElementById('saveButton').addEventListener('click', saveEvent);
-    document.getElementById('cancelButton').addEventListener('click', closeModal);
+    // document.getElementById('cancelButton').addEventListener('click', closeModal);
     document.getElementById('deleteButton').addEventListener('click', deleteEvent);
-    document.getElementById('closeButton').addEventListener('click', closeModal);
+    var closeButton = document.getElementsByClassName('closeButton');
+    var numcloseButton = closeButton.length;
+    for (var i = 0; i < numcloseButton; i++) {
+        document.getElementsByClassName('closeButton')[i].addEventListener('click', closeModal);
+    }
 }
+
 
 initButtons();
 load(events);
