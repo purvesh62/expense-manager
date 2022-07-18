@@ -78,7 +78,7 @@ public class User {
         return authenticationDAO.verifyUser(this);
     }
 
-    public class BCryptPasswordEncoder {
+    public static class BCryptPasswordEncoder {
         public String encode(String password) {
             return password;
         }

@@ -15,6 +15,12 @@ public class UserController {
 
     private final User user = new User();
 
+    @GetMapping("/index")
+    @ResponseBody
+    public String viewHomePage() {
+        return "index";
+    }
+
     @PostMapping("/register")
     @ResponseBody
     public void registerUser(@RequestBody User user, HttpSession session) throws SQLException {
@@ -37,5 +43,13 @@ public class UserController {
         } else {
             // User already exists
         }
+    }
+    @PostMapping("/process_register")
+    @ResponseBody
+    public String processRegister(User userRepo) {
+        User.BCryptPasswordEncoder passwordEncoder = new User.BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(userRepo.getPassword());
+        userRepo.setPassword(encodedPassword);
+        return "process_register";
     }
 }

@@ -2,18 +2,14 @@ package com.expensify.controller;
 
 import com.expensify.SessionManager;
 import com.expensify.model.Budget;
-import com.expensify.model.BudgetFactory;
-import com.expensify.model.IBudgetFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -68,7 +64,7 @@ public class BudgetController {
             model.addAttribute("budgetList" , budgetList);
             return "budget";
         } else {
-            return "index";
+            return "login";
         }
 
     }

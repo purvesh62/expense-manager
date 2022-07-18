@@ -2,11 +2,13 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.User;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 
 @Component
@@ -43,7 +45,10 @@ public class UserDAOService {
 
         return userId;
     }
-
+    @Bean
+    public User.BCryptPasswordEncoder passwordEncoder() {
+        return new User.BCryptPasswordEncoder();
+    }
     public int verifyUser(User user) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
