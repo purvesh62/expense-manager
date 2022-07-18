@@ -97,4 +97,26 @@ public class ExpenseDAOService {
         }
         return expense;
     }
+
+    public Expense deleteUserExpense(Expense expense){
+        List<Object> parameterList = new ArrayList<>();
+        parameterList.add(expense.getExpenseID());
+        try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL delete_expense(?)", parameterList)) {
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    expense.setExpenseID(resultSet.getInt("expense_id"));
+                    expense.setExpenseTitle(resultSet.getString("title"));
+                    expense.setDescription(resultSet.getString("description"));
+                    expense.setUserID(resultSet.getInt("user_id"));
+                    expense.setAmount(resultSet.getFloat("amount"));
+                    expense.setExpenseCategory(resultSet.getInt("c_id"));
+                    expense.setWalletId(resultSet.getInt("w_id"));
+                    expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
+                }
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return expense;
+    }
 }

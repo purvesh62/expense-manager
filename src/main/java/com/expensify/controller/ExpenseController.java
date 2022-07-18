@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 @Controller
 public class ExpenseController {
@@ -37,22 +38,45 @@ public class ExpenseController {
         return null;
     }
 
-    @PostMapping(value = "/expense")
+    @RequestMapping(value = "expense", method = DELETE, produces = "application/json")
+    public String delete(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            expense.setExpenseID(expenseId);
+            expense.deleteExpense();
+            return "redirect:/";
+        }
+        return "redirect:/";
+    }
+
+    @PostMapping(value = "/add-expense")
     public String post(@ModelAttribute("expense") Expense expense, BindingResult result, HttpSession session) {
+        System.out.println(expense);
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             expense.setUserID(userId);
-            return "redirect:/expense";
+            if (expense.getAmount() == null) {
+                expense.addUserExpense();
+            } else {
+                expense.addUserExpense();
+            }
+            return "redirect:/";
         }
         return null;
     }
 
 
-    @GetMapping(path = "/expense", produces = "text/html")
+    @GetMapping(path = "/", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
-            JSONObject userCache = SessionManager.getSession(session);
+            // TODO: Remove later
+            JSONObject userCache = new JSONObject();
+            userCache.put("userId", 5);
+            SessionManager.setSession(session, userCache);
+
+            userCache = SessionManager.getSession(session);
             if (userCache.containsKey("userId")) {
                 LocalDate currentdate = LocalDate.now();
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";

@@ -49,9 +49,11 @@ button {
     margin: auto;
     display: flex;
     flex-wrap: wrap;
+    z-index: 1;
 }
 
 .day {
+    z-index: 2;
     width: 100px;
     padding: 10px;
     height: 100px;
@@ -81,6 +83,11 @@ button {
     border-radius: 5px;
     max-height: 55px;
     overflow: hidden;
+    z-index: 2;
+}
+
+.event:hover {
+    background-color: #e8faed;
 }
 
 .padding {
@@ -118,17 +125,26 @@ button {
     border: 2px solid red;
 }
 
-#cancelButton, #deleteButton {
-    background-color: #d36c6c;
+#modelHeader {
+    display: flex;
 }
 
-#saveButton, #closeButton {
+#cancelButton, #deleteButton {
+    background-color: #d36c6c;
+    width: 75px;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px grey;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+}
+
+#saveButton {
     background-color: #92a1d1;
 }
 
-#eventText {
-    font-size: 14px;
-}
 
 #modalBackDrop {
     display: none;
@@ -140,6 +156,20 @@ button {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.8);
 }
+
+#modalTable {
+    margin-bottom: 5%;
+    padding: 0 0 5% 0;
+}
+
+td:first-child {
+    padding-right: 10px;
+}
+
+td:nth-child(2) {
+    color: gray;
+}
+
 
 .close-button {
     border: none;
@@ -159,4 +189,47 @@ button {
     position: absolute;
     right: 0;
     top: 0
+}
+
+#modalRoot {
+    position: fixed;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.4);
+    left: 0;
+    top: 0;
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+    transition: opacity 0.15s ease-out, width 0s linear 0.15s, height 0s linear 0.15s;
+}
+
+
+#modalRoot.visible {
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    transition: opacity 0.15s ease-out;
+}
+
+.collapsible {
+    background-color: #777;
+    color: white;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+
+.active, .collapsible:hover {
+    background-color: #555;
+}
+
+.content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f1f1f1;
 }
