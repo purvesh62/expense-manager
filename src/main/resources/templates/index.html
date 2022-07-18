@@ -1,22 +1,71 @@
-<!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-<title>Expensify</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous" />
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="ISO-8859-1">
-    <title>EXPENSIFY</title>
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
-    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expensify</title>
+    <link href="../static/css/expenses.css" th:href="@{/css/expenses.css}" rel="stylesheet"/>
 </head>
+
 <body>
-<div class="container text-center">
-    <h1>Welcome to EXPENSIFY!!!!</h1>
-    <h3><a th:href="@{/login}">Login Page</a></h3>
-    <h3><a th:href="@{/register}">Sign up Page</a></h3>
+<div id="container">
+    <div id="header">
+        <div id="monthDisplay"></div>
+        <div>
+            <button id="backButton">Back</button>
+            <button id="nextButton">Next</button>
+        </div>
+    </div>
+
+    <div id="weekdays">
+        <div>Sunday</div>
+        <div>Monday</div>
+        <div>Tuesday</div>
+        <div>Wednesday</div>
+        <div>Thursday</div>
+        <div>Friday</div>
+        <div>Saturday</div>
+    </div>
+
+    <div id="calendar"></div>
 </div>
+<script th:inline="javascript">
+    var localExpenseData = [[${expenseData}]];
+</script>
+
+<div id="newEventModal">
+    <form th:action="@{/expense}" th:object="${expense}" method="POST">
+        <h2>Expense</h2>
+        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title">
+
+        <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
+            <option value="1">Debit Card</option>
+            <option value="2">Credit Card</option>
+            <option value="3">Cash</option>
+            <option value="4">Saving Account</option>
+        </select>
+        <input id="expenseAccountNameInput" type="number" th:field="*{amount}" placeholder="Amount" min="1"/>
+        <textarea id="expenseNoteInput" th:field="*{description}" placeholder="Note"></textarea>
+        <input type="hidden" th:field="*{expenseID}"/>
+        <input type="hidden" th:field="*{userID}"/>
+        <input id="expenseDate" type="hidden" th:value="*{expenseDate}" name="expenseDate" value="getTodaysDate()"/>
+        <button id="saveButton" type="submit">Save</button>
+        <button id="cancelButton" type="cancel" onclick="window.location.reload()">Cancel</button>
+    </form>
+</div>
+
+<div id="deleteEventModal">
+    <h2>Expense</h2>
+
+    <p id="eventText"></p>
+
+    <button id="deleteButton">Delete</button>
+    <button id="closeButton">Close</button>
+</div>
+
+<div id="modalBackDrop"></div>
+
+<script src="../js/expenses.js"></script>
 </body>
+
 </html>

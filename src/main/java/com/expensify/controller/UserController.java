@@ -5,6 +5,7 @@ import com.expensify.SessionManager;
 import com.expensify.model.User;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -51,5 +52,15 @@ public class UserController {
         String encodedPassword = passwordEncoder.encode(userRepo.getPassword());
         userRepo.setPassword(encodedPassword);
         return "process_register";
+    }
+
+    @GetMapping(path = "/login", produces = "text/html")
+    public String userExpenses(Model model, HttpSession session) {
+        try {
+            return "login";
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+        return "login";
     }
 }
