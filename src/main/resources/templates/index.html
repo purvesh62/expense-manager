@@ -40,8 +40,8 @@
             <h2>Expense</h2>
             <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
         </div>
-        <input type="text" id="expenseTitleInput" th:field="*{expenseTitle}" placeholder="Title" />
-<!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title">-->
+        <input type="text" id="expenseTitleInput" th:field="*{expenseTitle}" placeholder="Title"/>
+<!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title"/>-->
         <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
             <option value="1">Debit Card</option>
             <option value="2">Credit Card</option>
@@ -65,7 +65,7 @@
         <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
     </div>
 
-    <div>
+    <div id="eventModal">
         <table id="modalTable">
             <tr>
                 <td>Title</td>

@@ -14,35 +14,59 @@ function openModal(date) {
     clicked = date;
     //yyyy-MM-dd
     document.getElementById("expenseDate").value = clicked.split("/")[2] + "-" + clicked.split("/")[0] + "-" + clicked.split("/")[1];
-
-    const eventForDay = events.find(e => e.expenseDate === dateFormatter(clicked));
-
-    if (eventForDay) {
-        document.getElementById('eventText').innerText = eventForDay.expenseTitle;
-        document.getElementById('eventDescription').innerText = eventForDay.description;
-        document.getElementById('eventAmount').innerText = eventForDay.amount;
-        deleteEventModal.style.display = 'block';
-    } else {
+    if (deleteEventModal.style.display !== "block") {
         newEventModal.style.display = 'block';
+        backDrop.style.display = 'block';
     }
-
-    backDrop.style.display = 'block';
+    // const eventForDay = events.find(e => e.expenseDate === dateFormatter(clicked));
+    //
+    // if (!eventForDay) {
+    //     document.getElementById('eventText').innerText = eventForDay.expenseTitle;
+    //     document.getElementById('eventDescription').innerText = eventForDay.description;
+    //     document.getElementById('eventAmount').innerText = eventForDay.amount;
+    //     deleteEventModal.style.display = 'block';
+    // } else {
+    //     newEventModal.style.display = 'block';
+    // }
+    // newEventModal.style.display = 'block';
+    // backDrop.style.display = 'block';
 }
+
 
 function openExpense(date) {
     clicked = date;
-    //yyyy-MM-dd
+
     document.getElementById("expenseDate").value = clicked.split("/")[2] + "-" + clicked.split("/")[0] + "-" + clicked.split("/")[1];
 
-    const eventForDay = events.find(e => e.expenseDate === dateFormatter(clicked));
-
-    if (eventForDay) {
-        document.getElementById('eventText').innerText = eventForDay.expenseTitle;
-        deleteEventModal.style.display = 'block';
-    } else {
-        newEventModal.style.display = 'block';
-    }
-
+    const eventForDay = getEventsOnDay(dateFormatter(clicked));
+    // const eventForDay = events.find(e => e.expenseDate === dateFormatter(clicked));
+    // let eventModal = document.getElementById("eventModal")
+    //<div class="card">
+    //     <div class="card-header" id="headingOne">
+    //       <h2 class="mb-0">
+    //         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+    //           Collapsible Group Item #1
+    //         </button>
+    //       </h2>
+    //     </div>
+    // let modelTable = document.getElementById("modalTable");
+    // for (let i = 0; i < eventForDay.length; i++) {
+    //     let r1 = document.createElement('tr');
+    //     let td1 = document.createElement('td');
+    //     td1.innerText = 'Title';
+    //     let td2 = document.createElement('td');
+    //     td2.innerText = eventForDay[i].title;
+    //     r1.appendChild(td1);
+    //     r1.appendChild(td2);
+    //     modelTable.appendChild(r1);
+    // }
+    // document.body.appendChild(modelTable);
+    // modelTable.style.display = 'block';
+    document.getElementById('eventText').innerText = eventForDay[0].expenseTitle;
+    document.getElementById('eventDescription').innerText = eventForDay[0].description;
+    document.getElementById('eventAmount').innerText = eventForDay[0].amount;
+    deleteEventModal.style.display = 'block';
+    newEventModal.style.display = 'none';
     backDrop.style.display = 'block';
 }
 
@@ -85,32 +109,45 @@ function load(events) {
     for (let i = 1; i <= paddingDays + daysInMonth; i++) {
         const daySquare = document.createElement('div');
         daySquare.classList.add('day');
+        daySquare.addEventListener('click', () => openModal(dayString));
 
         const dayString = `${month + 1}/${i - paddingDays}/${year}`;
 
         if (i > paddingDays) {
             daySquare.innerText = i - paddingDays;
-            const eventForDay = events.find(e => e.expenseDate === dateFormatter(dayString));
+            // const eventForDay = events.find(e => e.expenseDate === dateFormatter(dayString));
+            const eventForDay = getEventsOnDay(dateFormatter(dayString));
 
             if (i - paddingDays === day && nav === 0) {
                 daySquare.id = 'currentDay';
             }
 
-            if (eventForDay) {
+            if (eventForDay.length > 0) {
+                let totalExpense = 0;
                 const eventDiv = document.createElement('div');
                 eventDiv.classList.add('event');
-                eventDiv.innerText = eventForDay.expenseTitle;
+                for (let j = 0; j < eventForDay.length; j++) {
+                    totalExpense += eventForDay[j].amount;
+                }
                 eventDiv.addEventListener('click', () => openExpense(dayString));
                 daySquare.appendChild(eventDiv);
+                eventDiv.innerText = "$ " + totalExpense;
             }
-
-            daySquare.addEventListener('click', () => openModal(dayString));
         } else {
             daySquare.classList.add('padding');
         }
-
         calendar.appendChild(daySquare);
     }
+}
+
+function getEventsOnDay(dayString) {
+    let eventOnDay = [];
+    for (let i = 0; i < events.length; i++) {
+        if (events[i].expenseDate == dayString) {
+            eventOnDay.push(events[i]);
+        }
+    }
+    return eventOnDay;
 }
 
 function closeModal() {
@@ -118,7 +155,7 @@ function closeModal() {
     newEventModal.style.display = 'none';
     deleteEventModal.style.display = 'none';
     backDrop.style.display = 'none';
-    expenseTitleInput.value = '';
+    // expenseTitleInput.value = '';
     clicked = null;
     load(events);
 }
