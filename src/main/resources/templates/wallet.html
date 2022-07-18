@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <title>Wallet Details</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="../js/budget.js"></script>
+</head>
+<style>
+
+    #hideMe {
+        -webkit-animation: cssAnimation 5s forwards;
+        animation: cssAnimation 5s forwards;
+        position: absolute;
+        left:0;
+        right:0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+    }
+    @keyframes cssAnimation {
+        100% {visibility: hidden;}
+    }
+    @-webkit-keyframes cssAnimation {
+        100% {visibility: hidden;}
+    }
+</style>
+<body>
+<p>
+        <span th:text="'Wallets of the User'"></span>
+</p>
+<div class = "alert alert-success" id ="hideMe" role = "alert" th:text = "${SUCCESS}" th:if = "${SUCCESS}"></div>
+
+<div class="p-4">
+    <div><button type="button" class="btn btn-primary mb-2"  data-toggle="modal" data-target="#addWalletModal" >Add Wallet</button></div>
+
+    <div class="row">
+        <div class="col-4" th:each="wallet : ${wallet_list}">
+            <div class="card" >
+                <div class="card-body">
+<!--                    <p>Wallet ID: <span th:text="${wallet.walletId}">Dummy Limit</span></p>-->
+                    <p>Wallet Label: <span th:text="${wallet.walletLabel}">Dummy Expenses</span></p>
+                    <p>Payment Type: <span th:text="${wallet.paymentType}">Dummy Expenses</span></p>
+                    <p>Amount: $<span th:text="${wallet.amount}">Dummy Expenses</span></p>
+                    <a th:href="@{/api/v1/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn btn-primary">Delete</a>
+<!--                    <a th:href="@{/api/v1/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn btn-primary">Edit</a>-->
+                    <button data-toggle="modal" th:data-wallet="${wallet}" th:attr="data-target=${'#editWalletModal' + wallet.walletId}" class="btn btn-primary">Edit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal-->
+<div class="modal fade" id="addWalletModal" tabindex="-1" role="dialog" aria-labelledby="addWalletModal" aria-hidden="false">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addWalletModalLabel">Add Wallet</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form action="#" method="POST" th:action="@{/api/v1/wallet}" th:object="${wallet}">
+<!--                <label for="PaymentCategories"> Payment Categories:</label>-->
+<!--                <select id ="PaymentCategories" th:field="*{paymentType}">-->
+<!--                    <option value="0">Select Option</option>-->
+<!--                    <option th:each="category:${payment_categories}" th:value="${category.paymentId}" th:text="${category.paymentCategory}"></option>-->
+<!--                </select>-->
+<!--                 <br>-->
+<!--                <label for="walletLabel">Wallet Label</label><input id="walletLabel" type="text" th:field="*{walletLabel}">-->
+<!--                <br>-->
+<!--                <label for="Amount">Amount</label><input id="Amount" type="number" th:field="*{amount}">-->
+<!--                <br>-->
+                    <input type="hidden" th:value="${wallet.getUserId()}" th:field="*{userId}">
+                    <div class="form-group">
+                        <label for="PaymentCategories">Payment Categories:</label>
+                        <select class="form-control" id ="PaymentCategories" th:field="*{paymentType}">
+                            <option value="0">Select Option</option>
+                            <option th:each="category:${payment_categories}" th:value="${category.paymentId}" th:text="${category.paymentCategory}"></option>
+                        </select>
+<!--                        <div class="alert alert-warning" th:if="${#fields.hasErrors('PaymentCategories')}" th:errors="*{PaymentCategories}"></div>-->
+                    </div>
+                    <div class="form-group">
+                        <label for="walletLabel">Wallet Label</label>
+                        <input class="form-control" type="text" th:field="*{walletLabel}" id="walletLabel" placeholder="walletLabel">
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('walletLabel')}" th:errors="*{walletLabel}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Amount">Amount</label>
+                        <input class="form-control" type="text" th:field="*{amount}" id="Amount" placeholder="Amount">
+                        <div class="alert alert-warning" th:if="${#fields.hasErrors('Amount')}" th:errors="*{amount}"></div>
+                    </div>
+
+                <button class="btn btn-primary" type="submit">ADD</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:each="wallet : ${wallet_list}" th:attr="id=${'editWalletModal' + wallet.walletId}" class="modal fade"  tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editWalletModalLabel">Edit Wallet</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form  method="POST" th:action="@{/api/v1/updatewallet}" th:object="${wallet}" >
+                        <input hidden type="number" th:value="${wallet.walletId}" name="walletId"/>
+                        <input hidden type="number" th:value="${wallet.userId}" name="userId"/>
+                        <input type="text" th:value="${wallet.walletLabel}"  name="walletLabel"/>
+                        <input type="text" th:value="${wallet.amount}"  name="amount"/>
+<!--                        <input type="submit">Submit</input>-->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+<!--                    <form  method="PUT" th:action="@{/api/v1/wallet}" th:object="${wallet}" >-->
+<!--                        <input type="text" th:field="${wallet.walletId}" th:value="${wallet.walletId}"/>-->
+<!--                        <p>Wallet Label: <input type="text" th:field="${wallet.walletLabel}"  name="walletLabel"/></p>-->
+<!--                        <p>Amount: <input type="text" th:field="${wallet.amount}"  name="amount"/></p>-->
+<!--                        <div class="modal-footer">-->
+<!--                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+<!--                            <button type="submit" class="btn btn-primary">Update</button>-->
+<!--                        </div>-->
+<!--                    </form>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,7 +1,6 @@
 package com.expensify.model;
 
 public class BudgetFactory implements IBudgetFactory {
-
     public BudgetFactory(){
 
     }

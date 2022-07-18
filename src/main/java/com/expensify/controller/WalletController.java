@@ -4,8 +4,11 @@ import com.expensify.model.PaymentCategory;
 import com.expensify.model.Wallet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -20,37 +23,51 @@ public class WalletController {
 
     }
 
-    //   @GetMapping
-//    private  List<Wallet> getAllWalletDetails(@RequestParam("user_id") int userId) throws SQLException {
-//        return this.wallet.getAllWalletDetails(userId);
-//    }
     @GetMapping(value = "/api/v1/wallet", produces = "text/html")
     private String getAllWalletDetails(@RequestParam("user_id") int userId, Model model) throws SQLException {
         List<Wallet> walletList = wallet.getAllWalletDetails(userId);
         List<PaymentCategory> paymentCategoryList = paymentCategory.getAllPaymentCategoriesList();
         model.addAttribute("wallet_list", walletList);
         model.addAttribute("payment_categories", paymentCategoryList);
-        Wallet wallet = new Wallet();
         wallet.setUserId(userId);
-        model.addAttribute(wallet);
-        return "walletDetails";
+        wallet.setWalletId(wallet.getWalletId());
+        model.addAttribute("wallet",wallet);
+        return "wallet";
     }
 
     @PostMapping(value = "/api/v1/wallet")
-    private String addWallet(Wallet newWallet) throws SQLException {
-        this.wallet.saveWallet(newWallet);
-        return "redirect:/api/v1/wallet?user_id="+newWallet.getUserId();
+    private String addWallet(@Valid Wallet newWallet, BindingResult result, RedirectAttributes redirAttrs) throws SQLException {
+        System.out.println("Add called");
+        if (result.hasErrors()) {
+            return "redirect:/api/v1/wallet?user_id=" + newWallet.getUserId();
+
+        }
+        newWallet.saveWallet(newWallet);
+        redirAttrs.addFlashAttribute("SUCCESS", "Wallet Added");
+        return "redirect:/api/v1/wallet?user_id=" + newWallet.getUserId();
     }
 
 
-    @DeleteMapping
-    private void deleteWallet(@RequestParam("wallet_id") int walletId) throws SQLException {
+    @GetMapping(value = "/api/v1/wallet/walletId/{walletId}")
+    private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs) throws SQLException {
+        System.out.println(walletId);
+        int userId = wallet.getWalletById(walletId).getUserId();
         this.wallet.deleteWallet(walletId);
+        redirAttrs.addFlashAttribute("SUCCESS", "Wallet Deleted");
+        return "redirect:/api/v1/wallet?user_id=" + userId;
     }
 
-    @PutMapping
-    private void updateWallet(@RequestBody Wallet wallet) throws SQLException {
-        this.wallet.updateWallet(wallet);
+    @PostMapping(value =  "/api/v1/updatewallet")
+    private String updateWallet(@ModelAttribute("wallet") Wallet wallet) throws SQLException {
+//        wallet = this.wallet;
+//        System.out.println("Put Mapping called");
+//        System.out.println(wallet.getWalletId());
+//        System.out.println(wallet.getUserId());
+//        System.out.println("-------------------------------------------------");
+//        System.out.println(wallet.getWalletId()+" " +wallet.getAmount()+" " +wallet.getWalletLabel());
+//        System.out.println(wallet.getUserId());
+        wallet.updateWallet(wallet);
+        return "redirect:/api/v1/wallet?user_id=" + wallet.getUserId();
     }
 
 }

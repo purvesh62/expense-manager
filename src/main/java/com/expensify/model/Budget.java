@@ -2,8 +2,6 @@ package com.expensify.model;
 import com.expensify.persistenceLayer.BudgetDAOService;
 import java.sql.SQLException;
 import java.util.List;
-
-
 public class Budget {
     private final BudgetDAOService budgetDAOService;
 

@@ -1,17 +1,22 @@
 package com.expensify.model;
-
 import com.expensify.persistenceLayer.WalletDAOService;
-import org.apache.logging.log4j.util.PropertySource;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.sql.SQLException;
 import java.util.List;
 
 public class Wallet implements Comparable<Wallet> {
     private final WalletDAOService walletDAOService;
     private int walletId;
+    @NotEmpty
+    @NotNull
     private String walletLabel;
     private int userId;
+    @Min(value = 1)
     private int paymentType;
+    @Min(value = 1)
     private float amount;
 
     public Wallet() {
@@ -62,6 +67,10 @@ public class Wallet implements Comparable<Wallet> {
         return walletDAOService.getAllWalletDetails(userId);
     }
 
+    public Wallet getWalletById(int walletId) throws SQLException {
+        return walletDAOService.getWalletById(walletId);
+    }
+
     public void saveWallet(Wallet newWallet) throws SQLException {
         walletDAOService.addNewWallet(newWallet);
     }
@@ -70,16 +79,15 @@ public class Wallet implements Comparable<Wallet> {
         walletDAOService.deleteWallet(walletId);
     }
 
-    public void updateWallet(Wallet wallet) throws SQLException{
+    public void updateWallet(Wallet wallet) throws SQLException {
         walletDAOService.updateWallet(wallet);
     }
 
     @Override
     public int compareTo(Wallet wallet) {
-        if(this.walletId > wallet.walletId){
+        if (this.walletId > wallet.walletId) {
             return 1;
-        }
-        else{
+        } else {
             return -1;
         }
     }
