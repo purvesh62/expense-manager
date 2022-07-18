@@ -72,9 +72,9 @@ public class ExpenseController {
     public String userExpenses(Model model, HttpSession session) {
         try {
             // TODO: Remove later
-//            JSONObject userCache = new JSONObject();
-//            userCache.put("userId", 5);
-//            SessionManager.setSession(session, userCache);
+            JSONObject userCache = new JSONObject();
+            userCache.put("userId", 5);
+            SessionManager.setSession(session, userCache);
 
             userCache = SessionManager.getSession(session);
             if (userCache.containsKey("userId")) {
