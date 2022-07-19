@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -49,7 +48,7 @@ public class ExpenseController {
     }
 
 
-    @GetMapping(path = "/expense", produces = "text/html")
+    @GetMapping(path = "/", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
             JSONObject userCache = SessionManager.getSession(session);
