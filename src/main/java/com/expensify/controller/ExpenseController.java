@@ -17,7 +17,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 @Controller
 public class ExpenseController {
-    private final Expense expense;
+    private Expense expense;
 
     public ExpenseController() {
         this.expense = new Expense();

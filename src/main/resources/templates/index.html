@@ -38,10 +38,11 @@
     <form th:action="@{/add-expense}" th:object="${expense}" method="POST">
         <div id="modelHeader">
             <h2>Expense</h2>
-            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
+            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
+                                                                   class="fa fa-close fa-lg"></i></span>
         </div>
         <input type="text" id="expenseTitleInput" th:field="*{expenseTitle}" placeholder="Title"/>
-<!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title"/>-->
+        <!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title"/>-->
         <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
             <option value="1">Debit Card</option>
             <option value="2">Credit Card</option>
@@ -55,41 +56,44 @@
         <input id="expenseDate" type="hidden" th:value="*{expenseDate}" name="expenseDate" value="getTodaysDate()"/>
         <button id="saveButton" type="submit">Save</button>
         <!--        <input id="cancelButton" type="button" onclick="window.location.reload()" value="Cancel"/>-->
-<!--        <button class="closeButton" type="cancel">Close</button>-->
+        <!--        <button class="closeButton" type="cancel">Close</button>-->
     </form>
 </div>
 
 <div id="deleteEventModal">
     <div style="display: flex;">
         <h2>Expense</h2>
-        <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
+        <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
+                                                               class="fa fa-close fa-lg"></i></span>
     </div>
 
     <div id="eventModal">
-        <table id="modalTable">
-            <tr>
-                <td>Title</td>
-                <td id="eventText"></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>
-            </tr>
-            <tr>
-                <td>Description</td>
-                <td id="eventDescription"></td>
-            </tr>
-            <tr>
-                <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>
-            </tr>
-            <tr>
-                <td>Amount</td>
-                <td id="eventAmount"></td>
-            </tr>
-        </table>
+<!--                <table id="modalTable">-->
+<!--                    <tr>-->
+<!--                        <td>Title</td>-->
+<!--                        <td id="eventText"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Description</td>-->
+<!--                        <td id="eventDescription"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
+<!--                    </tr>-->
+<!--                    <tr>-->
+<!--                        <td>Amount</td>-->
+<!--                        <td id="eventAmount"></td>-->
+<!--                    </tr>-->
+<!--                </table>-->
+<!--        <table id="modalTable"></table>-->
+<!--        <button id="deleteButton">Delete</button>-->
     </div>
 
-    <button id="deleteButton">Delete</button>
-<!--    <button class="closeButton">Close</button>-->
+    <!--    <button id="deleteButton">Delete</button>-->
+    <!--    <button class="closeButton">Close</button>-->
 </div>
 
 <div id="modalBackDrop"></div>
