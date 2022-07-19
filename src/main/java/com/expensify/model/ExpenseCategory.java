@@ -9,8 +9,11 @@ public class ExpenseCategory {
     private String categoryName;
 
     private ExpenseCategoriesDAOService expenseCategoriesDAOService;
-    public ExpenseCategory(){
-        expenseCategoriesDAOService = new ExpenseCategoriesDAOService();
+
+    private final IExpenseCategoryFactory factory;
+    public ExpenseCategory(IExpenseCategoryFactory factory){
+        this.factory = factory;
+        this.expenseCategoriesDAOService = factory.makeExpenseCategoryDAOService();
     }
     public int getCategoryID() {
         return categoryID;

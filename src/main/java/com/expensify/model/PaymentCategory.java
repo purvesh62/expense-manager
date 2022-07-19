@@ -7,11 +7,12 @@ import java.util.List;
 public class PaymentCategory {
     private int paymentId;
     private String paymentCategory;
-
     private PaymentCategoriesDAOService paymentCategoriesDAOService;
+    private final IPaymentCategoryFactory factory;
 
-    public PaymentCategory() {
-        paymentCategoriesDAOService = new PaymentCategoriesDAOService();
+    public PaymentCategory(IPaymentCategoryFactory factory) {
+        this.factory = factory;
+        this.paymentCategoriesDAOService = factory.makePaymentCategoryDAOService();
     }
 
     public int getPaymentId() {

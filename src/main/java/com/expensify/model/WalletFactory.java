@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class WalletFactory implements IWalletFactory {
     @Override
     public Wallet makeWallet() {
+
         return Wallet.newWallet(this.makeWalletDAOService());
     }
 

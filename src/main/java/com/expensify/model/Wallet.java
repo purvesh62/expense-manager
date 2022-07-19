@@ -23,10 +23,12 @@ public class Wallet implements Comparable<Wallet> {
     }
 
     private Wallet(WalletDAOService walletDAOService) {
+
         this.walletDAOService = walletDAOService;
     }
 
     public static Wallet newWallet(WalletDAOService walletDAOService) {
+
         return new Wallet(walletDAOService);
     }
 

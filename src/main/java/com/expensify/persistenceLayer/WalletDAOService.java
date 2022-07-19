@@ -61,8 +61,6 @@ public class WalletDAOService {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
-
-
             ResultSet resultSet = database.executeProcedure("CALL get_wallet_by_id(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
@@ -86,7 +84,6 @@ public class WalletDAOService {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
-
             database.executeProcedure("CALL delete_wallet(?)", parameterList);
 
         } catch (Exception e) {

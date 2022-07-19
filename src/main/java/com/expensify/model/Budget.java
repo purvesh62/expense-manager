@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 public class Budget {
     private final BudgetDAOService budgetDAOService;
-
     private int budgetId;
     private int walletId;
 

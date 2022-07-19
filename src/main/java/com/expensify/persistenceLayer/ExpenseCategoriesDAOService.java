@@ -3,6 +3,7 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.ExpenseCategory;
+import com.expensify.model.IExpenseCategoryFactory;
 import com.expensify.model.Wallet;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +15,10 @@ import java.util.List;
 @Component
 public class ExpenseCategoriesDAOService {
     private final IDatabase database;
-    public ExpenseCategoriesDAOService() {
+
+    private final IExpenseCategoryFactory factory;
+    public ExpenseCategoriesDAOService(IExpenseCategoryFactory factory) {
+        this.factory = factory;
         this.database = Database.getInstance();
     }
     public List<ExpenseCategory> getAllExpenseCategoriesList() {
@@ -25,7 +29,7 @@ public class ExpenseCategoriesDAOService {
             ResultSet resultSet = database.executeProcedure("CALL get_all_expense_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    ExpenseCategory category= new ExpenseCategory();
+                    ExpenseCategory category= factory.makeExpenseCategory();
                     category.setCategoryID(resultSet.getInt("c_id"));
                     category.setCategoryName(resultSet.getString("expense_category"));
                     categoryList.add(category);

@@ -2,6 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
+import com.expensify.model.IPaymentCategoryFactory;
 import com.expensify.model.PaymentCategory;
 import com.expensify.model.WalletFactory;
 import org.springframework.stereotype.Component;
@@ -15,8 +16,11 @@ import java.util.List;
 public class PaymentCategoriesDAOService {
     private final IDatabase database;
 
-    public PaymentCategoriesDAOService() {
+    private final IPaymentCategoryFactory factory;
+
+    public PaymentCategoriesDAOService(IPaymentCategoryFactory factory) {
         this.database = Database.getInstance();
+        this.factory = factory;
     }
     public List<PaymentCategory> getAllPaymentCategoriesList() {
         List<PaymentCategory> paymentCategoryList = new ArrayList<>();
@@ -26,7 +30,7 @@ public class PaymentCategoriesDAOService {
             ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    PaymentCategory paymentCategory= new PaymentCategory();
+                    PaymentCategory paymentCategory= factory.makePaymentCategory();
                     paymentCategory.setPaymentId(resultSet.getInt("p_id"));
                     paymentCategory.setPaymentCategory(resultSet.getString("payment_category"));
                     paymentCategoryList.add(paymentCategory);
