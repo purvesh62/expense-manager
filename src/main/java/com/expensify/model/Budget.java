@@ -1,6 +1,9 @@
 package com.expensify.model;
+
 import com.expensify.persistenceLayer.BudgetDAOService;
+
 import java.sql.SQLException;
+import java.time.Month;
 import java.util.List;
 
 
@@ -16,10 +19,12 @@ public class Budget {
 
     private float totalExpenses;
 
-    public Budget() {
+    private String month;
 
+    public Budget() {
         budgetDAOService = new BudgetDAOService();
     }
+
     public int getBudgetId() {
         return budgetId;
     }
@@ -68,12 +73,20 @@ public class Budget {
         this.totalExpenses = totalExpenses;
     }
 
-    public  List<Budget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
-        return budgetDAOService.getAllBudgetDetails(user_id,startDate,endDate);
+    public String getMonth() {
+        return month;
     }
 
-    public Budget saveBudget(Budget newBudget) throws SQLException {
-        budgetDAOService.addNewBudget(newBudget);
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
+    public List<Budget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
+        return budgetDAOService.getAllBudgetDetails(user_id, startDate, endDate);
+    }
+
+    public Budget saveBudget() throws SQLException {
+        budgetDAOService.addNewBudget(this);
         return this;
     }
 
@@ -87,6 +100,6 @@ public class Budget {
     }
 
     public Budget getBudgetById(int budgetId) throws SQLException {
-       return budgetDAOService.getBudgetById(budgetId);
+        return budgetDAOService.getBudgetById(budgetId);
     }
 }

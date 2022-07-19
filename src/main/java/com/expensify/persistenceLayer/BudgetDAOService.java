@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -68,7 +70,18 @@ public class BudgetDAOService {
             parameterList.add(newBudget.getUserId());
             parameterList.add(newBudget.getBudgetLimit());
 
-            database.executeProcedure("CALL add_budget(?,?,?)", parameterList);
+            LocalDate currentDate = LocalDate.now();
+            LocalDate date = LocalDate.of(currentDate.getYear(), Integer.parseInt(newBudget.getMonth()),01);
+            Date start = formatter.parse(String.valueOf(date));
+            java.sql.Date startDate = new java.sql.Date(start.getTime());
+
+            Date end = formatter.parse(date.getYear() + "-" + (date.getMonth().ordinal() + 1) + "-" + date.lengthOfMonth());
+            java.sql.Date endDate = new java.sql.Date(end.getTime());
+
+            parameterList.add(startDate);
+            parameterList.add(endDate);
+
+            database.executeProcedure("CALL add_budget(?,?,?,?,?)", parameterList);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,7 +127,7 @@ public class BudgetDAOService {
             parameterList.add(budgetId);
 
 
-            ResultSet resultSet =  database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
+             ResultSet resultSet =  database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
 
