@@ -1,15 +1,24 @@
 package com.expensify.model;
 
-import com.expensify.model.EmailDetails;
-import org.springframework.context.annotation.PropertySource;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class EmailService {
-    public void sendMail(EmailDetails emailDetails) {
+public class EmailService implements IEmailService {
+    private static IEmailService instance;
+    private EmailService() {
+
+    }
+    public static IEmailService instance() {
+        if(null == instance){
+            instance = new EmailService();
+        }
+        return instance;
+    }
+
+    @Override
+    public void sendEmail(EmailDetails emailDetails) {
         try{
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");

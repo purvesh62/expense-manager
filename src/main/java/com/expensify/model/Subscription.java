@@ -1,7 +1,7 @@
 package com.expensify.model;
 
-import com.expensify.EmailService;
-import com.expensify.persistenceLayer.DailyExpenseReminderDOA;
+
+import com.expensify.persistenceLayer.SubscriptionDAO;
 
 import java.util.List;
 import java.util.ListIterator;
@@ -17,14 +17,14 @@ public class Subscription {
 
     private int subscriptionStatus;
 
-    private DailyExpenseReminderDOA expenseReminderDOA;
+    private SubscriptionDAO subscriptionDAO;
 
     public Subscription() {
         this.subscriptionId = 0;
         this.userId = 0;
         this.subscriptionType = 0;
         this.subscriptionStatus = 0;
-        expenseReminderDOA = new DailyExpenseReminderDOA();
+        subscriptionDAO = new SubscriptionDAO();
     }
 
     public int getSubscriptionId() {
@@ -74,14 +74,17 @@ public class Subscription {
             Subscription subscription = (Subscription) iter.next();
             EmailDetails emailDetails = new EmailDetails(subscription.getEmail(), "Have you filled it yet?", "Daily Expense Reminder");
 
-            EmailService emailService = new EmailService();
-            emailService.sendMail(emailDetails);
+            EmailService.instance().sendEmail(emailDetails);
         }
-
-
     }
 
     public List<Subscription> getDailyExpenseSubscribedUser() {
-        return expenseReminderDOA.dailyDailyExpenseSubscribedUsers();
+        return subscriptionDAO.dailyDailyExpenseSubscribedUsers();
+    }
+
+    public void notifyBudgetLimitExceeds(int userId) {
+        Subscription subscription = subscriptionDAO.getBudgetLimitExceedSubscribedUsers(userId);
+        EmailDetails emailDetails = new EmailDetails(subscription.getEmail(),"Your budget limit has been exceeded!!", "Budget Limit Exceeds");
+        EmailService.instance().sendEmail(emailDetails);
     }
 }

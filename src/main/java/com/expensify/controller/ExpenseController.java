@@ -1,10 +1,11 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.model.Expense;
-import com.expensify.model.ExpenseCategory;
-import com.expensify.model.PaymentCategory;
-import com.expensify.model.Wallet;
+import com.expensify.database.Database;
+import com.expensify.database.IDatabase;
+import com.expensify.model.*;
+import com.expensify.persistenceLayer.BudgetDAOServiceFactory;
+import com.expensify.persistenceLayer.IBudgetDAOServiceFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +67,14 @@ public class ExpenseController {
             } else {
                 expense.addUserExpense();
             }
-            expense.checkIfBudgetLimitExceeds();
+
+            IBudgetFactory budgetFactory = new BudgetFactory();
+
+            IBudgetDAOServiceFactory budgetDAOServiceFactory = new BudgetDAOServiceFactory();
+            IDatabase database = Database.instance();
+
+            budgetFactory.createBudget(budgetDAOServiceFactory,database).checkIfBudgetLimitExceeds(expense);
+
             return "redirect:/";
         }
         return null;

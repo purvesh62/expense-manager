@@ -115,8 +115,5 @@ public class Expense {
         return expenseDAO.deleteUserExpense(this);
     }
 
-    public void checkIfBudgetLimitExceeds() throws SQLException, ParseException {
-        int userId =  expenseDAO.checkIfBudgetLimitExceeds(this);
 
-    }
 }

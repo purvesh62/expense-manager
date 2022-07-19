@@ -1,9 +1,11 @@
 package com.expensify.persistenceLayer;
 
 import com.expensify.model.Budget;
+import com.expensify.model.Expense;
 import com.expensify.model.IBudget;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 public interface IBudgetDAOService {
@@ -12,5 +14,6 @@ public interface IBudgetDAOService {
     void updateBudget(IBudget budget) throws SQLException;
     void deleteBudget(int budgetId) throws SQLException;
     IBudget getBudgetById(int budgetId) throws SQLException;
+    int checkIfBudgetLimitExceeds(Expense expense) throws ParseException, SQLException;
 
 }

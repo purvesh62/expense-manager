@@ -5,6 +5,7 @@ import com.expensify.persistenceLayer.IBudgetDAOService;
 import com.expensify.persistenceLayer.IBudgetDAOServiceFactory;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 public abstract class IBudget {
@@ -96,4 +97,5 @@ public abstract class IBudget {
      abstract public IBudget updateBudget() throws SQLException;
      abstract public void deleteBudget(int budgetId) throws SQLException;
      abstract public IBudget getBudgetById(int budgetId) throws SQLException;
+     abstract public void checkIfBudgetLimitExceeds(Expense expense) throws SQLException, ParseException;
 }
