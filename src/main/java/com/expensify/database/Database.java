@@ -22,14 +22,9 @@ public class Database implements  IDatabase{
         dbPort = System.getenv("DB_PORT");
         dbUser = System.getenv("DB_USER");
         dbPassword = System.getenv("DB_PASSWORD");
-//        dbHost = "db-5308.cs.dal.ca";
-//        dbName = "CSCI5308_7_DEVINT";
-//        dbPort = "3306";
-//        dbUser = "CSCI5308_7_DEVINT_USER";
-//        dbPassword = "4KhAVapdN5";
         dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
     }
-    public static Database getInstance() {
+    public static Database instance() {
         if(Database.instance == null){
             Database.instance = new Database();
         }

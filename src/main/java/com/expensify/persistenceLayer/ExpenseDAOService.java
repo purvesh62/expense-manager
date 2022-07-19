@@ -19,7 +19,7 @@ public class ExpenseDAOService {
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public ExpenseDAOService() {
-        this.mySqlDatabaseManager = Database.getInstance();
+        this.mySqlDatabaseManager = Database.instance();
     }
 
     public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {
@@ -43,12 +43,12 @@ public class ExpenseDAOService {
                     while (resultSet.next()) {
                         Expense expense = new Expense();
                         expense.setExpenseID(resultSet.getInt("expense_id"));
-                        expense.setTitle(resultSet.getString("title"));
+                        expense.setExpenseTitle(resultSet.getString("title"));
                         expense.setDescription(resultSet.getString("description"));
                         expense.setUserID(resultSet.getInt("user_id"));
                         expense.setAmount(resultSet.getFloat("amount"));
                         expense.setExpenseCategory(resultSet.getInt("c_id"));
-                        expense.setWallet(resultSet.getInt("w_id"));
+                        expense.setWalletId(resultSet.getInt("w_id"));
                         expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
                         userExpenseList.add(expense);
                     }
@@ -66,12 +66,12 @@ public class ExpenseDAOService {
     public Expense addUserExpenses(Expense expense) {
         List<Object> parameterList = new ArrayList<>();
         try {
-            parameterList.add(expense.getTitle());
+            parameterList.add(expense.getExpenseTitle());
             parameterList.add(expense.getDescription());
             parameterList.add(expense.getUserID());
             parameterList.add(expense.getAmount());
             parameterList.add(expense.getExpenseCategory());
-            parameterList.add(expense.getWallet());
+            parameterList.add(expense.getWalletId());
 
             Date expenseDate = formatter.parse(expense.getExpenseDate());
             parameterList.add(expenseDate);
@@ -80,12 +80,12 @@ public class ExpenseDAOService {
                 if (resultSet != null) {
                     while (resultSet.next()) {
                         expense.setExpenseID(resultSet.getInt("expense_id"));
-                        expense.setTitle(resultSet.getString("title"));
+                        expense.setExpenseTitle(resultSet.getString("title"));
                         expense.setDescription(resultSet.getString("description"));
                         expense.setUserID(resultSet.getInt("user_id"));
                         expense.setAmount(resultSet.getFloat("amount"));
                         expense.setExpenseCategory(resultSet.getInt("c_id"));
-                        expense.setWallet(resultSet.getInt("w_id"));
+                        expense.setWalletId(resultSet.getInt("w_id"));
                         expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
                     }
                 }
