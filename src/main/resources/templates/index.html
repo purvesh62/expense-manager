@@ -9,7 +9,17 @@
 </head>
 
 <body>
+<header th:insert ="fragments/header :: header"></header>
+
 <div id="container">
+    <nav class="navbar navbar-light bg-light" style="background-color: #92a1d1;">
+        <div class="container-fluid">
+            <a class="navbar-brand " href="#">
+                <img src="https://pageflows.com/media/logos/expensify.jpg" alt="" width="30" height="30"
+                     class="d-inline-block ">
+            </a>
+        </div>
+    </nav>
     <div id="header">
         <div id="monthDisplay"></div>
         <div>
@@ -38,8 +48,7 @@
     <form th:action="@{/add-expense}" th:object="${expense}" method="POST">
         <div id="modelHeader">
             <h2>Expense</h2>
-            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
-                                                                   class="fa fa-close fa-lg"></i></span>
+            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
         </div>
         <input type="text" id="expenseTitleInput" th:field="*{expenseTitle}" placeholder="Title"/>
         <!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title"/>-->
@@ -68,28 +77,28 @@
     </div>
 
     <div id="eventModal">
-<!--                <table id="modalTable">-->
-<!--                    <tr>-->
-<!--                        <td>Title</td>-->
-<!--                        <td id="eventText"></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Description</td>-->
-<!--                        <td id="eventDescription"></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
-<!--                    </tr>-->
-<!--                    <tr>-->
-<!--                        <td>Amount</td>-->
-<!--                        <td id="eventAmount"></td>-->
-<!--                    </tr>-->
-<!--                </table>-->
-<!--        <table id="modalTable"></table>-->
-<!--        <button id="deleteButton">Delete</button>-->
+        <!--                <table id="modalTable">-->
+        <!--                    <tr>-->
+        <!--                        <td>Title</td>-->
+        <!--                        <td id="eventText"></td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>Description</td>-->
+        <!--                        <td id="eventDescription"></td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
+        <!--                    </tr>-->
+        <!--                    <tr>-->
+        <!--                        <td>Amount</td>-->
+        <!--                        <td id="eventAmount"></td>-->
+        <!--                    </tr>-->
+        <!--                </table>-->
+        <!--        <table id="modalTable"></table>-->
+        <!--        <button id="deleteButton">Delete</button>-->
     </div>
 
     <!--    <button id="deleteButton">Delete</button>-->

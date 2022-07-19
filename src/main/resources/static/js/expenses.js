@@ -83,6 +83,7 @@ function openExpense(date) {
 
 function makeTable(eventForDay) {
     var eventModal = document.getElementById("eventModal");
+    eventModal.innerHTML = '';
     for (let i = 0; i < eventForDay.length; i++) {
         var div = document.createElement("div");
         div.style.marginTop = "15px";
@@ -301,6 +302,7 @@ function initButtons() {
             .then(response => response.json())
             .then(data => load(data));
     });
+
     var eventElement = document.getElementById('event');
     if (eventElement) {
         eventElement.addEventListener('click', () => {
