@@ -2,6 +2,9 @@ package com.expensify.controller;
 
 import com.expensify.SessionManager;
 import com.expensify.model.Expense;
+import com.expensify.model.ExpenseCategory;
+import com.expensify.model.PaymentCategory;
+import com.expensify.model.Wallet;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,8 +86,16 @@ public class ExpenseController {
                 String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
 
                 List<Expense> expenses = this.expense.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
-                model.addAttribute("expense", new Expense());
                 model.addAttribute("expenseData", expenses);
+
+                List<ExpenseCategory> expenseCategoriesList = new ExpenseCategory().getAllExpenseCategories();
+                model.addAttribute("expenseCategoriesList", expenseCategoriesList);
+
+                List<Wallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
+                model.addAttribute("walletList", walletList);
+
+
+                model.addAttribute("expense", new Expense());
                 return "index";
             } else {
                 return "redirect:/login";

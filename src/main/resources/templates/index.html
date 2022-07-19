@@ -47,16 +47,21 @@
     <form th:action="@{/add-expense}" th:object="${expense}" method="POST">
         <div id="modelHeader">
             <h2>Expense</h2>
-            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
+            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
+                                                                   class="fa fa-close fa-lg"></i></span>
         </div>
         <input type="text" id="expenseTitleInput" th:field="*{expenseTitle}" placeholder="Title"/>
-        <!--        <input type="text" id="expenseTitleInput" th:value="*{expenseTitle}" name="expenseTitle" placeholder="Title"/>-->
+
         <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
-            <option value="1">Debit Card</option>
-            <option value="2">Credit Card</option>
-            <option value="3">Cash</option>
-            <option value="4">Saving Account</option>
+            <option th:each="category : ${expenseCategoriesList}" th:value="${category.categoryID}"
+                    th:text="${category.categoryName}"></option>
         </select>
+
+        <select name="expenseWalletInput" id="expenseWalletInput" th:field="*{walletId}">
+            <option th:each="wallet : ${walletList}" th:value="${wallet.walletId}"
+                    th:text="${wallet.walletLabel}"></option>
+        </select>
+
         <input id="expenseAccountNameInput" type="number" th:field="*{amount}" placeholder="Amount" min="1"/>
         <textarea id="expenseNoteInput" th:field="*{description}" placeholder="Note"></textarea>
         <input type="hidden" th:field="*{expenseID}"/>

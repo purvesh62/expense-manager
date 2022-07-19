@@ -86,6 +86,7 @@ function makeTable(eventForDay) {
     eventModal.innerHTML = '';
     for (let i = 0; i < eventForDay.length; i++) {
         var div = document.createElement("div");
+        div.id = "eventID-" + eventForDay[i].expenseID;
         div.style.marginTop = "15px";
         div.style.marginBottom = "15px";
         var table = document.createElement("table");
@@ -135,6 +136,7 @@ function makeTable(eventForDay) {
         btn.classList.add("deleteButton");
         btn.id = "deleteBtn-" + eventForDay[i].expenseID;
         btn.innerText = "Delete";
+        btn.addEventListener('click', deleteEvent);
         div.appendChild(btn);
         eventModal.appendChild(div);
     }
@@ -221,14 +223,30 @@ function getEventsOnDay(events, dayString) {
     return eventOnDay;
 }
 
-function closeModal() {
-    expenseTitleInput.classList.remove('error');
-    newEventModal.style.display = 'none';
-    deleteEventModal.style.display = 'none';
-    backDrop.style.display = 'none';
-    // expenseTitleInput.value = '';
-    clicked = null;
-    load(events);
+function closeModal(selectedEvent) {
+    if (selectedEvent != null && selectedEvent.expenseID !== undefined){
+        var eventModal = document.getElementById("eventModal");
+        if (eventModal.childNodes.length > 1){
+            document.getElementById("eventID-" + selectedEvent.expenseID).remove();
+            clicked = null;
+            load(events);
+        }
+        else {
+            expenseTitleInput.classList.remove('error');
+            newEventModal.style.display = 'none';
+            deleteEventModal.style.display = 'none';
+            backDrop.style.display = 'none';
+            clicked = null;
+            load(events);
+        }
+    } else {
+        expenseTitleInput.classList.remove('error');
+        newEventModal.style.display = 'none';
+        deleteEventModal.style.display = 'none';
+        backDrop.style.display = 'none';
+        clicked = null;
+        load(events);
+    }
 }
 
 
@@ -241,7 +259,7 @@ function saveEvent() {
         });
 
         // localStorage.setItem('events', JSON.stringify(events));
-        closeModal();
+        closeModal(null);
     } else {
         expenseTitleInput.classList.add('error');
     }
@@ -254,7 +272,7 @@ function deleteEvent() {
     // localStorage.setItem('events', JSON.stringify(events));
     fetch('http://localhost:8080/expense?expense_id=' + selectedEvent.expenseID, {
         method: 'DELETE',
-    }).then(closeModal()) // or res.json()
+    }).then(closeModal(selectedEvent)) // or res.json()
 }
 
 
@@ -312,7 +330,6 @@ function initButtons() {
 
 
     document.getElementById('saveButton').addEventListener('click', saveEvent);
-    // document.getElementById('cancelButton').addEventListener('click', closeModal);
 
     var closeButton = document.getElementsByClassName('closeButton');
     for (var i = 0; i < closeButton.length; i++) {
