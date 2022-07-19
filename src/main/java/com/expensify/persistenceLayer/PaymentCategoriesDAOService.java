@@ -15,7 +15,7 @@ public class PaymentCategoriesDAOService {
     private final IDatabase database;
 
     public PaymentCategoriesDAOService() {
-        this.database = Database.getInstance();
+        this.database = Database.instance();
     }
     public List<PaymentCategory> getAllPaymentCategoriesList() {
         List<PaymentCategory> paymentCategoryList = new ArrayList<>();

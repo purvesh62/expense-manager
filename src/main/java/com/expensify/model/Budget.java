@@ -1,105 +1,46 @@
 package com.expensify.model;
 
+import com.expensify.database.IDatabase;
 import com.expensify.persistenceLayer.BudgetDAOService;
+import com.expensify.persistenceLayer.IBudgetDAOService;
+import com.expensify.persistenceLayer.IBudgetDAOServiceFactory;
 
 import java.sql.SQLException;
 import java.time.Month;
 import java.util.List;
 
 
-public class Budget {
-    private final BudgetDAOService budgetDAOService;
+public class Budget extends IBudget {
 
-    private int budgetId;
-    private int walletId;
-
-    private String walletName;
-    private int userId;
-    private float budgetLimit;
-
-    private float totalExpenses;
-
-    private String month;
-
-    public Budget() {
-        budgetDAOService = new BudgetDAOService();
+    public Budget(){
+        super();
+    }
+    public Budget(IBudgetDAOServiceFactory budgetDAOServiceFactory, IDatabase database){
+        super(budgetDAOServiceFactory,database);
     }
 
-    public int getBudgetId() {
-        return budgetId;
-    }
 
-    public void setBudgetId(int budgetId) {
-        this.budgetId = budgetId;
-    }
 
-    public int getWalletId() {
-        return walletId;
-    }
-
-    public void setWalletId(int walletId) {
-        this.walletId = walletId;
-    }
-
-    public String getWalletName() {
-        return walletName;
-    }
-
-    public void setWalletName(String walletName) {
-        this.walletName = walletName;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public float getBudgetLimit() {
-        return budgetLimit;
-    }
-
-    public void setBudgetLimit(float budgetLimit) {
-        this.budgetLimit = budgetLimit;
-    }
-
-    public float getTotalExpenses() {
-        return totalExpenses;
-    }
-
-    public void setTotalExpenses(float totalExpenses) {
-        this.totalExpenses = totalExpenses;
-    }
-
-    public String getMonth() {
-        return month;
-    }
-
-    public void setMonth(String month) {
-        this.month = month;
-    }
-
-    public List<Budget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
+    @Override
+    public List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
         return budgetDAOService.getAllBudgetDetails(user_id, startDate, endDate);
     }
-
-    public Budget saveBudget() throws SQLException {
+    @Override
+    public IBudget saveBudget() throws SQLException {
         budgetDAOService.addNewBudget(this);
         return this;
     }
-
-    public Budget updateBudget() throws SQLException {
+    @Override
+    public IBudget updateBudget() throws SQLException {
         budgetDAOService.updateBudget(this);
         return this;
     }
-
+    @Override
     public void deleteBudget(int budgetId) throws SQLException {
         budgetDAOService.deleteBudget(budgetId);
     }
-
-    public Budget getBudgetById(int budgetId) throws SQLException {
+    @Override
+    public IBudget getBudgetById(int budgetId) throws SQLException {
         return budgetDAOService.getBudgetById(budgetId);
     }
 }

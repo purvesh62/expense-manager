@@ -1,10 +1,12 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.model.Budget;
-import com.expensify.model.BudgetFactory;
-import com.expensify.model.IBudgetFactory;
-import com.expensify.model.Wallet;
+import com.expensify.database.Database;
+import com.expensify.database.IDatabase;
+import com.expensify.model.*;
+import com.expensify.persistenceLayer.BudgetDAOServiceFactory;
+import com.expensify.persistenceLayer.IBudgetDAOService;
+import com.expensify.persistenceLayer.IBudgetDAOServiceFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,10 @@ import java.util.Optional;
 @Controller
 public class BudgetController {
 
-    private final IBudgetFactory budgetFactory  = new BudgetFactory();
+    private IBudgetDAOServiceFactory budgetDAOServiceFactory = new BudgetDAOServiceFactory();
+    private IDatabase database = Database.instance();
+    private IBudgetFactory budgetFactory  = new BudgetFactory();
+
 
 //    @RequestMapping(value="/api/v1/budget", method=RequestMethod.GET, produces="application/json")
 //    @ResponseBody
@@ -44,6 +49,8 @@ public class BudgetController {
 
     @PostMapping(value="/budget")
     private String updateBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
+        IBudgetDAOService budgetDAOService = budgetDAOServiceFactory.createBudgetDAOService(database);
+        budget.setBudgetDAOService(budgetDAOService);
         budget.updateBudget();
         return "redirect:/budget/1";
     }
@@ -51,17 +58,19 @@ public class BudgetController {
     @PostMapping(value="/budget/add")
     private String addBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
         System.out.println(budget);
+        IBudgetDAOService budgetDAOService = budgetDAOServiceFactory.createBudgetDAOService(database);
+        budget.setBudgetDAOService(budgetDAOService);
         budget.setUserId(1);
         budget.saveBudget();
         return "redirect:/budget/1";
     }
 
-//    @RequestMapping(value="/api/v1/budget", method=RequestMethod.DELETE, produces="application/json")
-//    @ResponseBody
-//    private void deleteBudget(@RequestParam("budget_id") int budgetId) throws SQLException {
-//        budget.deleteBudget(budgetId);
-//    }
-//
+    @GetMapping(value="/budget/delete/{budget_id}", produces="text/html")
+    private String deleteBudget(@PathVariable("budget_id") int budgetId) throws SQLException {
+        budgetFactory.createBudget(budgetDAOServiceFactory,database).deleteBudget(budgetId);
+        return "redirect:/budget/1";
+    }
+
     @GetMapping(value="/budget/{user_id}", produces="text/html")
     public String getAllBudgetDetails(@PathVariable("user_id") int userId, @RequestParam("month") Optional<String> month, Model model, HttpSession session) throws SQLException {
 //        JSONObject userCache = SessionManager.getSession(session);
@@ -93,7 +102,7 @@ public class BudgetController {
                 currentMonth = currentdate.getMonth().ordinal() + 1;
             }
 
-            List<Budget> budgetList = budgetFactory.createBudget().getAllBudgetDetailsService(userId,startDate,endDate);
+            List<IBudget> budgetList = budgetFactory.createBudget(budgetDAOServiceFactory,database).getAllBudgetDetailsService(userId,startDate,endDate);
             model.addAttribute("budgetList" , budgetList);
             model.addAttribute("dateToDisplay",dateToDisplay);
             model.addAttribute("currentMonth",currentMonth);
@@ -106,7 +115,7 @@ public class BudgetController {
 
     @GetMapping(value="/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
-       Budget budgetDetails = budgetFactory.createBudget().getBudgetById(budgetId);
+       IBudget budgetDetails = budgetFactory.createBudget(budgetDAOServiceFactory,database).getBudgetById(budgetId);
        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
        model.addAttribute("budget",budgetDetails);
        model.addAttribute("wallet",walletList);
@@ -116,7 +125,7 @@ public class BudgetController {
     @GetMapping(value="/budget/add", produces="text/html")
     private String addBudgetPage(Model model) throws SQLException {
         List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
-        Budget budget = budgetFactory.createBudget();
+        IBudget budget = budgetFactory.createBudget(budgetDAOServiceFactory,database);
         model.addAttribute("wallet",walletList);
         model.addAttribute("budget",budget);
         return "addBudget";

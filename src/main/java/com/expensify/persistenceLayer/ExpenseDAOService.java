@@ -19,7 +19,7 @@ public class ExpenseDAOService {
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public ExpenseDAOService() {
-        this.mySqlDatabaseManager = Database.getInstance();
+        this.mySqlDatabaseManager = Database.instance();
     }
 
     public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {

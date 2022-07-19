@@ -26,6 +26,7 @@
                     <p>Limit: $<span th:text="${budget.budgetLimit}">Dummy Limit</span></p>
                     <p>Total Expenses: $<span th:text="${budget.totalExpenses}">Dummy Expenses</span></p>
                     <a th:href="@{'/budget/budgetId/' + ${budget.budgetId}}" class="btn">Edit</a>
+                    <a th:href="@{'/budget/delete/' + ${budget.budgetId}}" class="btn btn-danger">Delete</a>
                 </div>
             </div>
         </div>
