@@ -43,9 +43,9 @@
             <div class="card" >
                 <div class="card-body">
 <!--                    <p>Wallet ID: <span th:text="${wallet.walletId}">Dummy Limit</span></p>-->
-                    <p>Wallet Label: <span th:text="${wallet.walletLabel}">Dummy Expenses</span></p>
-                    <p>Payment Type: <span th:text="${wallet.paymentType}">Dummy Expenses</span></p>
-                    <p>Amount: $<span th:text="${wallet.amount}">Dummy Expenses</span></p>
+                    <p>Wallet Label: <span th:text="${wallet.walletLabel}">Dummy wallet</span></p>
+                    <p>Payment Type: <span th:text="${wallet.paymentType}">Dummy wallet</span></p>
+                    <p>Amount: $<span th:text="${wallet.amount}">Dummy wallet</span></p>
                     <a th:href="@{/api/v1/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn btn-primary">Delete</a>
 <!--                    <a th:href="@{/api/v1/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn btn-primary">Edit</a>-->
                     <button data-toggle="modal" th:data-wallet="${wallet}" th:attr="data-target=${'#editWalletModal' + wallet.walletId}" class="btn btn-primary">Edit</button>

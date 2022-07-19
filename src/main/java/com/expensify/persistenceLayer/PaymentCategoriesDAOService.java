@@ -3,6 +3,7 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.PaymentCategory;
+import com.expensify.model.WalletFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;

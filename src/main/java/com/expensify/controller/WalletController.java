@@ -1,5 +1,6 @@
 package com.expensify.controller;
 
+import com.expensify.model.IWalletFactory;
 import com.expensify.model.PaymentCategory;
 import com.expensify.model.Wallet;
 import org.springframework.stereotype.Controller;
@@ -17,27 +18,33 @@ public class WalletController {
     private final Wallet wallet;
     private final PaymentCategory paymentCategory;
 
-    public WalletController() {
-        this.wallet = new Wallet();
+    private final IWalletFactory walletFactory;
+
+    public WalletController(IWalletFactory walletFactory) {
+        this.walletFactory = walletFactory;
+        this.wallet = this.walletFactory.makeWallet();
         this.paymentCategory = new PaymentCategory();
 
     }
 
     @GetMapping(value = "/api/v1/wallet", produces = "text/html")
     private String getAllWalletDetails(@RequestParam("user_id") int userId, Model model) throws SQLException {
+        // @TODO: walletDao.getAllWalletsByUserId()
         List<Wallet> walletList = wallet.getAllWalletDetails(userId);
+        // @TODO: payementDao.getAllPaymentCategoryList()
         List<PaymentCategory> paymentCategoryList = paymentCategory.getAllPaymentCategoriesList();
         model.addAttribute("wallet_list", walletList);
         model.addAttribute("payment_categories", paymentCategoryList);
         wallet.setUserId(userId);
-        wallet.setWalletId(wallet.getWalletId());
+//        wallet.setWalletId(wallet.getWalletId());
         model.addAttribute("wallet",wallet);
         return "wallet";
     }
 
     @PostMapping(value = "/api/v1/wallet")
-    private String addWallet(@Valid Wallet newWallet, BindingResult result, RedirectAttributes redirAttrs) throws SQLException {
-        System.out.println("Add called");
+    private String addWallet(Wallet newWallet, BindingResult result, RedirectAttributes redirAttrs) throws SQLException {
+        newWallet.setWalletDAOService(walletFactory.makeWalletDAOService());
+//        System.out.println("Add called");
         if (result.hasErrors()) {
             return "redirect:/api/v1/wallet?user_id=" + newWallet.getUserId();
 
@@ -51,10 +58,11 @@ public class WalletController {
     @GetMapping(value = "/api/v1/wallet/walletId/{walletId}")
     private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs) throws SQLException {
         System.out.println(walletId);
-        int userId = wallet.getWalletById(walletId).getUserId();
-        this.wallet.deleteWallet(walletId);
+        // @TODO: walletDao.getWalletById()
+        Wallet wallet1= wallet.getWalletById(walletId);
+        wallet1.deleteWallet();
         redirAttrs.addFlashAttribute("SUCCESS", "Wallet Deleted");
-        return "redirect:/api/v1/wallet?user_id=" + userId;
+        return "redirect:/api/v1/wallet?user_id=" + wallet1.getUserId();
     }
 
     @PostMapping(value =  "/api/v1/updatewallet")
@@ -66,6 +74,7 @@ public class WalletController {
 //        System.out.println("-------------------------------------------------");
 //        System.out.println(wallet.getWalletId()+" " +wallet.getAmount()+" " +wallet.getWalletLabel());
 //        System.out.println(wallet.getUserId());
+        wallet.setWalletDAOService(walletFactory.makeWalletDAOService());
         wallet.updateWallet(wallet);
         return "redirect:/api/v1/wallet?user_id=" + wallet.getUserId();
     }
