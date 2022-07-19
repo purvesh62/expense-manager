@@ -14,7 +14,7 @@ import java.util.List;
 public class WalletDAOService {
     private final IDatabase database;
     public WalletDAOService() {
-        this.database = Database.getInstance();
+        this.database = Database.instance();
     }
 
     public List<Wallet> getAllWalletDetails(int userId) throws SQLException {
