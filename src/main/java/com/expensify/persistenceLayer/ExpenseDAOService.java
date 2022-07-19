@@ -39,7 +39,7 @@ public class ExpenseDAOService {
 
             parameterList.add(expenseStartDate);
             parameterList.add(expenseEndDate);
-
+            // TODO: Convert to iterator
             try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL get_all_user_expense(?, ?, ?)", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {
