@@ -26,6 +26,7 @@ test-job:
     - dalfcs_docker_kvm
   script:
     - echo "Execute test case"
+    - sudo apt install redis
     - mvn clean test
   only:
     - develop
