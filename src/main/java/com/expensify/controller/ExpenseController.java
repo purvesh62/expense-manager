@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.sql.SQLException;
 import java.util.List;
@@ -54,7 +55,7 @@ public class ExpenseController {
     }
 
     @PostMapping(value = "/add-expense")
-    public String post(@ModelAttribute("expense") Expense expense, BindingResult result, HttpSession session) {
+    public String post(@ModelAttribute("expense") Expense expense, BindingResult result, HttpSession session) throws SQLException, ParseException {
         System.out.println(expense);
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
@@ -65,6 +66,7 @@ public class ExpenseController {
             } else {
                 expense.addUserExpense();
             }
+            expense.checkIfBudgetLimitExceeds();
             return "redirect:/";
         }
         return null;
@@ -76,7 +78,7 @@ public class ExpenseController {
         try {
             // TODO: Remove later
             JSONObject userCache = new JSONObject();
-            userCache.put("userId", 5);
+            userCache.put("userId", 1);
             SessionManager.setSession(session, userCache);
 
             userCache = SessionManager.getSession(session);

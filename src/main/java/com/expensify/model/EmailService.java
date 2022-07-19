@@ -1,4 +1,4 @@
-package com.expensify;
+package com.expensify.model;
 
 import com.expensify.model.EmailDetails;
 import org.springframework.context.annotation.PropertySource;

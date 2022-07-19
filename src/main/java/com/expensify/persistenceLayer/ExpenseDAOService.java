@@ -2,16 +2,18 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
+import com.expensify.model.BudgetFactory;
 import com.expensify.model.Expense;
+import com.expensify.model.IBudget;
+import com.expensify.model.IBudgetFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 
 public class ExpenseDAOService {
@@ -98,7 +100,7 @@ public class ExpenseDAOService {
         return expense;
     }
 
-    public Expense deleteUserExpense(Expense expense){
+    public Expense deleteUserExpense(Expense expense) {
         List<Object> parameterList = new ArrayList<>();
         parameterList.add(expense.getExpenseID());
         try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL delete_expense(?)", parameterList)) {
@@ -118,5 +120,48 @@ public class ExpenseDAOService {
             exception.printStackTrace();
         }
         return expense;
+    }
+
+    public int checkIfBudgetLimitExceeds(Expense expense) throws ParseException, SQLException {
+
+        int userId = 0;
+
+        try {
+            List<Object> parameterList = new ArrayList<>();
+
+            parameterList.add(expense.getUserID());
+            parameterList.add(expense.getWalletId());
+
+            Date date = formatter.parse(expense.getExpenseDate());
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+
+            LocalDate startDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 01);
+            LocalDate endDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, startDate.lengthOfMonth());
+
+            Date start = formatter.parse(String.valueOf(startDate));
+            java.sql.Date budgetStartDate = new java.sql.Date(start.getTime());
+
+            Date end = formatter.parse(String.valueOf(endDate));
+            java.sql.Date budgetEndDate = new java.sql.Date(end.getTime());
+
+            parameterList.add(budgetStartDate);
+            parameterList.add(budgetEndDate);
+
+            ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL budget_limit_exceeds(?,?,?,?)", parameterList);
+
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    userId = resultSet.getInt("user_id");
+                }
+            }
+             return userId;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            mySqlDatabaseManager.closeConnection();
+        }
+        return userId;
     }
 }

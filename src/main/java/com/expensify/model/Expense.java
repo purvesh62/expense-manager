@@ -3,6 +3,7 @@ package com.expensify.model;
 import com.expensify.persistenceLayer.ExpenseDAOService;
 
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.List;
 
 public class Expense {
@@ -112,5 +113,10 @@ public class Expense {
 
     public Expense deleteExpense(){
         return expenseDAO.deleteUserExpense(this);
+    }
+
+    public void checkIfBudgetLimitExceeds() throws SQLException, ParseException {
+        int userId =  expenseDAO.checkIfBudgetLimitExceeds(this);
+
     }
 }
