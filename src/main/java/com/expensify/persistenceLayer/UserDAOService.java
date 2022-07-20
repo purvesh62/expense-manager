@@ -14,7 +14,7 @@ public class UserDAOService {
     private final IDatabase database;
 
     public UserDAOService() {
-        this.database = Database.getInstance();
+        this.database = Database.instance();
     }
 
     public int saveUser(User user) throws SQLException {

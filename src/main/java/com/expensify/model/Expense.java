@@ -8,12 +8,12 @@ import java.util.List;
 public class Expense {
     private int expenseID;
     private int userID;
-    private String title;
+    private String expenseTitle;
     private String description;
 
     private Float amount;
     private int expenseCategory;
-    private int walletID;
+    private int walletId;
     private String expenseDate;
 
     private ExpenseDAOService expenseDAO;
@@ -25,17 +25,17 @@ public class Expense {
     public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate) {
         this.expenseID = expenseID;
         this.userID = userID;
-        this.title = title;
+        this.expenseTitle = title;
         this.description = description;
         this.amount = amount;
         this.expenseCategory = expenseCategory;
-        this.walletID = walletID;
+        this.walletId = walletID;
         this.expenseDate = expenseDate;
     }
 
     @Override
     public String toString() {
-        return "Expense{" + "expenseID=" + expenseID + ", userID=" + userID + ", title='" + title + '\'' + ", description='" + description + '\'' + ", amount=" + amount + ", expenseCategory=" + expenseCategory + ", walletID=" + walletID + ", expenseDate=" + expenseDate + '}';
+        return "Expense{" + "expenseID=" + expenseID + ", userID=" + userID + ", title='" + expenseTitle + '\'' + ", description='" + description + '\'' + ", amount=" + amount + ", expenseCategory=" + expenseCategory + ", walletID=" + walletId + ", expenseDate=" + expenseDate + '}';
     }
 
     public int getExpenseID() {
@@ -54,12 +54,12 @@ public class Expense {
         this.userID = userID;
     }
 
-    public String getTitle() {
-        return title;
+    public String getExpenseTitle() {
+        return expenseTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setExpenseTitle(String title) {
+        this.expenseTitle = title;
     }
 
     public String getDescription() {
@@ -86,12 +86,12 @@ public class Expense {
         this.expenseCategory = expenseCategory;
     }
 
-    public int getWallet() {
-        return walletID;
+    public int getWalletId() {
+        return walletId;
     }
 
-    public void setWallet(int walletID) {
-        this.walletID = walletID;
+    public void setWalletId(int walletID) {
+        this.walletId = walletID;
     }
 
     public String getExpenseDate() {
@@ -108,5 +108,9 @@ public class Expense {
 
     public Expense addUserExpense() {
         return expenseDAO.addUserExpenses(this);
+    }
+
+    public Expense deleteExpense(){
+        return expenseDAO.deleteUserExpense(this);
     }
 }
