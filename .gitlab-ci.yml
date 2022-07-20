@@ -28,7 +28,7 @@ test-job:
     - echo "Execute test case"
     - mvn clean test
   only:
-    - develop
+   
     - test
     - production
 
