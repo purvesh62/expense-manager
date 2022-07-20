@@ -37,7 +37,7 @@ public class ExpenseDAOService {
 
             parameterList.add(expenseStartDate);
             parameterList.add(expenseEndDate);
-
+            // TODO: Convert to iterator
             try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL get_all_user_expense(?, ?, ?)", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {
@@ -98,7 +98,7 @@ public class ExpenseDAOService {
         return expense;
     }
 
-    public Expense deleteUserExpense(Expense expense){
+    public Expense deleteUserExpense(Expense expense) {
         List<Object> parameterList = new ArrayList<>();
         parameterList.add(expense.getExpenseID());
         try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL delete_expense(?)", parameterList)) {
