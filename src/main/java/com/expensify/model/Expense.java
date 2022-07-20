@@ -10,19 +10,18 @@ public class Expense {
     private int userID;
     private String expenseTitle;
     private String description;
-
     private Float amount;
     private int expenseCategory;
+    private String expenseCategoryName;
     private int walletId;
     private String expenseDate;
-
     private ExpenseDAOService expenseDAO;
 
     public Expense() {
         expenseDAO = new ExpenseDAOService();
     }
 
-    public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate) {
+    public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate, String expenseCategoryName) {
         this.expenseID = expenseID;
         this.userID = userID;
         this.expenseTitle = title;
@@ -31,6 +30,7 @@ public class Expense {
         this.expenseCategory = expenseCategory;
         this.walletId = walletID;
         this.expenseDate = expenseDate;
+        this.expenseCategoryName = expenseCategoryName;
     }
 
     @Override
@@ -86,6 +86,14 @@ public class Expense {
         this.expenseCategory = expenseCategory;
     }
 
+    public String getExpenseCategoryName() {
+        return expenseCategoryName;
+    }
+
+    public void setExpenseCategoryName(String expenseCategoryName) {
+        this.expenseCategoryName = expenseCategoryName;
+    }
+
     public int getWalletId() {
         return walletId;
     }
@@ -110,7 +118,7 @@ public class Expense {
         return expenseDAO.addUserExpenses(this);
     }
 
-    public Expense deleteExpense(){
+    public Expense deleteExpense() {
         return expenseDAO.deleteUserExpense(this);
     }
 }

@@ -50,6 +50,7 @@ public class ExpenseDAOService {
                         expense.setExpenseCategory(resultSet.getInt("c_id"));
                         expense.setWalletId(resultSet.getInt("w_id"));
                         expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
+                        expense.setExpenseTitle(resultSet.getString("expense_category"));
                         userExpenseList.add(expense);
                     }
                 }
@@ -87,6 +88,7 @@ public class ExpenseDAOService {
                         expense.setExpenseCategory(resultSet.getInt("c_id"));
                         expense.setWalletId(resultSet.getInt("w_id"));
                         expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
+                        expense.setExpenseCategoryName(String.valueOf(resultSet.getDate("expense_category")));
                     }
                 }
             }
