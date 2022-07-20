@@ -128,7 +128,7 @@ public class Budget implements IBudget {
 
         int userId = budgetDAOService.checkIfBudgetLimitExceeds(expense);
         if (userId > 0) {
-            Subscription subscription = new Subscription();
+            ISubscription subscription = new SubscriptionFactory().createSubscription();
             subscription.notifyBudgetLimitExceeds(userId);
         }
     }
