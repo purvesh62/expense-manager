@@ -107,7 +107,10 @@ public class Expense {
     }
 
     public Expense addUserExpense() {
+
         return expenseDAO.addUserExpenses(this);
+
+
     }
 
     public Expense deleteExpense(){

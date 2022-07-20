@@ -78,6 +78,7 @@ public class WalletController {
 //        System.out.println("-------------------------------------------------");
 //        System.out.println(wallet.getWalletId()+" " +wallet.getAmount()+" " +wallet.getWalletLabel());
 //        System.out.println(wallet.getUserId());
+//        System.out.println(wallet.getWalletLabel());
         wallet.setWalletDAOService(walletFactory.makeWalletDAOService());
         wallet.updateWallet(wallet);
         return "redirect:/api/v1/wallet?user_id=" + wallet.getUserId();

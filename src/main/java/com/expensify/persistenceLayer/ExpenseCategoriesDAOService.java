@@ -19,7 +19,7 @@ public class ExpenseCategoriesDAOService {
     private final IExpenseCategoryFactory factory;
     public ExpenseCategoriesDAOService(IExpenseCategoryFactory factory) {
         this.factory = factory;
-        this.database = Database.getInstance();
+        this.database = Database.instance();
     }
     public List<ExpenseCategory> getAllExpenseCategoriesList() {
         List<ExpenseCategory> categoryList = new ArrayList<>();

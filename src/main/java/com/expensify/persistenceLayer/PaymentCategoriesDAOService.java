@@ -19,7 +19,7 @@ public class PaymentCategoriesDAOService {
     private final IPaymentCategoryFactory factory;
 
     public PaymentCategoriesDAOService(IPaymentCategoryFactory factory) {
-        this.database = Database.getInstance();
+        this.database = Database.instance();
         this.factory = factory;
     }
     public List<PaymentCategory> getAllPaymentCategoriesList() {

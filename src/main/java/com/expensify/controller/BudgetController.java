@@ -27,6 +27,8 @@ public class BudgetController {
     private IDatabase database = Database.instance();
     private IBudgetFactory budgetFactory  = new BudgetFactory();
 
+    private final IWalletFactory walletFactory = new WalletFactory();
+
 
 //    @RequestMapping(value="/api/v1/budget", method=RequestMethod.GET, produces="application/json")
 //    @ResponseBody
@@ -116,7 +118,7 @@ public class BudgetController {
     @GetMapping(value="/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
        IBudget budgetDetails = budgetFactory.createBudget(budgetDAOServiceFactory,database).getBudgetById(budgetId);
-       List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+       List<Wallet> walletList = walletFactory.makeWallet().getAllWalletDetails(1);
        model.addAttribute("budget",budgetDetails);
        model.addAttribute("wallet",walletList);
        return "updateBudget";
@@ -124,7 +126,7 @@ public class BudgetController {
 
     @GetMapping(value="/budget/add", produces="text/html")
     private String addBudgetPage(Model model) throws SQLException {
-        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+        List<Wallet> walletList = walletFactory.makeWallet().getAllWalletDetails(1);
         IBudget budget = budgetFactory.createBudget(budgetDAOServiceFactory,database);
         model.addAttribute("wallet",walletList);
         model.addAttribute("budget",budget);

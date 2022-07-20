@@ -118,8 +118,8 @@
                     <form  method="POST" th:action="@{/api/v1/updatewallet}" th:object="${wallet}" >
                         <input hidden type="number" th:value="${wallet.walletId}" name="walletId"/>
                         <input hidden type="number" th:value="${wallet.userId}" name="userId"/>
-                        <input type="text" th:value="${wallet.walletLabel}"  name="walletLabel"/>
-                        <input type="text" th:value="${wallet.amount}"  name="amount"/>
+                        <input type="text" th:value="${wallet.walletLabel}" name="walletLabel"/>
+                        <input type="text" th:value="${wallet.amount}" name="amount"/>
 <!--                        <input type="submit">Submit</input>-->
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
                         <button type="submit" class="btn btn-primary">Update</button>

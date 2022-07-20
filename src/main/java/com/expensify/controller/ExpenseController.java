@@ -1,10 +1,7 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.model.Expense;
-import com.expensify.model.ExpenseCategory;
-import com.expensify.model.PaymentCategory;
-import com.expensify.model.Wallet;
+import com.expensify.model.*;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +19,15 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 public class ExpenseController {
     private Expense expense;
 
+    private final IWalletFactory walletFactory;
+
+    private final IExpenseCategoryFactory expenseCategoryFactory;
+
     public ExpenseController() {
+
         this.expense = new Expense();
+        this.walletFactory = new WalletFactory();
+        this.expenseCategoryFactory = new ExpenseCategoryFactory();
     }
 
     @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
@@ -88,10 +92,10 @@ public class ExpenseController {
                 List<Expense> expenses = this.expense.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
-                List<ExpenseCategory> expenseCategoriesList = new ExpenseCategory().getAllExpenseCategories();
+                List<ExpenseCategory> expenseCategoriesList = expenseCategoryFactory.makeExpenseCategory().getAllExpenseCategories();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
-                List<Wallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
+                List<Wallet> walletList = walletFactory.makeWallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
 
 
