@@ -1,6 +1,6 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.Subscription;
 
@@ -13,7 +13,7 @@ public class SubscriptionDAO {
     private final IDatabase mySqlDatabaseManager;
 
     public SubscriptionDAO() {
-        this.mySqlDatabaseManager = Database.instance();
+        this.mySqlDatabaseManager = MySqlDatabase.instance();
     }
 
     public List<Subscription> dailyDailyExpenseSubscribedUsers() {

@@ -1,18 +1,14 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
-import com.expensify.model.BudgetFactory;
 import com.expensify.model.Expense;
-import com.expensify.model.IBudget;
-import com.expensify.model.IBudgetFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 
@@ -21,7 +17,7 @@ public class ExpenseDAOService {
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public ExpenseDAOService() {
-        this.mySqlDatabaseManager = Database.instance();
+        this.mySqlDatabaseManager = MySqlDatabase.instance();
     }
 
     public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {

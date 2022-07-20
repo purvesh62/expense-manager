@@ -10,10 +10,15 @@ import java.util.List;
 
 public interface IBudgetDAOService {
     List<IBudget> getAllBudgetDetails(int userId, String startDate, String endDate) throws SQLException;
-    void addNewBudget(IBudget newBudget) throws SQLException;
-    void updateBudget(IBudget budget) throws SQLException;
+
+    void addNewBudget(int walletId, int userId, float budgetLimit, String month) throws SQLException;
+
+    void updateBudget(int budgetId, int walletId, float budgetLimit) throws SQLException;
+
     void deleteBudget(int budgetId) throws SQLException;
+
     IBudget getBudgetById(int budgetId) throws SQLException;
+
     int checkIfBudgetLimitExceeds(Expense expense) throws ParseException, SQLException;
 
 }

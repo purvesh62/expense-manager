@@ -1,11 +1,9 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
-import com.expensify.persistenceLayer.BudgetDAOServiceFactory;
-import com.expensify.persistenceLayer.IBudgetDAOServiceFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -70,10 +68,9 @@ public class ExpenseController {
 
             IBudgetFactory budgetFactory = new BudgetFactory();
 
-            IBudgetDAOServiceFactory budgetDAOServiceFactory = new BudgetDAOServiceFactory();
-            IDatabase database = Database.instance();
+            IDatabase database = MySqlDatabase.instance();
 
-            budgetFactory.createBudget(budgetDAOServiceFactory,database).checkIfBudgetLimitExceeds(expense);
+            budgetFactory.createBudget(database).checkIfBudgetLimitExceeds(expense);
 
             return "redirect:/";
         }

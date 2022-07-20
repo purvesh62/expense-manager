@@ -74,7 +74,7 @@ public class Subscription {
             Subscription subscription = (Subscription) iter.next();
             EmailDetails emailDetails = new EmailDetails(subscription.getEmail(), "Have you filled it yet?", "Daily Expense Reminder");
 
-            EmailService.instance().sendEmail(emailDetails);
+            SMTPEmailService.instance().sendEmail(emailDetails);
         }
     }
 
@@ -85,6 +85,6 @@ public class Subscription {
     public void notifyBudgetLimitExceeds(int userId) {
         Subscription subscription = subscriptionDAO.getBudgetLimitExceedSubscribedUsers(userId);
         EmailDetails emailDetails = new EmailDetails(subscription.getEmail(),"Your budget limit has been exceeded!!", "Budget Limit Exceeds");
-        EmailService.instance().sendEmail(emailDetails);
+        SMTPEmailService.instance().sendEmail(emailDetails);
     }
 }

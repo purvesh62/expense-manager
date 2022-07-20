@@ -5,14 +5,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class EmailService implements IEmailService {
+public class SMTPEmailService implements IEmailService {
     private static IEmailService instance;
-    private EmailService() {
+    private SMTPEmailService() {
 
     }
     public static IEmailService instance() {
         if(null == instance){
-            instance = new EmailService();
+            instance = new SMTPEmailService();
         }
         return instance;
     }

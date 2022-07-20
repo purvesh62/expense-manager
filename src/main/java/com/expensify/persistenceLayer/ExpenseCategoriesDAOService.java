@@ -1,9 +1,8 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.ExpenseCategory;
-import com.expensify.model.Wallet;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -15,7 +14,7 @@ import java.util.List;
 public class ExpenseCategoriesDAOService {
     private final IDatabase database;
     public ExpenseCategoriesDAOService() {
-        this.database = Database.instance();
+        this.database = MySqlDatabase.instance();
     }
     public List<ExpenseCategory> getAllExpenseCategoriesList() {
         List<ExpenseCategory> categoryList = new ArrayList<>();

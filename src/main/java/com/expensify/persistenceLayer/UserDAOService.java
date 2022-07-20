@@ -1,5 +1,5 @@
 package com.expensify.persistenceLayer;
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.User;
 import org.springframework.stereotype.Component;
@@ -14,7 +14,7 @@ public class UserDAOService {
     private final IDatabase database;
 
     public UserDAOService() {
-        this.database = Database.instance();
+        this.database = MySqlDatabase.instance();
     }
 
     public int saveUser(User user) throws SQLException {

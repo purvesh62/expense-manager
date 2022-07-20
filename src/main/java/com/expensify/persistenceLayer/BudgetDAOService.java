@@ -1,6 +1,5 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
 
@@ -10,14 +9,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 
-public class BudgetDAOService implements IBudgetDAOService{
+public class BudgetDAOService implements IBudgetDAOService {
     private IDatabase database;
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -45,15 +43,14 @@ public class BudgetDAOService implements IBudgetDAOService{
             if (resultSet != null) {
                 while (resultSet.next()) {
                     IBudgetFactory budgetFactory = new BudgetFactory();
-                    IBudget budget = budgetFactory.createBudget();
-
-                    budget.setBudgetId(resultSet.getInt("budget_id"));
-                    budget.setUserId(resultSet.getInt("user_id"));
-                    budget.setWalletId(resultSet.getInt("wallet_id"));
-                    budget.setBudgetLimit(resultSet.getFloat("budget_limit"));
-                    budget.setWalletName(resultSet.getString("wallet_label"));
-                    budget.setTotalExpenses(resultSet.getFloat("total_expenses"));
-
+                    IBudget budget = budgetFactory.createBudget(
+                            resultSet.getInt("budget_id"),
+                            resultSet.getInt("wallet_id"),
+                            resultSet.getString("wallet_label"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getFloat("budget_limit"),
+                            resultSet.getFloat("total_expenses")
+                    );
                     budgetList.add(budget);
                 }
             }
@@ -67,16 +64,16 @@ public class BudgetDAOService implements IBudgetDAOService{
     }
 
     @Override
-    public void addNewBudget(IBudget newBudget) throws SQLException {
+    public void addNewBudget(int walletId, int userId, float budgetLimit, String month) throws SQLException {
 
         try {
             List<Object> parameterList = new ArrayList<>(10);
-            parameterList.add(newBudget.getWalletId());
-            parameterList.add(newBudget.getUserId());
-            parameterList.add(newBudget.getBudgetLimit());
+            parameterList.add(walletId);
+            parameterList.add(userId);
+            parameterList.add(budgetLimit);
 
             LocalDate currentDate = LocalDate.now();
-            LocalDate date = LocalDate.of(currentDate.getYear(), Integer.parseInt(newBudget.getMonth()),01);
+            LocalDate date = LocalDate.of(currentDate.getYear(), Integer.parseInt(month), 01);
             Date start = formatter.parse(String.valueOf(date));
             java.sql.Date startDate = new java.sql.Date(start.getTime());
 
@@ -96,13 +93,12 @@ public class BudgetDAOService implements IBudgetDAOService{
     }
 
     @Override
-    public void updateBudget(IBudget budget) throws SQLException {
+    public void updateBudget(int budgetId, int walletId, float budgetLimit) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>(10);
-            System.out.println(budget.getBudgetId() + budget.getWalletId() + budget.getBudgetLimit());
-            parameterList.add(budget.getBudgetId());
-            parameterList.add(budget.getWalletId());
-            parameterList.add(budget.getBudgetLimit());
+            parameterList.add(budgetId);
+            parameterList.add(walletId);
+            parameterList.add(budgetLimit);
 
             database.executeProcedure("CALL update_budget(?,?,?)", parameterList);
 
@@ -135,16 +131,17 @@ public class BudgetDAOService implements IBudgetDAOService{
             List<Object> parameterList = new ArrayList<>(10);
             parameterList.add(budgetId);
 
-
-             ResultSet resultSet =  database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
+            ResultSet resultSet = database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-
-                    budget.setBudgetId(resultSet.getInt("budget_id"));
-                    budget.setUserId(resultSet.getInt("user_id"));
-                    budget.setWalletId(resultSet.getInt("wallet_id"));
-                    budget.setBudgetLimit(resultSet.getFloat("budget_limit"));
-                    budget.setWalletName(resultSet.getString("wallet_label"));
+                    budget = budgetFactory.createBudget(
+                            resultSet.getInt("budget_id"),
+                            resultSet.getInt("wallet_id"),
+                            resultSet.getString("wallet_label"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getFloat("budget_limit"),
+                            resultSet.getFloat("total_expenses")
+                    );
                 }
             }
             return budget;

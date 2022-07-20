@@ -1,8 +1,7 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
-import com.expensify.model.Budget;
 import com.expensify.model.Wallet;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ public class WalletDAOService {
     private final IDatabase database;
 
     public WalletDAOService() {
-        this.database = Database.instance();
+        this.database = MySqlDatabase.instance();
     }
 
     public List<Wallet> getAllWalletDetails(int userId) throws SQLException {
