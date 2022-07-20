@@ -3,7 +3,6 @@ package com.expensify.controller;
 import com.expensify.SessionManager;
 import com.expensify.model.Expense;
 import com.expensify.model.ExpenseCategory;
-import com.expensify.model.PaymentCategory;
 import com.expensify.model.Wallet;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
