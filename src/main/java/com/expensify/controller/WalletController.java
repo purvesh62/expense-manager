@@ -15,8 +15,8 @@ import java.util.List;
 
 @Controller
 public class WalletController {
-    private final Wallet wallet;
-    private final PaymentCategory paymentCategory;
+//    private final Wallet wallet;
+//    private final PaymentCategory paymentCategory;
 
     private final IWalletFactory walletFactory;
 
@@ -25,14 +25,15 @@ public class WalletController {
     public WalletController(IWalletFactory walletFactory, IPaymentCategoryFactory paymentCategoryFactory) {
         this.walletFactory = walletFactory;
         this.paymentCategoryFactory = paymentCategoryFactory;
-        this.wallet = this.walletFactory.makeWallet();
-        this.paymentCategory = paymentCategoryFactory.makePaymentCategory();
+//        this.wallet = walletFactory.makeWallet();
+//        this.paymentCategory = paymentCategoryFactory.makePaymentCategory();
 
     }
 
     @GetMapping(value = "/api/v1/wallet", produces = "text/html")
     private String getAllWalletDetails(@RequestParam("user_id") int userId, Model model) throws SQLException {
         // @TODO: walletDao.getAllWalletsByUserId()
+        Wallet wallet = walletFactory.makeWallet();
         List<Wallet> walletList = walletFactory.makeWalletDAOService().getAllWalletDetails(userId);
         // @TODO: payementDao.getAllPaymentCategoryList()
         List<PaymentCategory> paymentCategoryList = paymentCategoryFactory.makePaymentCategoryDAOService().getAllPaymentCategoriesList();
