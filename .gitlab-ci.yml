@@ -16,7 +16,6 @@ build-job:
     - echo "building maven project."
     - mvn clean compile
   only:
-    - develop
     - test
     - production
 
@@ -28,7 +27,6 @@ test-job:
     - echo "Execute test case"
     - mvn clean test
   only:
-   
     - test
     - production
 
@@ -39,7 +37,7 @@ deploy-dev:
   image: ruby:2.6
   script:
     - apt-get update -qy
-    - apt-get install redis
+    - sudo apt install redis -y
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=$HEROKU_DEV_API_KEY
@@ -53,7 +51,7 @@ deploy-test:
   image: ruby:2.6
   script:
     - apt-get update -qy
-    - apt-get install redis
+    - sudo apt install redis
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_TEST_APP_NAME --api-key=$HEROKU_TEST_API_KEY
