@@ -22,7 +22,6 @@ public class ExpenseFactory implements IExpenseFactory {
         return expenseFactory;
     }
 
-
     @Override
     public IExpense createExpense() {
         IDatabase database = MySqlDatabase.instance();
