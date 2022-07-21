@@ -1,6 +1,5 @@
 package com.expensify.controller;
-
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.model.Expense;
 import com.expensify.model.IExpense;
 import com.expensify.model.factories.ExpenseFactory;
@@ -22,7 +21,7 @@ public class AnalyticsController {
         String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
         String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
 
-        List<IExpense> expenses = new ExpenseFactory().createExpense(Database.instance()).getAllUserExpenses(1, startDate, endDate);
+        List<IExpense> expenses = new ExpenseFactory().createExpense(MySqlDatabase.instance()).getAllUserExpenses(1, startDate, endDate);
         HashMap<String, Float> expenseCategoryMap = new HashMap<>();
 
 //        for ((IExpense expense :expenses){
