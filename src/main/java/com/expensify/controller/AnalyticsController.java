@@ -1,4 +1,5 @@
 package com.expensify.controller;
+
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.Expense;
 import com.expensify.model.IExpense;
@@ -16,12 +17,12 @@ import java.util.List;
 public class AnalyticsController {
 
     @GetMapping(value = "/analytics", produces = "text/html")
-    public String index(Model model) throws SQLException {
+    public String index(Model model) {
         LocalDate currentdate = LocalDate.now();
         String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
         String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
 
-        List<IExpense> expenses = new ExpenseFactory().createExpense(MySqlDatabase.instance()).getAllUserExpenses(1, startDate, endDate);
+        List<IExpense> expenses = ExpenseFactory.instance().createExpense().getAllUserExpenses(1, startDate, endDate);
         HashMap<String, Float> expenseCategoryMap = new HashMap<>();
 
 //        for ((IExpense expense :expenses){

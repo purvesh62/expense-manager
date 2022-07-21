@@ -27,8 +27,7 @@ public class ExpenseController {
     private final IExpense expenseObj;
 
     public ExpenseController() {
-        IDatabase dbInstance = MySqlDatabase.instance();
-        expenseObj = new ExpenseFactory().createExpense(dbInstance);
+        expenseObj = ExpenseFactory.instance().createExpense();
     }
 
 
