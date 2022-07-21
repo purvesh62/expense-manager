@@ -1,5 +1,8 @@
-package com.expensify.model;
+package com.expensify.model.factories;
 
+import com.expensify.model.ISubscription;
+import com.expensify.model.Subscription;
+import com.expensify.model.factories.ISubscriptionFactory;
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
 import com.expensify.persistenceLayer.SubscriptionDAOService;
 

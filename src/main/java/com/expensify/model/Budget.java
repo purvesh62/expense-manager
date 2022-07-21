@@ -1,5 +1,6 @@
 package com.expensify.model;
 
+import com.expensify.model.factories.SubscriptionFactory;
 import com.expensify.persistenceLayer.IBudgetDAOService;
 
 import java.sql.SQLException;

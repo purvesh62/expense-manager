@@ -1,14 +1,12 @@
 package com.expensify;
 
 import com.expensify.model.ISubscription;
-import com.expensify.model.Subscription;
-import com.expensify.model.SubscriptionFactory;
+import com.expensify.model.factories.SubscriptionFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 

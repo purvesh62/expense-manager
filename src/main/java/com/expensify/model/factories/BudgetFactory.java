@@ -1,6 +1,8 @@
-package com.expensify.model;
+package com.expensify.model.factories;
 
 import com.expensify.database.IDatabase;
+import com.expensify.model.Budget;
+import com.expensify.model.IBudget;
 import com.expensify.persistenceLayer.BudgetDAOService;
 import com.expensify.persistenceLayer.IBudgetDAOService;
 
