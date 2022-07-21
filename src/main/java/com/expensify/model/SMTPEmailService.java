@@ -1,15 +1,34 @@
-package com.expensify;
-
-import com.expensify.model.EmailDetails;
-import org.springframework.context.annotation.PropertySource;
+package com.expensify.model;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class EmailService {
-    public void sendMail(EmailDetails emailDetails) {
+public class SMTPEmailService implements IEmailService {
+    private static IEmailService instance;
+    private String receipentAddress;
+    private String emailBody;
+    private String subject;
+
+    private SMTPEmailService() {
+
+    }
+    private SMTPEmailService(String receipentAddress, String emailBody, String subject) {
+        this.receipentAddress = receipentAddress;
+        this.emailBody = emailBody;
+        this.subject = subject;
+    }
+
+    public static IEmailService instance(String receipentAddress, String emailBody, String subject) {
+        if(null == instance){
+            instance = new SMTPEmailService(receipentAddress,emailBody,subject);
+        }
+        return instance;
+    }
+
+    @Override
+    public void sendEmail() {
         try{
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
@@ -25,10 +44,10 @@ public class EmailService {
 
             //create message using session
             MimeMessage message = new MimeMessage(session);
-            message.setContent(emailDetails.getEmailBody(), "text/html; charset=utf-8");
+            message.setContent(emailBody, "text/html; charset=utf-8");
             message.setFrom(new InternetAddress("expensify2022@gmail.com"));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDetails.getReceipentAddress()));
-            message.setSubject(emailDetails.getSubject());
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receipentAddress));
+            message.setSubject(subject);
 
             //sending message
             Transport.send(message);
