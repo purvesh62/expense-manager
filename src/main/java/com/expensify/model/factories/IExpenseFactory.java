@@ -6,7 +6,7 @@ import com.expensify.persistenceLayer.IExpenseDOAService;
 
 public interface IExpenseFactory {
 
-    IExpense createExpense(IDatabase database);
+    IExpense createExpense();
 
     IExpenseDOAService createExpenseDAOService(IDatabase database);
 

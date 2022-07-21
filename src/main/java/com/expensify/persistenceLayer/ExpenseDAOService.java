@@ -42,7 +42,7 @@ public class ExpenseDAOService implements IExpenseDOAService {
             try (ResultSet resultSet = this.database.executeProcedure("CALL get_all_user_expense(?, ?, ?)", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {
-                        IExpense expense = new ExpenseFactory().createExpense(resultSet.getInt("expense_id"), resultSet.getInt("user_id"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getFloat("amount"), resultSet.getInt("c_id"), resultSet.getInt("w_id"), String.valueOf(resultSet.getDate("expense_date")), resultSet.getString("expense_category"));
+                        IExpense expense = ExpenseFactory.instance().createExpense(resultSet.getInt("expense_id"), resultSet.getInt("user_id"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getFloat("amount"), resultSet.getInt("c_id"), resultSet.getInt("w_id"), String.valueOf(resultSet.getDate("expense_date")), resultSet.getString("expense_category"));
                         userExpenseList.add(expense);
                     }
                 }

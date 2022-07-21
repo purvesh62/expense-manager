@@ -1,5 +1,6 @@
 package com.expensify.model.factories;
 
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.Expense;
 import com.expensify.model.IExpense;
@@ -7,8 +8,24 @@ import com.expensify.persistenceLayer.ExpenseDAOService;
 import com.expensify.persistenceLayer.IExpenseDOAService;
 
 public class ExpenseFactory implements IExpenseFactory {
+
+    private static ExpenseFactory expenseFactory;
+
+    private ExpenseFactory() {
+
+    }
+
+    public static ExpenseFactory instance() {
+        if (expenseFactory == null) {
+            expenseFactory = new ExpenseFactory();
+        }
+        return expenseFactory;
+    }
+
+
     @Override
-    public IExpense createExpense(IDatabase database) {
+    public IExpense createExpense() {
+        IDatabase database = MySqlDatabase.instance();
         return new Expense(createExpenseDAOService(database));
     }
 
