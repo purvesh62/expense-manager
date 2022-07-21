@@ -1,6 +1,7 @@
 package com.expensify.model.factories;
 
 import com.expensify.database.IDatabase;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.model.Budget;
 import com.expensify.model.IBudget;
 import com.expensify.persistenceLayer.BudgetDAOService;
@@ -8,19 +9,21 @@ import com.expensify.persistenceLayer.IBudgetDAOService;
 
 public class BudgetFactory implements IBudgetFactory {
 
-    public BudgetFactory() {
+    private static IBudgetFactory budgetFactory = null;
+    private BudgetFactory() {
 
     }
-
-    @Override
-    public IBudget createBudget(IDatabase database) {
-
-        return new Budget(createBudgetDAOService(database));
+    public static IBudgetFactory instance(){
+        if(budgetFactory == null){
+            budgetFactory = new BudgetFactory();
+        }
+        return budgetFactory;
     }
 
     @Override
     public IBudget createBudget() {
-        return new Budget();
+        IDatabase database = MySqlDatabase.instance();
+        return new Budget(createBudgetDAOService(database));
     }
 
     @Override

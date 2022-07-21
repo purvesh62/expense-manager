@@ -89,11 +89,8 @@ public class ExpenseController {
             } else {
                 boolean status = expense.addUserExpense();
             }
-            IBudgetFactory budgetFactory = new BudgetFactory();
 
-            IDatabase database = MySqlDatabase.instance();
-
-            budgetFactory.createBudget(database).checkIfBudgetLimitExceeds(expense);
+            BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(expense);
 
             return "redirect:/";
         }
