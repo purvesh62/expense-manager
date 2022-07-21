@@ -12,7 +12,7 @@ public class PaymentCategory {
 
     public PaymentCategory(IPaymentCategoryFactory factory) {
         this.factory = factory;
-        this.paymentCategoriesDAOService = factory.makePaymentCategoryDAOService();
+        this.paymentCategoriesDAOService = factory.createPaymentCategoryDAOService();
     }
 
     public int getPaymentId() {

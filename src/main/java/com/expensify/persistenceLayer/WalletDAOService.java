@@ -2,8 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
-import com.expensify.model.Budget;
-import com.expensify.model.Expense;
+
 import com.expensify.model.IWalletFactory;
 import com.expensify.model.Wallet;
 import org.springframework.stereotype.Component;
@@ -38,7 +37,7 @@ public class WalletDAOService {
                     executeProcedure("CALL get_user_wallet(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    Wallet wallet = walletFactory.makeWallet();
+                    Wallet wallet = walletFactory.createWallet();
                     wallet.setWalletId(resultSet.getInt("wallet_id"));
                     wallet.setWalletLabel(resultSet.getString("wallet_label"));
                     wallet.setUserId(resultSet.getInt("user_id"));
@@ -60,7 +59,7 @@ public class WalletDAOService {
     }
 
     public Wallet getWalletById(int walletId) throws SQLException {
-        Wallet wallet = walletFactory.makeWallet();
+        Wallet wallet = walletFactory.createWallet();
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);

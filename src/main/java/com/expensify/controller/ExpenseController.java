@@ -92,10 +92,10 @@ public class ExpenseController {
                 List<Expense> expenses = this.expense.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
-                List<ExpenseCategory> expenseCategoriesList = expenseCategoryFactory.makeExpenseCategory().getAllExpenseCategories();
+                List<ExpenseCategory> expenseCategoriesList = expenseCategoryFactory.createExpenseCategory().getAllExpenseCategories();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
-                List<Wallet> walletList = walletFactory.makeWallet().getAllWalletDetails((Integer) userCache.get("userId"));
+                List<Wallet> walletList = walletFactory.createWallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
 
 

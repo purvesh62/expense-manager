@@ -4,7 +4,6 @@ import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.ExpenseCategory;
 import com.expensify.model.IExpenseCategoryFactory;
-import com.expensify.model.Wallet;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -29,7 +28,7 @@ public class ExpenseCategoriesDAOService {
             ResultSet resultSet = database.executeProcedure("CALL get_all_expense_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    ExpenseCategory category= factory.makeExpenseCategory();
+                    ExpenseCategory category= factory.createExpenseCategory();
                     category.setCategoryID(resultSet.getInt("c_id"));
                     category.setCategoryName(resultSet.getString("expense_category"));
                     categoryList.add(category);

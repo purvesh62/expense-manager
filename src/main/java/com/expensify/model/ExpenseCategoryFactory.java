@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExpenseCategoryFactory implements IExpenseCategoryFactory{
     @Override
-    public ExpenseCategory makeExpenseCategory() {
+    public ExpenseCategory createExpenseCategory() {
         return new ExpenseCategory(this);
     }
 
     @Override
-    public ExpenseCategoriesDAOService makeExpenseCategoryDAOService() {
+    public ExpenseCategoriesDAOService createExpenseCategoryDAOService() {
         return new ExpenseCategoriesDAOService(this);
     }
 }

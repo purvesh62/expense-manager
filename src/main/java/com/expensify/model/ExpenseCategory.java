@@ -13,7 +13,7 @@ public class ExpenseCategory {
     private final IExpenseCategoryFactory factory;
     public ExpenseCategory(IExpenseCategoryFactory factory){
         this.factory = factory;
-        this.expenseCategoriesDAOService = factory.makeExpenseCategoryDAOService();
+        this.expenseCategoriesDAOService = factory.createExpenseCategoryDAOService();
     }
     public int getCategoryID() {
         return categoryID;

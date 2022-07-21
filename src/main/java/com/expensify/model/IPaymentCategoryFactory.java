@@ -3,8 +3,8 @@ package com.expensify.model;
 import com.expensify.persistenceLayer.PaymentCategoriesDAOService;
 
 public interface IPaymentCategoryFactory {
-    PaymentCategory makePaymentCategory();
+    PaymentCategory createPaymentCategory();
 
-    PaymentCategoriesDAOService makePaymentCategoryDAOService();
+    PaymentCategoriesDAOService createPaymentCategoryDAOService();
 
 }

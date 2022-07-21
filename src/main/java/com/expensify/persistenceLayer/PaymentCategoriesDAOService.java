@@ -4,7 +4,6 @@ import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.IPaymentCategoryFactory;
 import com.expensify.model.PaymentCategory;
-import com.expensify.model.WalletFactory;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -30,7 +29,7 @@ public class PaymentCategoriesDAOService {
             ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    PaymentCategory paymentCategory= factory.makePaymentCategory();
+                    PaymentCategory paymentCategory= factory.createPaymentCategory();
                     paymentCategory.setPaymentId(resultSet.getInt("p_id"));
                     paymentCategory.setPaymentCategory(resultSet.getString("payment_category"));
                     paymentCategoryList.add(paymentCategory);
