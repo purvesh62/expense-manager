@@ -1,6 +1,6 @@
 package com.expensify.model;
 
-import com.expensify.model.factories.SubscriptionFactory;
+import com.expensify.model.factories.NotificationFactory;
 import com.expensify.persistenceLayer.IBudgetDAOService;
 
 import java.sql.SQLException;
@@ -27,18 +27,22 @@ public class Budget implements IBudget {
         this.totalExpenses = totalExpenses;
 
     }
-    public Budget(){
+
+    public Budget() {
 
     }
+
     public Budget(IBudgetDAOService database) {
-    budgetDAOService = database;
+        budgetDAOService = database;
     }
+
+    @Override
     public IBudgetDAOService getBudgetDAOService() {
         return budgetDAOService;
     }
 
-    public void setBudgetDAOService(IBudgetDAOService budgetDAOService) {
-        this.budgetDAOService = budgetDAOService;
+    public void setBudgetDAOService(IBudget budget) {
+        this.budgetDAOService = budget.getBudgetDAOService();
     }
 
     public int getBudgetId() {
@@ -103,20 +107,18 @@ public class Budget implements IBudget {
     }
 
     @Override
-    public IBudget saveBudget() throws SQLException {
-        budgetDAOService.addNewBudget(walletId,userId,budgetLimit,month);
-        return this;
+    public boolean saveBudget() throws SQLException {
+        return budgetDAOService.addNewBudget(walletId, userId, budgetLimit, month);
     }
 
     @Override
-    public IBudget updateBudget() throws SQLException {
-        budgetDAOService.updateBudget(budgetId,walletId,budgetLimit);
-        return this;
+    public boolean updateBudget() throws SQLException {
+        return budgetDAOService.updateBudget(budgetId, walletId, budgetLimit);
     }
 
     @Override
-    public void deleteBudget(int budgetId) throws SQLException {
-        budgetDAOService.deleteBudget(budgetId);
+    public boolean deleteBudget(int budgetId) throws SQLException {
+        return budgetDAOService.deleteBudget(budgetId);
     }
 
     @Override
@@ -129,8 +131,8 @@ public class Budget implements IBudget {
 
         int userId = budgetDAOService.checkIfBudgetLimitExceeds(expense);
         if (userId > 0) {
-            ISubscription subscription = new SubscriptionFactory().createSubscription();
-            subscription.notifyBudgetLimitExceeds(userId);
+            INotification notification = NotificationFactory.instance().createNotification();
+            notification.notifyBudgetLimitExceeds(userId);
         }
     }
 }

@@ -1,40 +1,39 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
-import com.expensify.model.ISubscription;
-import com.expensify.model.factories.ISubscriptionFactory;
-import com.expensify.model.factories.SubscriptionFactory;
+import com.expensify.model.INotification;
+import com.expensify.model.factories.INotificationFactory;
+import com.expensify.model.factories.NotificationFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubscriptionDAOService implements ISubscriptionDAOService{
+public class NotificationDAOService implements INotficationDAOService {
     private final IDatabase database;
 
-    public SubscriptionDAOService() {
-        this.database = MySqlDatabase.instance();
+    public NotificationDAOService(IDatabase database) {
+        this.database = database;
     }
 
     @Override
-    public List<ISubscription> dailyDailyExpenseSubscribedUsers() {
-        List<ISubscription> userSubscribedList = new ArrayList<>();
+    public List<INotification> dailyDailyExpenseSubscribedUsers() {
+        List<INotification> userSubscribedList = new ArrayList<>();
         try {
             List<Object> parameterList = new ArrayList<>();
 
             try (ResultSet resultSet = database.executeProcedure("CALL get_daily_expense_notification_subscribed_users()", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {
-                        ISubscription subscription = new SubscriptionFactory().createSubscription(
+                        INotification notification = NotificationFactory.instance().createNotification(
                                 resultSet.getInt("id"),
                                 resultSet.getInt("user_id"),
                                 resultSet.getString("email"),
                                 resultSet.getInt("s_id"),
                                 resultSet.getInt("status")
                         );
-                        userSubscribedList.add(subscription);
+                        userSubscribedList.add(notification);
                     }
                 }
             }
@@ -52,27 +51,24 @@ public class SubscriptionDAOService implements ISubscriptionDAOService{
     }
 
     @Override
-    public ISubscription getBudgetLimitExceedSubscribedUsers(int userId) {
-        ISubscriptionFactory subscriptionFactory = new SubscriptionFactory();
-        ISubscription subscription = subscriptionFactory.createSubscription();
+    public INotification getBudgetLimitExceedSubscribedUsers(int userId) {
+        INotification notification = NotificationFactory.instance().createNotification();
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
 
             try (ResultSet resultSet = database.executeProcedure("CALL get_budget_limit_exceed_notification(?)", parameterList)) {
-                if (resultSet != null) {
-                    while (resultSet.next()) {
-                        subscription = subscriptionFactory.createSubscription(
-                                resultSet.getInt("id"),
-                                resultSet.getInt("user_id"),
-                                resultSet.getString("email"),
-                                resultSet.getInt("s_id"),
-                                resultSet.getInt("status")
-                        );
-                    }
+                while (resultSet.next()) {
+                    notification = NotificationFactory.instance().createNotification(
+                            resultSet.getInt("id"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getString("email"),
+                            resultSet.getInt("s_id"),
+                            resultSet.getInt("status")
+                    );
                 }
             }
-            return subscription;
+            return notification;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -82,6 +78,6 @@ public class SubscriptionDAOService implements ISubscriptionDAOService{
                 throw new RuntimeException(e);
             }
         }
-        return subscription;
+        return notification;
     }
 }

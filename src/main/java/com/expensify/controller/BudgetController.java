@@ -1,11 +1,7 @@
 package com.expensify.controller;
-
 import com.expensify.SessionManager;
-import com.expensify.database.MySqlDatabase;
-import com.expensify.database.IDatabase;
 import com.expensify.model.*;
 import com.expensify.model.factories.BudgetFactory;
-import com.expensify.model.factories.IBudgetFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,33 +15,31 @@ import java.util.Optional;
 
 @Controller
 public class BudgetController {
-    private IDatabase database;
-    private IBudgetFactory budgetFactory;
+    private IBudget budgetObj;
 
     public BudgetController() {
-        database = MySqlDatabase.instance();
-        budgetFactory = new BudgetFactory();
+        budgetObj = BudgetFactory.instance().createBudget();
     }
 
     @PostMapping(value = "/budget")
     private String updateBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
-        budget.setBudgetDAOService(budgetFactory.createBudgetDAOService(database));
-        budget.updateBudget();
+        budget.setBudgetDAOService(budgetObj);
+        boolean status = budget.updateBudget();
         return "redirect:/budget";
     }
 
     @PostMapping(value = "/budget/add")
     private String addBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
         System.out.println(budget);
-        budget.setBudgetDAOService(budgetFactory.createBudgetDAOService(database));
+        budget.setBudgetDAOService(budgetObj);
         budget.setUserId(1);
-        budget.saveBudget();
+        boolean status = budget.saveBudget();
         return "redirect:/budget";
     }
 
     @GetMapping(value = "/budget/delete/{budget_id}", produces = "text/html")
     private String deleteBudget(@PathVariable("budget_id") int budgetId) throws SQLException {
-        budgetFactory.createBudget(database).deleteBudget(budgetId);
+        boolean status = budgetObj.deleteBudget(budgetId);
         return "redirect:/budget";
     }
 
@@ -80,7 +74,7 @@ public class BudgetController {
                 currentMonth = currentdate.getMonth().ordinal() + 1;
             }
 
-            List<IBudget> budgetList = budgetFactory.createBudget(database).getAllBudgetDetailsService(userId, startDate, endDate);
+            List<IBudget> budgetList = budgetObj.getAllBudgetDetailsService(userId, startDate, endDate);
             model.addAttribute("budgetList", budgetList);
             model.addAttribute("dateToDisplay", dateToDisplay);
             model.addAttribute("currentMonth", currentMonth);
@@ -93,7 +87,7 @@ public class BudgetController {
 
     @GetMapping(value = "/budget/budgetId/{budget_id}", produces = "text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
-        IBudget budgetDetails = budgetFactory.createBudget(database).getBudgetById(budgetId);
+        IBudget budgetDetails = budgetObj.getBudgetById(budgetId);
         List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
         model.addAttribute("budget", budgetDetails);
         model.addAttribute("wallet", walletList);
@@ -103,7 +97,7 @@ public class BudgetController {
     @GetMapping(value = "/budget/add", produces = "text/html")
     private String addBudgetPage(Model model) throws SQLException {
         List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
-        IBudget budget = budgetFactory.createBudget(database);
+        IBudget budget = budgetObj;
         model.addAttribute("wallet", walletList);
         model.addAttribute("budget", budget);
         return "addBudget";

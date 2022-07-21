@@ -8,7 +8,7 @@ button {
     padding: 5px;
     border-radius: 5px;
     color: white;
-    background-color: #92a1d1;
+    background-color: #6f95aa;
 }
 #header {
     padding: 10px;
@@ -20,9 +20,13 @@ button {
 }
 
 .edit-btn{
-    background-color: #92a1d1;
+    background-color: #6f95aa;
     color: white;
 }
 .form-control{
     width:16%;
+}
+
+.container {
+    width: 1000px;
 }
