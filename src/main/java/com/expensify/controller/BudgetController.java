@@ -2,6 +2,7 @@ package com.expensify.controller;
 import com.expensify.SessionManager;
 import com.expensify.model.*;
 import com.expensify.model.factories.BudgetFactory;
+import com.expensify.model.factories.WalletFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -88,7 +89,7 @@ public class BudgetController {
     @GetMapping(value = "/budget/budgetId/{budget_id}", produces = "text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
         IBudget budgetDetails = budgetObj.getBudgetById(budgetId);
-        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+        List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(1);
         model.addAttribute("budget", budgetDetails);
         model.addAttribute("wallet", walletList);
         return "updateBudget";
@@ -96,7 +97,7 @@ public class BudgetController {
 
     @GetMapping(value = "/budget/add", produces = "text/html")
     private String addBudgetPage(Model model) throws SQLException {
-        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+        List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(1);
         IBudget budget = budgetObj;
         model.addAttribute("wallet", walletList);
         model.addAttribute("budget", budget);
