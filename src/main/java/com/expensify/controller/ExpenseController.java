@@ -7,6 +7,7 @@ import com.expensify.model.*;
 import com.expensify.model.factories.BudgetFactory;
 import com.expensify.model.factories.ExpenseFactory;
 import com.expensify.model.factories.IBudgetFactory;
+import com.expensify.model.factories.WalletFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,10 +49,10 @@ public class ExpenseController {
                 List<IExpense> expenses = expenseObj.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
-                List<ExpenseCategory> expenseCategoriesList = new ExpenseCategory().getAllExpenseCategories();
+                List<IExpenseCategory> expenseCategoriesList = ExpenseCategoryFactory.instance().createExpenseCategory().getAllExpenseCategoriesList();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
-                List<Wallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
+                List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
                 model.addAttribute("expense", expenseObj);
 
