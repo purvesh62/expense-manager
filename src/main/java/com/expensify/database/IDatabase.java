@@ -9,5 +9,6 @@ public interface IDatabase {
     Connection connectDB();
 
     ResultSet executeProcedure(String procQuery, List<Object> parameterList) throws SQLException;
+
     void closeConnection() throws SQLException;
 }

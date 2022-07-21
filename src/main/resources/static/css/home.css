@@ -28,7 +28,8 @@ button {
 }
 
 #header button {
-    background-color: #92a1d1;
+    /*background-color: #92a1d1;*/
+    background-color: #6f95aa;
 }
 
 #container {
@@ -45,10 +46,11 @@ button {
     width: 100%;
     display: flex;
     color: #247BA0;
+    text-align: center;
 }
 
 #weekdays div {
-    width: 100px;
+    width: 100%;
     padding: 10px;
 }
 
@@ -135,6 +137,7 @@ button {
 
 #modelHeader {
     display: flex;
+    margin-bottom: 10px;
 }
 
 #cancelButton {
@@ -244,7 +247,9 @@ td:nth-child(2) {
 }
 
 .active, .collapsible:hover {
-    background-color: #555;
+    /*background-color: #555;*/
+    background-color: #6f95aa;
+
 }
 
 .content {

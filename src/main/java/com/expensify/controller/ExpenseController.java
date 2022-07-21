@@ -1,9 +1,10 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.database.MySqlDatabase;
+import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
+import com.expensify.model.factories.ExpenseFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,67 +15,19 @@ import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
 @Controller
 public class ExpenseController {
-    private Expense expense;
+
+    private final IExpense expenseObj;
 
     public ExpenseController() {
-        this.expense = new Expense();
-    }
-
-    @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
-    @ResponseBody
-    List<Expense> get(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session) {
-        try {
-            JSONObject userCache = SessionManager.getSession(session);
-            if (userCache.containsKey("userId")) {
-                int userId = (Integer) userCache.get("userId");
-                return this.expense.getAllUserExpenses(userId, startDate, endDate);
-            }
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return null;
-    }
-
-    @RequestMapping(value = "expense", method = DELETE, produces = "application/json")
-    public String delete(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
-        JSONObject userCache = SessionManager.getSession(session);
-        if (userCache.containsKey("userId")) {
-            int userId = (Integer) userCache.get("userId");
-            expense.setExpenseID(expenseId);
-            expense.deleteExpense();
-            return "redirect:/";
-        }
-        return "redirect:/";
-    }
-
-    @PostMapping(value = "/add-expense")
-    public String post(@ModelAttribute("expense") Expense expense, BindingResult result, HttpSession session) throws SQLException, ParseException {
-        System.out.println(expense);
-        JSONObject userCache = SessionManager.getSession(session);
-        if (userCache.containsKey("userId")) {
-            int userId = (Integer) userCache.get("userId");
-            expense.setUserID(userId);
-            if (expense.getAmount() == null) {
-                expense.addUserExpense();
-            } else {
-                expense.addUserExpense();
-            }
-
-            IBudgetFactory budgetFactory = new BudgetFactory();
-
-            IDatabase database = MySqlDatabase.instance();
-
-            budgetFactory.createBudget(database).checkIfBudgetLimitExceeds(expense);
-
-            return "redirect:/";
-        }
-        return null;
+        IDatabase dbInstance = Database.instance();
+        expenseObj = new ExpenseFactory().createExpense(dbInstance);
     }
 
 
@@ -92,7 +45,7 @@ public class ExpenseController {
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
                 String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
 
-                List<Expense> expenses = this.expense.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
+                List<IExpense> expenses = expenseObj.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
                 List<ExpenseCategory> expenseCategoriesList = new ExpenseCategory().getAllExpenseCategories();
@@ -100,10 +53,9 @@ public class ExpenseController {
 
                 List<Wallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
+                model.addAttribute("expense", expenseObj);
 
-
-                model.addAttribute("expense", new Expense());
-                return "index";
+                return "home";
             } else {
                 return "redirect:/login";
             }
@@ -112,4 +64,50 @@ public class ExpenseController {
         }
         return "error";
     }
+
+    @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
+    @ResponseBody
+    List<IExpense> getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session) {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            return expenseObj.getAllUserExpenses(userId, startDate, endDate);
+        }
+        return null;
+    }
+
+    @PostMapping(value = "/add-expense")
+    public String addExpense(@ModelAttribute("expense") Expense expense, HttpSession session) {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+
+            expense.setExpenseDOAService(expenseObj);
+            expense.setUserID(userId);
+            if (expense.getAmount() == null) {
+                boolean status = expense.addUserExpense();
+            } else {
+                boolean status = expense.addUserExpense();
+            }
+            return "redirect:/";
+        }
+        return null;
+    }
+
+    @RequestMapping(value = "expense", method = DELETE, produces = "application/json")
+    public HashMap<String, Boolean> deleteExpense(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
+        HashMap<String, Boolean> response = new HashMap<String, Boolean>();
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            boolean status = expenseObj.deleteUserExpense(expenseId);
+            if (status) {
+                response.put("status", true);
+                return response;
+            }
+        }
+        response.put("status", true);
+        return response;
+    }
+
 }
