@@ -5,6 +5,12 @@ public class EmailDetails {
     private String emailBody;
     private String subject;
 
+    public EmailDetails(String receipentAddress, String emailBody, String subject) {
+        this.receipentAddress = receipentAddress;
+        this.emailBody = emailBody;
+        this.subject = subject;
+    }
+
     public String getReceipentAddress() {
         return receipentAddress;
     }
