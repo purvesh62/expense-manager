@@ -1,8 +1,8 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.model.*;
 import com.expensify.model.factories.ExpenseFactory;
 import org.json.simple.JSONObject;
@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class ExpenseController {
     private final IExpense expenseObj;
 
     public ExpenseController() {
-        IDatabase dbInstance = Database.instance();
+        IDatabase dbInstance = MySqlDatabase.instance();
         expenseObj = new ExpenseFactory().createExpense(dbInstance);
     }
 
@@ -76,7 +77,7 @@ public class ExpenseController {
     }
 
     @PostMapping(value = "/add-expense")
-    public String addExpense(@ModelAttribute("expense") Expense expense, HttpSession session) {
+    public String addExpense(@ModelAttribute("expense") Expense expense, HttpSession session) throws SQLException, ParseException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
@@ -88,6 +89,12 @@ public class ExpenseController {
             } else {
                 boolean status = expense.addUserExpense();
             }
+            IBudgetFactory budgetFactory = new BudgetFactory();
+
+            IDatabase database = MySqlDatabase.instance();
+
+            budgetFactory.createBudget(database).checkIfBudgetLimitExceeds(expense);
+
             return "redirect:/";
         }
         return null;

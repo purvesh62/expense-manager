@@ -1,6 +1,6 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
+import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.PaymentCategory;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,7 @@ public class PaymentCategoriesDAOService {
     private final IDatabase database;
 
     public PaymentCategoriesDAOService() {
-        this.database = Database.instance();
+        this.database = MySqlDatabase.instance();
     }
     public List<PaymentCategory> getAllPaymentCategoriesList() {
         List<PaymentCategory> paymentCategoryList = new ArrayList<>();
