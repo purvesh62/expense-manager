@@ -1,8 +1,8 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.Database;
 import com.expensify.database.IDatabase;
-import com.expensify.model.Expense;
+import com.expensify.model.IExpense;
+import com.expensify.model.factories.ExpenseFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,16 +14,17 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ExpenseDAOService {
-    private final IDatabase mySqlDatabaseManager;
+public class ExpenseDAOService implements IExpenseDOAService {
+    private final IDatabase database;
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-    public ExpenseDAOService() {
-        this.mySqlDatabaseManager = Database.instance();
+    public ExpenseDAOService(IDatabase database) {
+        this.database = database;
     }
 
-    public List<Expense> getAllUserExpenses(int userID, String startDate, String endDate) throws SQLException {
-        List<Expense> userExpenseList = new ArrayList<>();
+    @Override
+    public List<IExpense> getAllUserExpenses(int userID, String startDate, String endDate) {
+        List<IExpense> userExpenseList = new ArrayList<>();
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userID);
@@ -37,20 +38,11 @@ public class ExpenseDAOService {
 
             parameterList.add(expenseStartDate);
             parameterList.add(expenseEndDate);
-            // TODO: Convert to iterator
-            try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL get_all_user_expense(?, ?, ?)", parameterList)) {
+
+            try (ResultSet resultSet = this.database.executeProcedure("CALL get_all_user_expense(?, ?, ?)", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {
-                        Expense expense = new Expense();
-                        expense.setExpenseID(resultSet.getInt("expense_id"));
-                        expense.setExpenseTitle(resultSet.getString("title"));
-                        expense.setDescription(resultSet.getString("description"));
-                        expense.setUserID(resultSet.getInt("user_id"));
-                        expense.setAmount(resultSet.getFloat("amount"));
-                        expense.setExpenseCategory(resultSet.getInt("c_id"));
-                        expense.setWalletId(resultSet.getInt("w_id"));
-                        expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
-                        expense.setExpenseTitle(resultSet.getString("expense_category"));
+                        IExpense expense = new ExpenseFactory().createExpense(resultSet.getInt("expense_id"), resultSet.getInt("user_id"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getFloat("amount"), resultSet.getInt("c_id"), resultSet.getInt("w_id"), String.valueOf(resultSet.getDate("expense_date")), resultSet.getString("expense_category"));
                         userExpenseList.add(expense);
                     }
                 }
@@ -59,66 +51,45 @@ public class ExpenseDAOService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            mySqlDatabaseManager.closeConnection();
+            try {
+                this.database.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return userExpenseList;
     }
 
-    public Expense addUserExpenses(Expense expense) {
+    @Override
+    public boolean addUserExpenses(int expenseId, int userId, String expenseTitle, String description, Float amount, int expenseCategory, int walletId, String expenseDate) {
         List<Object> parameterList = new ArrayList<>();
         try {
-            parameterList.add(expense.getExpenseTitle());
-            parameterList.add(expense.getDescription());
-            parameterList.add(expense.getUserID());
-            parameterList.add(expense.getAmount());
-            parameterList.add(expense.getExpenseCategory());
-            parameterList.add(expense.getWalletId());
-
-            Date expenseDate = formatter.parse(expense.getExpenseDate());
-            parameterList.add(expenseDate);
-
-            try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL add_expense(?, ?, ?, ?, ?, ?, ?)", parameterList)) {
-                if (resultSet != null) {
-                    while (resultSet.next()) {
-                        expense.setExpenseID(resultSet.getInt("expense_id"));
-                        expense.setExpenseTitle(resultSet.getString("title"));
-                        expense.setDescription(resultSet.getString("description"));
-                        expense.setUserID(resultSet.getInt("user_id"));
-                        expense.setAmount(resultSet.getFloat("amount"));
-                        expense.setExpenseCategory(resultSet.getInt("c_id"));
-                        expense.setWalletId(resultSet.getInt("w_id"));
-                        expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
-                        expense.setExpenseCategoryName(String.valueOf(resultSet.getDate("expense_category")));
-                    }
-                }
+            parameterList.add(expenseTitle);
+            parameterList.add(description);
+            parameterList.add(userId);
+            parameterList.add(amount);
+            parameterList.add(expenseCategory);
+            parameterList.add(walletId);
+            Date date = formatter.parse(expenseDate);
+            parameterList.add(date);
+            try (ResultSet resultSet = this.database.executeProcedure("CALL add_expense(?, ?, ?, ?, ?, ?, ?)", parameterList)) {
+                return true;
             }
-        } catch (SQLException exception) {
+        } catch (SQLException | ParseException exception) {
             exception.printStackTrace();
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
         }
-        return expense;
+        return false;
     }
 
-    public Expense deleteUserExpense(Expense expense) {
+    @Override
+    public boolean deleteUserExpense(int expenseId) {
         List<Object> parameterList = new ArrayList<>();
-        parameterList.add(expense.getExpenseID());
-        try (ResultSet resultSet = mySqlDatabaseManager.executeProcedure("CALL delete_expense(?)", parameterList)) {
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    expense.setExpenseID(resultSet.getInt("expense_id"));
-                    expense.setExpenseTitle(resultSet.getString("title"));
-                    expense.setDescription(resultSet.getString("description"));
-                    expense.setUserID(resultSet.getInt("user_id"));
-                    expense.setAmount(resultSet.getFloat("amount"));
-                    expense.setExpenseCategory(resultSet.getInt("c_id"));
-                    expense.setWalletId(resultSet.getInt("w_id"));
-                    expense.setExpenseDate(String.valueOf(resultSet.getDate("expense_date")));
-                }
-            }
+        parameterList.add(expenseId);
+        try (ResultSet resultSet = this.database.executeProcedure("CALL delete_expense(?)", parameterList)) {
+            return true;
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return expense;
+        return false;
     }
 }

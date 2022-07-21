@@ -136,6 +136,7 @@ function makeTable(eventForDay) {
         btn.classList.add("deleteButton");
         btn.id = "deleteBtn-" + eventForDay[i].expenseID;
         btn.innerText = "Delete";
+        btn.style.marginTop = "5px";
         btn.addEventListener('click', deleteEvent);
         div.appendChild(btn);
         eventModal.appendChild(div);
@@ -224,14 +225,13 @@ function getEventsOnDay(events, dayString) {
 }
 
 function closeModal(selectedEvent) {
-    if (selectedEvent != null && selectedEvent.expenseID !== undefined){
+    if (selectedEvent != null && selectedEvent.expenseID !== undefined) {
         var eventModal = document.getElementById("eventModal");
-        if (eventModal.childNodes.length > 1){
+        if (eventModal.childNodes.length > 1) {
             document.getElementById("eventID-" + selectedEvent.expenseID).remove();
             clicked = null;
             load(events);
-        }
-        else {
+        } else {
             expenseTitleInput.classList.remove('error');
             newEventModal.style.display = 'none';
             deleteEventModal.style.display = 'none';
@@ -263,16 +263,35 @@ function saveEvent() {
     } else {
         expenseTitleInput.classList.add('error');
     }
+    $.notify("Successfully Added", {position: 'top center', className: "success" });
+
 }
 
 
 function deleteEvent() {
     let selectedEvent = events.filter(e => e.expenseDate == dateFormatter(clicked))[0];
-    events = events.filter(e => e.expenseDate !== dateFormatter(clicked));
+    // events = events.filter(e => e.expenseDate !== dateFormatter(clicked));
     // localStorage.setItem('events', JSON.stringify(events));
-    fetch('http://localhost:8080/expense?expense_id=' + selectedEvent.expenseID, {
+    fetch('http://localhost:8080/expense?expense_id=' + event.target.id.split('-')[1], {
         method: 'DELETE',
-    }).then(closeModal(selectedEvent)) // or res.json()
+    }).then(() => {
+        document.getElementById(event.target.id).parentNode.remove();
+        if (document.getElementById("eventModal").childNodes.length > 1) {
+            clicked = null;
+            load(events);
+        } else {
+            expenseTitleInput.classList.remove('error');
+            newEventModal.style.display = 'none';
+            deleteEventModal.style.display = 'none';
+            backDrop.style.display = 'none';
+            clicked = null;
+            location.reload();
+            load(events);
+        }
+    }).catch(() => {
+        location.reload();
+    });
+    // .then(closeModal(selectedEvent)) // or res.json()
 }
 
 
