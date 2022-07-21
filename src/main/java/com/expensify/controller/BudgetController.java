@@ -4,6 +4,8 @@ import com.expensify.SessionManager;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
+import com.expensify.model.factories.BudgetFactory;
+import com.expensify.model.factories.IBudgetFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
