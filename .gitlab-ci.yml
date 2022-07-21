@@ -16,6 +16,7 @@ build-job:
     - echo "building maven project."
     - mvn clean compile
   only:
+    - develop
     - test
     - production
 
