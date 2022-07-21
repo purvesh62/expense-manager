@@ -3,82 +3,27 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Expensify Side Bar</title>
-    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <title>Expensify</title>
     <link rel="stylesheet" href="../static/css/home.css" th:href="@{/css/home.css}">
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
     <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css"/>
-    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
-          integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <script src="https://uicdn.toast.com/tui.code-snippet/latest/tui-code-snippet.js"></script>
-    <script src="https://uicdn.toast.com/tui.dom/v3.0.0/tui-dom.js"></script>
-    <script src="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.min.js"></script>
-    <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.min.js"></script>
-    <script src="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--  END  -->
     <script th:src="@{/js/notify.min.js}"></script>
-
 </head>
-
 <body>
 <script th:inline="javascript">
     var localExpenseData = [[${expenseData}]];
 </script>
-
-<!--<div class="sidebar active" id="sidebar">-->
-<!--    <div class="logo_content">-->
-<!--        <div class="logo">-->
-<!--            <i class='bx bx-wallet'></i>-->
-<!--            <div class="logo_name">Expensify</div>-->
-<!--        </div>-->
-<!--        <i class='bx bx-menu-alt-left' id="nav-btn"></i>-->
-<!--    </div>-->
-<!--    <ul class="nav_list">-->
-<!--        <li>-->
-<!--            <a href="#">-->
-<!--                <i class='bx bxs-dashboard'></i>-->
-<!--                <span class="links_name">Dashboard</span>-->
-<!--            </a>-->
-<!--            <span class="tooltip">Dashboard</span>-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a href="#">-->
-<!--                <i class='bx bxs-dashboard'></i>-->
-<!--                <span class="links_name">Dashboard</span>-->
-<!--            </a>-->
-<!--            <span class="tooltip">Dashboard</span>-->
-<!--        </li>-->
-<!--        <li>-->
-<!--            <a href="#">-->
-<!--                <i class='bx bxs-dashboard'></i>-->
-<!--                <span class="links_name">Dashboard</span>-->
-<!--            </a>-->
-<!--            <span class="tooltip">Dashboard</span>-->
-<!--        </li>-->
-<!--    </ul>-->
-<!--    <div class="profile_content">-->
-<!--        <div class="profile">-->
-<!--            <div class="profile_details">-->
-<!--                <img th:src="@{/images/profile.jpg}" alt="Profile Logo">-->
-<!--                <div class="name_job">-->
-<!--                    <div class="name">Purvesh Rathod</div>-->
-<!--                    <div class="job">Developer</div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <i class='bx bx-log-out-circle' id="logout"></i>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
-<header th:insert ="fragments/sidebar"></header>
+<header th:insert="fragments/sidebar"></header>
 <div class="home_content" id="container">
     <!--    <div class="menu-navi-container" id="monthDisplay">-->
     <!--			<span id="menu-navi">-->
@@ -120,12 +65,11 @@
     <form th:action="@{/add-expense}" th:object="${expense}" method="POST">
         <div id="modelHeader">
             <h2>Expense</h2>
-            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
+            <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
+                                                                   class="fa fa-close fa-lg"></i></span>
         </div>
-<!--        <label class="large-label" for="expenseTitleInput">-->
-<!--            Expense Title-->
-            <input type="text" id="expenseTitleInput" name="expenseTitle" th:field="*{expenseTitle}" placeholder="Title"/>
-<!--        </label>-->
+
+        <input type="text" id="expenseTitleInput" name="expenseTitle" th:field="*{expenseTitle}" placeholder="Title"/>
 
         <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
             <option th:each="category : ${expenseCategoriesList}" th:value="${category.categoryID}"
@@ -137,14 +81,13 @@
                     th:text="${wallet.walletLabel}"></option>
         </select>
 
-        <input id="expenseAccountNameInput" type="number" step="0.01" th:field="*{amount}" placeholder="Amount" min="1"/>
+        <input id="expenseAccountNameInput" type="number" step="0.01" th:field="*{amount}" placeholder="Amount"
+               min="1"/>
         <textarea id="expenseNoteInput" th:field="*{description}" placeholder="Note"></textarea>
         <input type="hidden" th:field="*{expenseID}"/>
         <input type="hidden" th:field="*{userID}"/>
         <input id="expenseDate" type="hidden" th:value="*{expenseDate}" name="expenseDate" value="getTodaysDate()"/>
         <button id="saveButton" type="submit">Save</button>
-        <!--        <input id="cancelButton" type="button" onclick="window.location.reload()" value="Cancel"/>-->
-        <!--        <button class="closeButton" type="cancel">Close</button>-->
     </form>
 </div>
 
@@ -154,34 +97,8 @@
         <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
                                                                class="fa fa-close fa-lg"></i></span>
     </div>
-
     <div id="eventModal">
-        <!--                <table id="modalTable">-->
-        <!--                    <tr>-->
-        <!--                        <td>Title</td>-->
-        <!--                        <td id="eventText"></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td>Description</td>-->
-        <!--                        <td id="eventDescription"></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td colspan="2" style="box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;"></td>-->
-        <!--                    </tr>-->
-        <!--                    <tr>-->
-        <!--                        <td>Amount</td>-->
-        <!--                        <td id="eventAmount"></td>-->
-        <!--                    </tr>-->
-        <!--                </table>-->
-        <!--        <table id="modalTable"></table>-->
-        <!--        <button id="deleteButton">Delete</button>-->
     </div>
-
-    <!--    <button id="deleteButton">Delete</button>-->
-    <!--    <button class="closeButton">Close</button>-->
 </div>
 
 <div id="modalBackDrop"></div>

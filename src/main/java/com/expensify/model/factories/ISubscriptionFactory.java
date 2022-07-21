@@ -1,5 +1,6 @@
-package com.expensify.model;
+package com.expensify.model.factories;
 
+import com.expensify.model.ISubscription;
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
 
 import java.util.List;
