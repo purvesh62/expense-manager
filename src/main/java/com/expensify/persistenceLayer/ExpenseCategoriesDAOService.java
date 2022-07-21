@@ -15,7 +15,7 @@ import java.util.List;
 public class ExpenseCategoriesDAOService {
     private final IDatabase database;
     public ExpenseCategoriesDAOService() {
-        this.database = Database.getInstance();
+        this.database = Database.instance();
     }
     public List<ExpenseCategory> getAllExpenseCategoriesList() {
         List<ExpenseCategory> categoryList = new ArrayList<>();

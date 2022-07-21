@@ -22,8 +22,9 @@ public class Database implements  IDatabase{
         dbPort = System.getenv("DB_PORT");
         dbUser = System.getenv("DB_USER");
         dbPassword = System.getenv("DB_PASSWORD");
+        dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
     }
-    public static Database getInstance() {
+    public static Database instance() {
         if(Database.instance == null){
             Database.instance = new Database();
         }
