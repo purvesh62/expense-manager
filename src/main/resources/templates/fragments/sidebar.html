@@ -1,0 +1,51 @@
+<div class="sidebar active" id="sidebar" th:fragment="sidebar" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="logo_content">
+        <div class="logo">
+            <i class='bx bx-wallet'></i>
+            <div class="logo_name">Expensify</div>
+        </div>
+        <i class='bx bx-menu-alt-left' id="nav-btn"></i>
+    </div>
+    <ul class="nav_list">
+        <li>
+            <a href="/">
+                <i class='bx bxs-dashboard'></i>
+                <span class="links_name">Home</span>
+            </a>
+            <span class="tooltip">Home</span>
+        </li>
+        <li>
+            <a href="#">
+                <i class='bx bxs-dashboard'></i>
+                <span class="links_name">Wallet</span>
+            </a>
+            <span class="tooltip">Wallet</span>
+        </li>
+        <li>
+            <a href="/budget">
+                <i class='bx bxs-dashboard'></i>
+                <span class="links_name">Budget</span>
+            </a>
+            <span class="tooltip">Budget</span>
+        </li>
+        <li>
+            <a href="/analytics">
+                <i class='bx bxs-dashboard'></i>
+                <span class="links_name">Analytics</span>
+            </a>
+            <span class="tooltip">Analytics</span>
+        </li>
+    </ul>
+    <div class="profile_content">
+        <div class="profile">
+            <div class="profile_details">
+                <img th:src="@{/images/profile.jpg}" alt="Profile Logo">
+                <div class="name_job">
+                    <div class="name">Purvesh Rathod</div>
+                    <div class="job">User</div>
+                </div>
+            </div>
+            <i class='bx bx-log-out-circle' id="logout"></i>
+        </div>
+    </div>
+</div>

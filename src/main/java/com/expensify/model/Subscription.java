@@ -41,11 +41,5 @@ public class Subscription implements ISubscription {
     public void notifyBudgetLimitExceeds(int userId) {
         ISubscription subscription = subscriptionDAOService.getBudgetLimitExceedSubscribedUsers(userId);
         subscription.notifyUsers("Your budget limit has been exceeded!!","Budget Limit Exceeds");
-//        SMTPEmailService.instance(
-//                subscription.email,
-//                "Your budget limit has been exceeded!!",
-//                "Budget Limit Exceeds"
-//
-//        ).sendEmail();
     }
 }

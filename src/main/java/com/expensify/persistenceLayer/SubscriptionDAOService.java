@@ -3,9 +3,8 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.ISubscription;
-import com.expensify.model.ISubscriptionFactory;
-import com.expensify.model.Subscription;
-import com.expensify.model.SubscriptionFactory;
+import com.expensify.model.factories.ISubscriptionFactory;
+import com.expensify.model.factories.SubscriptionFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

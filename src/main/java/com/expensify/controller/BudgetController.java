@@ -1,8 +1,12 @@
 package com.expensify.controller;
 
+import com.expensify.SessionManager;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
+import com.expensify.model.factories.BudgetFactory;
+import com.expensify.model.factories.IBudgetFactory;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,59 +22,39 @@ public class BudgetController {
     private IDatabase database;
     private IBudgetFactory budgetFactory;
 
-    public BudgetController(){
+    public BudgetController() {
         database = MySqlDatabase.instance();
         budgetFactory = new BudgetFactory();
     }
 
-
-//    @RequestMapping(value="/api/v1/budget", method=RequestMethod.GET, produces="application/json")
-//    @ResponseBody
-//    private List<Budget> getAllBudgetDetails(@RequestParam("user_id") int userId) throws SQLException {
-//        return budget.getAllBudgetDetailsService(userId);
-//    }
-//    @RequestMapping(value="/api/v1/budget", method=RequestMethod.POST, produces="application/json")
-//    @ResponseBody
-//    private Budget addBudget(@RequestBody Budget budgetObj) throws SQLException {
-//        budget.createBudget().saveBudget(budgetObj);
-//        return budgetObj;
-//    }
-
-//    @RequestMapping(value="/api/v1/budget", method=RequestMethod.PUT, produces="application/json")
-//    @ResponseBody
-//    private Budget updateBudget(@RequestBody Budget budgetObj) throws SQLException {
-//        budget.updateBudget(budgetObj);
-//        return budget;
-//    }
-
-    @PostMapping(value="/budget")
+    @PostMapping(value = "/budget")
     private String updateBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
         budget.setBudgetDAOService(budgetFactory.createBudgetDAOService(database));
         budget.updateBudget();
-        return "redirect:/budget/1";
+        return "redirect:/budget";
     }
 
-    @PostMapping(value="/budget/add")
+    @PostMapping(value = "/budget/add")
     private String addBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
         System.out.println(budget);
         budget.setBudgetDAOService(budgetFactory.createBudgetDAOService(database));
         budget.setUserId(1);
         budget.saveBudget();
-        return "redirect:/budget/1";
+        return "redirect:/budget";
     }
 
-    @GetMapping(value="/budget/delete/{budget_id}", produces="text/html")
+    @GetMapping(value = "/budget/delete/{budget_id}", produces = "text/html")
     private String deleteBudget(@PathVariable("budget_id") int budgetId) throws SQLException {
         budgetFactory.createBudget(database).deleteBudget(budgetId);
-        return "redirect:/budget/1";
+        return "redirect:/budget";
     }
 
-    @GetMapping(value="/budget/{user_id}", produces="text/html")
-    public String getAllBudgetDetails(@PathVariable("user_id") int userId, @RequestParam("month") Optional<String> month, Model model, HttpSession session) throws SQLException {
-//        JSONObject userCache = SessionManager.getSession(session);
-//
-//        if(userCache.containsKey("userId")) {
-//            int userId = (Integer)userCache.get("userId");
+    @GetMapping(value = "/budget", produces = "text/html")
+    public String getAllBudgetDetails(@RequestParam("month") Optional<String> month, Model model, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
 
             String monthNumber = month.orElse("");
             String startDate = null;
@@ -78,16 +62,16 @@ public class BudgetController {
             String dateToDisplay = null;
             int currentMonth = 0;
 
-            if(monthNumber.length() > 0) {
+            if (monthNumber.length() > 0) {
                 LocalDate currentDate = LocalDate.now();
-                LocalDate newDate = LocalDate.of(currentDate.getYear(),Integer.parseInt(monthNumber),01);
+                LocalDate newDate = LocalDate.of(currentDate.getYear(), Integer.parseInt(monthNumber), 01);
 
                 startDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-01";
                 endDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-" + newDate.lengthOfMonth();
 
                 dateToDisplay = newDate.getMonth().toString() + "," + newDate.getYear();
                 currentMonth = newDate.getMonth().ordinal() + 1;
-            }else {
+            } else {
                 LocalDate currentdate = LocalDate.now();
                 startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
                 endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
@@ -96,18 +80,18 @@ public class BudgetController {
                 currentMonth = currentdate.getMonth().ordinal() + 1;
             }
 
-            List<IBudget> budgetList = budgetFactory.createBudget(database).getAllBudgetDetailsService(userId,startDate,endDate);
-            model.addAttribute("budgetList" , budgetList);
-            model.addAttribute("dateToDisplay",dateToDisplay);
-            model.addAttribute("currentMonth",currentMonth);
+            List<IBudget> budgetList = budgetFactory.createBudget(database).getAllBudgetDetailsService(userId, startDate, endDate);
+            model.addAttribute("budgetList", budgetList);
+            model.addAttribute("dateToDisplay", dateToDisplay);
+            model.addAttribute("currentMonth", currentMonth);
             return "budget";
-//        } else {
-//            return "index";
-//        }
+        } else {
+            return "redirect:/";
+        }
 
     }
 
-    @GetMapping(value="/budget/budgetId/{budget_id}", produces="text/html")
+    @GetMapping(value = "/budget/budgetId/{budget_id}", produces = "text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
        IBudget budgetDetails = budgetFactory.createBudget(database).getBudgetById(budgetId);
        List<IWallet> walletList = new Wallet().getAllWalletDetails(1);
@@ -116,12 +100,12 @@ public class BudgetController {
        return "updateBudget";
     }
 
-    @GetMapping(value="/budget/add", produces="text/html")
+    @GetMapping(value = "/budget/add", produces = "text/html")
     private String addBudgetPage(Model model) throws SQLException {
         List<IWallet> walletList = new Wallet().getAllWalletDetails(1);
         IBudget budget = budgetFactory.createBudget(database);
-        model.addAttribute("wallet",walletList);
-        model.addAttribute("budget",budget);
+        model.addAttribute("wallet", walletList);
+        model.addAttribute("budget", budget);
         return "addBudget";
     }
 }
