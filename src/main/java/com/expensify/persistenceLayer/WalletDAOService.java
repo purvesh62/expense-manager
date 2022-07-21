@@ -2,7 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
-import com.expensify.model.Wallet;
+import com.expensify.model.*;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -11,16 +11,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-@Component
-public class WalletDAOService {
-    private final IDatabase database;
 
-    public WalletDAOService() {
-        this.database = MySqlDatabase.instance();
+public class WalletDAOService implements IWalletDAOService {
+    private IDatabase database;
+
+    public WalletDAOService(IDatabase database) {
+
+        this.database = database;
     }
 
-    public List<Wallet> getAllWalletDetails(int userId) throws SQLException {
-        List<Wallet> walletList = new ArrayList<>();
+    public List<IWallet> getAllWalletDetails(int userId) throws SQLException {
+        List<IWallet> walletList = new ArrayList<>();
 
         try {
             List<Object> parameterList = new ArrayList<>();
@@ -30,17 +31,19 @@ public class WalletDAOService {
                     executeProcedure("CALL get_user_wallet(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    Wallet wallet = new Wallet();
-                    wallet.setWalletId(resultSet.getInt("wallet_id"));
-                    wallet.setWalletLabel(resultSet.getString("wallet_label"));
-                    wallet.setUserId(resultSet.getInt("user_id"));
-                    wallet.setPaymentType(resultSet.getInt("p_type"));
-                    wallet.setAmount(resultSet.getFloat("amount"));
+                    IWalletFactory walletFactory = new WalletFactory();
+                    IWallet wallet = walletFactory.createWallet(
+                        resultSet.getInt("wallet_id"),
+                        resultSet.getString("wallet_label"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getInt("p_type"),
+                        resultSet.getFloat("amount")
+                    );
                     walletList.add(wallet);
                 }
 
             }
-            Collections.sort(walletList);
+//            Collections.sort(walletList);
             return walletList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,9 +53,9 @@ public class WalletDAOService {
         }
         return walletList;
     }
-
-    public Wallet getWalletById(int walletId) throws SQLException {
-        Wallet wallet = new Wallet();
+    public IWallet getWalletById(int walletId) throws SQLException {
+        IWalletFactory walletFactory = new WalletFactory();
+        IWallet wallet = walletFactory.createWallet();
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
@@ -61,11 +64,13 @@ public class WalletDAOService {
             ResultSet resultSet = database.executeProcedure("CALL get_wallet_by_id(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    wallet.setWalletId(resultSet.getInt("wallet_id"));
-                    wallet.setWalletLabel(resultSet.getString("wallet_label"));
-                    wallet.setUserId(resultSet.getInt("user_id"));
-                    wallet.setPaymentType(resultSet.getInt("p_type"));
-                    wallet.setAmount(resultSet.getFloat("amount"));
+                    wallet = walletFactory.createWallet(
+                        resultSet.getInt("wallet_id"),
+                        resultSet.getString("wallet_label"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getInt("p_type"),
+                        resultSet.getFloat("amount")
+                    );
                 }
             }
             return wallet;
@@ -91,13 +96,13 @@ public class WalletDAOService {
         }
     }
 
-    public void addNewWallet(Wallet newWallet) throws SQLException {
+    public void addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
-            parameterList.add(newWallet.getUserId());
-            parameterList.add(newWallet.getWalletLabel());
-            parameterList.add(newWallet.getPaymentType());
-            parameterList.add(newWallet.getAmount());
+            parameterList.add(userId);
+            parameterList.add(walletLabel);
+            parameterList.add(paymentType);
+            parameterList.add(amount);
             database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList);
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,12 +112,12 @@ public class WalletDAOService {
 
     }
 
-    public void updateWallet(Wallet newWallet) throws SQLException {
+    public void updateWallet(int walletId, float amount, String walletLabel) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
-            parameterList.add(newWallet.getWalletId());
-            parameterList.add(newWallet.getAmount());
-            parameterList.add(newWallet.getWalletLabel());
+            parameterList.add(walletId);
+            parameterList.add(amount);
+            parameterList.add(walletLabel);
             database.executeProcedure("CALL update_wallet(?,?,?)", parameterList);
 
         } catch (Exception e) {

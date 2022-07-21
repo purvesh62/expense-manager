@@ -98,7 +98,7 @@ public class ExpenseController {
                 List<ExpenseCategory> expenseCategoriesList = new ExpenseCategory().getAllExpenseCategories();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
-                List<Wallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
+                List<IWallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
 
 

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="../js/budget.js"></script>
+
 </head>
 <style>
 
@@ -28,11 +28,19 @@
     @-webkit-keyframes cssAnimation {
         100% {visibility: hidden;}
     }
+    .heading{
+        margin:15px auto;
+        text-align: center;
+    }
+    .heading span{
+        font-size: 35px;
+        font-weight: 600;
+    }
 </style>
 <body>
-<p>
-        <span th:text="'Wallets of the User'"></span>
-</p>
+<div class="heading">
+        <span th:text="'User Wallets'"></span>
+</div>
 <div class = "alert alert-success" id ="hideMe" role = "alert" th:text = "${SUCCESS}" th:if = "${SUCCESS}"></div>
 
 <div class="p-4">
@@ -79,7 +87,7 @@
 <!--                <br>-->
 <!--                <label for="Amount">Amount</label><input id="Amount" type="number" th:field="*{amount}">-->
 <!--                <br>-->
-                    <input type="hidden" th:value="${wallet.getUserId()}" th:field="*{userId}">
+<!--                    <input type="hidden" th:value="${wallet.getUserId()}" th:field="*{userId}">-->
                     <div class="form-group">
                         <label for="PaymentCategories">Payment Categories:</label>
                         <select class="form-control" id ="PaymentCategories" th:field="*{paymentType}">
@@ -118,11 +126,24 @@
                     <form  method="POST" th:action="@{/api/v1/updatewallet}" th:object="${wallet}" >
                         <input hidden type="number" th:value="${wallet.walletId}" name="walletId"/>
                         <input hidden type="number" th:value="${wallet.userId}" name="userId"/>
-                        <input type="text" th:value="${wallet.walletLabel}"  name="walletLabel"/>
-                        <input type="text" th:value="${wallet.amount}"  name="amount"/>
+<!--                        <input type="text" th:value="${wallet.walletLabel}"  name="walletLabel"/>-->
+<!--                        <input type="text" th:value="${wallet.amount}"  name="amount"/>-->
 <!--                        <input type="submit">Submit</input>-->
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
+                        <div class="form-group">
+                            <label for="walletLabelEdit">Wallet Label</label>
+                            <input id="walletLabelEdit" type="text" th:value="${wallet.walletLabel}" name="walletLabel" class="form-control"/>
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('walletLabel')}" th:errors="*{walletLabel}"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="walletAmount">Wallet Amount</label>
+                            <input id="walletAmount" type="text" th:value="${wallet.amount}" name="amount" class="form-control"/>
+                            <div class="alert alert-warning" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
+                        </div>
+
+
+<!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>&ndash;&gt;-->
                         <button type="submit" class="btn btn-primary">Update</button>
+
                     </form>
 <!--                    <form  method="PUT" th:action="@{/api/v1/wallet}" th:object="${wallet}" >-->
 <!--                        <input type="text" th:field="${wallet.walletId}" th:value="${wallet.walletId}"/>-->

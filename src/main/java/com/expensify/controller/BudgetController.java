@@ -110,7 +110,7 @@ public class BudgetController {
     @GetMapping(value="/budget/budgetId/{budget_id}", produces="text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
        IBudget budgetDetails = budgetFactory.createBudget(database).getBudgetById(budgetId);
-       List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+       List<IWallet> walletList = new Wallet().getAllWalletDetails(1);
        model.addAttribute("budget",budgetDetails);
        model.addAttribute("wallet",walletList);
        return "updateBudget";
@@ -118,7 +118,7 @@ public class BudgetController {
 
     @GetMapping(value="/budget/add", produces="text/html")
     private String addBudgetPage(Model model) throws SQLException {
-        List<Wallet> walletList = new Wallet().getAllWalletDetails(1);
+        List<IWallet> walletList = new Wallet().getAllWalletDetails(1);
         IBudget budget = budgetFactory.createBudget(database);
         model.addAttribute("wallet",walletList);
         model.addAttribute("budget",budget);
