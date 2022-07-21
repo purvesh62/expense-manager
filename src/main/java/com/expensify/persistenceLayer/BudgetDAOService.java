@@ -3,7 +3,6 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
 import com.expensify.model.factories.BudgetFactory;
-import com.expensify.model.factories.IBudgetFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,19 +41,16 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(budgetEndDate);
 
             ResultSet resultSet = database.executeProcedure("CALL get_all_budget(?,?,?)", parameterList);
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    IBudgetFactory budgetFactory = new BudgetFactory();
-                    IBudget budget = budgetFactory.createBudget(
-                            resultSet.getInt("budget_id"),
-                            resultSet.getInt("wallet_id"),
-                            resultSet.getString("wallet_label"),
-                            resultSet.getInt("user_id"),
-                            resultSet.getFloat("budget_limit"),
-                            resultSet.getFloat("total_expenses")
-                    );
-                    budgetList.add(budget);
-                }
+            while (resultSet.next()) {
+                IBudget budget = BudgetFactory.instance().createBudget(
+                        resultSet.getInt("budget_id"),
+                        resultSet.getInt("wallet_id"),
+                        resultSet.getString("wallet_label"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getFloat("budget_limit"),
+                        resultSet.getFloat("total_expenses")
+                );
+                budgetList.add(budget);
             }
             return budgetList;
         } catch (Exception e) {
@@ -66,8 +62,7 @@ public class BudgetDAOService implements IBudgetDAOService {
     }
 
     @Override
-    public void addNewBudget(int walletId, int userId, float budgetLimit, String month) throws SQLException {
-
+    public boolean addNewBudget(int walletId, int userId, float budgetLimit, String month) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>(10);
             parameterList.add(walletId);
@@ -85,66 +80,70 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(startDate);
             parameterList.add(endDate);
 
-            database.executeProcedure("CALL add_budget(?,?,?,?,?)", parameterList);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            try (ResultSet resultSet = database.executeProcedure("CALL add_budget(?,?,?,?,?)", parameterList)) {
+                return true;
+            }
+        } catch (SQLException | ParseException exception) {
+            exception.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
     }
 
     @Override
-    public void updateBudget(int budgetId, int walletId, float budgetLimit) throws SQLException {
+    public boolean updateBudget(int budgetId, int walletId, float budgetLimit) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>(10);
             parameterList.add(budgetId);
             parameterList.add(walletId);
             parameterList.add(budgetLimit);
 
-            database.executeProcedure("CALL update_budget(?,?,?)", parameterList);
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            try (ResultSet resultSet = database.executeProcedure("CALL update_budget(?,?,?)", parameterList)) {
+                return true;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
     }
 
     @Override
-    public void deleteBudget(int budgetId) throws SQLException {
+    public boolean deleteBudget(int budgetId) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>(10);
             parameterList.add(budgetId);
 
-            database.executeProcedure("CALL delete_budget(?)", parameterList);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try (ResultSet resultSet = database.executeProcedure("CALL delete_budget(?)", parameterList)) {
+                return true;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
     }
 
     @Override
     public IBudget getBudgetById(int budgetId) throws SQLException {
-        IBudgetFactory budgetFactory = new BudgetFactory();
-        IBudget budget = budgetFactory.createBudget();
+        IBudget budget = BudgetFactory.instance().createBudget();
         try {
             List<Object> parameterList = new ArrayList<>(10);
             parameterList.add(budgetId);
 
             ResultSet resultSet = database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    budget = budgetFactory.createBudget(
-                            resultSet.getInt("budget_id"),
-                            resultSet.getInt("wallet_id"),
-                            resultSet.getString("wallet_label"),
-                            resultSet.getInt("user_id"),
-                            resultSet.getFloat("budget_limit"),
-                            resultSet.getFloat("total_expenses")
-                    );
-                }
+            while (resultSet.next()) {
+                budget = BudgetFactory.instance().createBudget(
+                        resultSet.getInt("budget_id"),
+                        resultSet.getInt("wallet_id"),
+                        resultSet.getString("wallet_label"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getFloat("budget_limit"),
+                        resultSet.getFloat("total_expenses")
+                );
             }
             return budget;
         } catch (Exception e) {
@@ -183,10 +182,8 @@ public class BudgetDAOService implements IBudgetDAOService {
 
             ResultSet resultSet = database.executeProcedure("CALL budget_limit_exceeds(?,?,?,?)", parameterList);
 
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    userId = resultSet.getInt("user_id");
-                }
+            while (resultSet.next()) {
+                userId = resultSet.getInt("user_id");
             }
             return userId;
 

@@ -1,7 +1,7 @@
 package com.expensify;
 
-import com.expensify.model.ISubscription;
-import com.expensify.model.factories.SubscriptionFactory;
+import com.expensify.model.INotification;
+import com.expensify.model.factories.NotificationFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -17,11 +17,11 @@ public class Scheduler {
 
     @Scheduled(cron = "* 10 * 10 * *")
     public void sendDailyReminderToFillExpense() {
-        List<ISubscription> subscriptionList = new SubscriptionFactory().createSubscription().getDailyExpenseSubscribedUser();
-        ListIterator<ISubscription> iter = subscriptionList.listIterator();
+        List<INotification> notificationList = NotificationFactory.instance().createNotification().getDailyExpenseSubscribedUser();
+        ListIterator<INotification> iter = notificationList.listIterator();
         if (iter.hasNext()) {
-            ISubscription subscription = (ISubscription) iter.next();
-            subscription.notifyUsers("Reminder to add expense","Reminder");
+            INotification notification = (INotification) iter.next();
+            notification.notifyUsers("Reminder to add expense","Reminder");
         }
     }
 }
