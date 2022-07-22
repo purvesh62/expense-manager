@@ -1,0 +1,26 @@
+html, body {
+    height: 100%;
+}
+
+div {
+    width: 50%;
+    height: 50%;
+    float: left;
+}
+
+#div1 {
+    background: #DDD;
+}
+
+#div2 {
+    background: #AAA;
+}
+
+#div3 {
+    background: #777;
+}
+
+#div4 {
+    background: #444;
+}
+
