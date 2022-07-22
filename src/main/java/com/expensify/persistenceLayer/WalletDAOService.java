@@ -30,8 +30,7 @@ public class WalletDAOService implements IWalletDAOService {
                     executeProcedure("CALL get_user_wallet(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    IWalletFactory walletFactory = new WalletFactory();
-                    IWallet wallet = walletFactory.createWallet(
+                    IWallet wallet = WalletFactory.instance().createWallet(
                         resultSet.getInt("wallet_id"),
                         resultSet.getString("wallet_label"),
                         resultSet.getInt("user_id"),
@@ -42,7 +41,6 @@ public class WalletDAOService implements IWalletDAOService {
                 }
 
             }
-//            Collections.sort(walletList);
             return walletList;
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,8 +51,7 @@ public class WalletDAOService implements IWalletDAOService {
         return walletList;
     }
     public IWallet getWalletById(int walletId) throws SQLException {
-        IWalletFactory walletFactory = new WalletFactory();
-        IWallet wallet = walletFactory.createWallet();
+        IWallet wallet = WalletFactory.instance().createWallet();
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
@@ -63,7 +60,7 @@ public class WalletDAOService implements IWalletDAOService {
             ResultSet resultSet = database.executeProcedure("CALL get_wallet_by_id(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    wallet = walletFactory.createWallet(
+                        wallet = WalletFactory.instance().createWallet(
                         resultSet.getInt("wallet_id"),
                         resultSet.getString("wallet_label"),
                         resultSet.getInt("user_id"),
@@ -85,7 +82,6 @@ public class WalletDAOService implements IWalletDAOService {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
-
             database.executeProcedure("CALL delete_wallet(?)", parameterList);
 
         } catch (Exception e) {

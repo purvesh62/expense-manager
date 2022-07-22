@@ -1,11 +1,9 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
 import com.expensify.model.factories.IExpenseCategoryFactory;
-import com.expensify.model.factories.IPaymentCategoryFactory;
-import org.springframework.stereotype.Component;
+import com.expensify.model.factories.ISubscriptionFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +24,7 @@ public class ExpenseCategoriesDAOService implements IExpenseCategoriesDAOService
             ResultSet resultSet = database.executeProcedure("CALL get_all_expense_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    IExpenseCategoryFactory expenseCategoryFactory = new ExpenseCategoryFactory();
+                    IExpenseCategoryFactory expenseCategoryFactory = new ISubscriptionFactory.ExpenseCategoryFactory();
                     IExpenseCategory expenseCategory = expenseCategoryFactory.createExpenseCategory(
                             resultSet.getInt("c_id"),
                             resultSet.getString("expense_category")

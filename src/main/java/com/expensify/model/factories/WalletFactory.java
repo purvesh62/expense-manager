@@ -1,10 +1,8 @@
 package com.expensify.model.factories;
-
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.IWallet;
 import com.expensify.model.Wallet;
-import com.expensify.model.factories.IWalletFactory;
 import com.expensify.persistenceLayer.IWalletDAOService;
 import com.expensify.persistenceLayer.WalletDAOService;
 
@@ -34,6 +32,7 @@ public class WalletFactory implements IWalletFactory {
 
     @Override
     public IWalletDAOService createWalletDAOService(IDatabase database) {
+
         return new WalletDAOService(database);
     }
 

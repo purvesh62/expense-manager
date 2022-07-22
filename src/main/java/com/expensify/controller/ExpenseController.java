@@ -1,13 +1,8 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabase;
 import com.expensify.model.*;
-import com.expensify.model.factories.BudgetFactory;
-import com.expensify.model.factories.ExpenseFactory;
-import com.expensify.model.factories.IBudgetFactory;
-import com.expensify.model.factories.WalletFactory;
+import com.expensify.model.factories.*;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -49,7 +44,7 @@ public class ExpenseController {
                 List<IExpense> expenses = expenseObj.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
-                List<IExpenseCategory> expenseCategoriesList = ExpenseCategoryFactory.instance().createExpenseCategory().getAllExpenseCategoriesList();
+                List<IExpenseCategory> expenseCategoriesList = ISubscriptionFactory.ExpenseCategoryFactory.instance().createExpenseCategory().getAllExpenseCategoriesList();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
                 List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails((Integer) userCache.get("userId"));

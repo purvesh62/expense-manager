@@ -1,5 +1,6 @@
 package com.expensify.model;
 
+import com.expensify.model.IExpenseCategory;
 import com.expensify.persistenceLayer.ExpenseCategoriesDAOService;
 import com.expensify.persistenceLayer.IExpenseCategoriesDAOService;
 import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
@@ -13,26 +14,28 @@ public class ExpenseCategory implements IExpenseCategory {
     private int categoryID;
     private String categoryName;
 
-    public ExpenseCategory(){
+    public ExpenseCategory() {
 
     }
+
     public ExpenseCategory(int categoryID, String categoryName) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
     }
-    public ExpenseCategory(IExpenseCategoriesDAOService database){
+
+    public ExpenseCategory(IExpenseCategoriesDAOService database) {
         expenseCategoriesDAOService = database;
     }
 
 
-
-    public IExpenseCategoriesDAOService getExpenseCategoriesDAOService(){
+    public IExpenseCategoriesDAOService getExpenseCategoriesDAOService() {
         return expenseCategoriesDAOService;
     }
 
-    public void setExpenseCategoriesDAOService(IExpenseCategoriesDAOService expenseCategoriesDAOService){
-        this.expenseCategoriesDAOService = expenseCategoriesDAOService;
+    public void setExpenseCategoriesDAOService(IExpenseCategory expenseCategory) {
+        this.expenseCategoriesDAOService = expenseCategory.getExpenseCategoriesDAOService();
     }
+
     public int getCategoryID() {
         return categoryID;
     }
@@ -49,8 +52,11 @@ public class ExpenseCategory implements IExpenseCategory {
         this.categoryName = categoryName;
 
     }
+
     @Override
     public List<IExpenseCategory> getAllExpenseCategoriesList() throws SQLException {
         return expenseCategoriesDAOService.getAllExpenseCategories();
     }
+
+
 }

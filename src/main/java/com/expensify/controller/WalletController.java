@@ -1,10 +1,7 @@
 package com.expensify.controller;
 
-import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabase;
 import com.expensify.model.*;
-import com.expensify.model.factories.IPaymentCategoryFactory;
-import com.expensify.model.factories.IWalletFactory;
+import com.expensify.model.factories.SubscriptionFactory;
 import com.expensify.model.factories.WalletFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,28 +16,24 @@ import java.util.List;
 
 @Controller
 public class WalletController {
-    private IDatabase database;
-
-    private IWalletFactory walletFactory;
-
-    private IPaymentCategoryFactory paymentCategoryFactory;
+    private IWallet walletObj;
+    private IPaymentCategory paymentCategoryObj;
 
 
     public WalletController() {
-        database = MySqlDatabase.instance();
-        this.walletFactory = new WalletFactory();
-        this.paymentCategoryFactory = new PaymentCategoryFactory();
+       walletObj = WalletFactory.instance().createWallet();
+       paymentCategoryObj = SubscriptionFactory.PaymentCategoryFactory.instance().createPaymentCategory();
 
     }
 
     @GetMapping(value = "/api/v1/wallet", produces = "text/html")
     private String getAllWalletDetails(@RequestParam("user_id") int userId, Model model) throws SQLException {
-        List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(userId);
-        List<IPaymentCategory> paymentCategoryList = PaymentCategoryFactory.instance().createPaymentCategory().getAllPaymentCategories();
+        List<IWallet> walletList = walletObj.getAllWalletDetails(userId);
+        List<IPaymentCategory> paymentCategoryList = paymentCategoryObj.getAllPaymentCategories();
 
         model.addAttribute("wallet_list", walletList);
         model.addAttribute("payment_categories", paymentCategoryList);
-        model.addAttribute("wallet", WalletFactory.instance().createWallet());
+        model.addAttribute("wallet", walletObj);
         return "wallet";
     }
 
@@ -51,7 +44,7 @@ public class WalletController {
             return "redirect:/api/v1/wallet?user_id=1";
 
         }
-        newWallet.setWalletDAOService(WalletFactory.instance().createWalletDAOService(database));
+        newWallet.setWalletDAOService(walletObj);
         newWallet.setUserId(1);
         newWallet.saveWallet();
         redirAttrs.addFlashAttribute("SUCCESS", "Wallet Added");
@@ -61,13 +54,12 @@ public class WalletController {
 
     @GetMapping(value = "/api/v1/wallet/walletId/{walletId}")
     private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs) throws SQLException {
-        System.out.println(walletId);
-        WalletFactory.instance().createWallet().deleteWallet(walletId);
+        walletObj.deleteWallet(walletId);
         redirAttrs.addFlashAttribute("SUCCESS", "Wallet Deleted");
         return "redirect:/api/v1/wallet?user_id=1";
     }
 
-    @PostMapping(value =  "/api/v1/updatewallet")
+    @PostMapping(value = "/api/v1/updatewallet")
     private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs) throws SQLException {
 //        wallet = this.wallet;
 //        System.out.println("Put Mapping called");
@@ -76,7 +68,7 @@ public class WalletController {
 //        System.out.println("-------------------------------------------------");
 //        System.out.println(wallet.getWalletId()+" " +wallet.getAmount()+" " +wallet.getWalletLabel());
 //        System.out.println(wallet.getUserId());
-        wallet.setWalletDAOService(WalletFactory.instance().createWalletDAOService(database));
+        wallet.setWalletDAOService(walletObj);
         wallet.updateWallet();
         redirAttrs.addFlashAttribute("SUCCESS", "Wallet Updated");
         return "redirect:/api/v1/wallet?user_id=1";

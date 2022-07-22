@@ -24,8 +24,8 @@ public class PaymentCategory implements IPaymentCategory {
         return paymentCategoriesDAOService;
     }
 
-    public void setPaymentCategoriesDAOService(IPaymentCategoriesDAOService paymentCategoriesDAOService){
-        this.paymentCategoriesDAOService = paymentCategoriesDAOService;
+    public void setPaymentCategoriesDAOService(IPaymentCategory paymentCategories){
+        this.paymentCategoriesDAOService = paymentCategories.getPaymentCategoriesDAOService();
     }
 
     public int getPaymentId() {

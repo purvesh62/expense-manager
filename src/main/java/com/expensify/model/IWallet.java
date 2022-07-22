@@ -1,5 +1,7 @@
 package com.expensify.model;
 
+import com.expensify.persistenceLayer.IWalletDAOService;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,4 +12,6 @@ public interface IWallet {
     IWallet updateWallet() throws SQLException;
     void deleteWallet(int walletId) throws SQLException;
     IWallet getWalletById(int walletId) throws SQLException;
+
+    IWalletDAOService getWalletDAOService();
 }

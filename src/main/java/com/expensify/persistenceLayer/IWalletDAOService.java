@@ -12,7 +12,7 @@ public interface IWalletDAOService {
 
     void updateWallet(int walletId, float amount, String walletLabel) throws SQLException;
 
-    void deleteWallet(int budgetId) throws SQLException;
+    void deleteWallet(int walletId) throws SQLException;
 
-    IWallet getWalletById(int budgetId) throws SQLException;
+    IWallet getWalletById(int walletId) throws SQLException;
 }
