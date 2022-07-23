@@ -2,27 +2,31 @@ package com.expensify.controller;
 
 import com.expensify.SessionManager;
 import com.expensify.model.DateRange;
-import com.expensify.model.Expense;
 import com.expensify.model.ExportDataToCSV;
+import com.expensify.model.ExportDataToPDF;
 import com.expensify.model.IExpense;
 import com.expensify.model.factories.ExpenseFactory;
+import com.expensify.model.factories.ExportDataFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.text.DateFormat;
+import java.io.IOException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+
 import java.util.List;
 
 @Controller
-public class ExportData {
+public class ExportDataController {
 
     @GetMapping(path = "/export", produces = "text/html")
-    public String exportCSV(Model model, HttpSession session) throws ParseException {
+    public String export(Model model, HttpSession session) throws ParseException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             LocalDate currentdate = LocalDate.now();
@@ -38,9 +42,15 @@ public class ExportData {
     }
 
     @PostMapping(value = "/export-csv")
-    public String exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session) {
+    public String exportCSV(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session, HttpServletResponse response) throws IOException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
+            response.setContentType("text/csv");
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=expenses_" + dateFrom + "-" + dateTo + ".csv";
+            response.setHeader(headerKey, headerValue);
+
             List<IExpense> expenseList = null;
             try {
                 expenseList = ExpenseFactory.instance().createExpense().getAllUserExpenses((Integer) userCache.get("userId"),
@@ -49,16 +59,34 @@ public class ExportData {
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-            ExportDataToCSV exportDataToCSV = new ExportDataToCSV();
-            exportDataToCSV.addDataToFile(expenseList);
+
+            ExportDataFactory.instance().createExportDataToCSV().exportExpenseData(expenseList, response);
         }
         model.addAttribute("dateRange", new DateRange(dateFrom, dateTo));
         return "saved";
     }
 
     @PostMapping(value = "/export-pdf")
-    public String exportCSV(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model) {
-        model.addAttribute("dateRange", new DateRange(dateFrom, dateTo));
-        return "saved";
+    public void exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            response.setContentType("application/pdf");
+
+            String headerKey = "Content-Disposition";
+            String headerValue = "attachment; filename=expenses_" + dateFrom + "-" + dateTo + ".pdf";
+
+            response.setHeader(headerKey, headerValue);
+
+            List<IExpense> expenseList = null;
+            try {
+                expenseList = ExpenseFactory.instance().createExpense().getAllUserExpenses((Integer) userCache.get("userId"),
+                        new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom)),
+                        new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo)));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+            ExportDataFactory.instance().createExportDataToPDF().exportExpenseData(expenseList, response);
+        }
     }
 }
