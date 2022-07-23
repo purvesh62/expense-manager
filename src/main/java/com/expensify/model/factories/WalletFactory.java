@@ -10,7 +10,7 @@ public class WalletFactory implements IWalletFactory {
 
     private static WalletFactory walletFactory;
 
-    public WalletFactory(){
+    private WalletFactory(){
 
     }
     public static WalletFactory instance() {

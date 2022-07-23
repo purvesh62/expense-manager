@@ -12,7 +12,7 @@ public class SubscriptionFactory implements ISubscriptionFactory {
 
     private static SubscriptionFactory subscriptionFactory;
 
-    public SubscriptionFactory() {
+    private SubscriptionFactory() {
 
     }
 
@@ -40,32 +40,5 @@ public class SubscriptionFactory implements ISubscriptionFactory {
         return new Subscription(subscriptionId, subscriptionName, userId, expiryDate);
     }
 
-    public static class PaymentCategoryFactory implements IPaymentCategoryFactory {
 
-        private static PaymentCategoryFactory paymentCategoryFactory;
-
-        public PaymentCategoryFactory(){
-
-        }
-        public static PaymentCategoryFactory instance() {
-            if (paymentCategoryFactory == null) {
-                paymentCategoryFactory = new PaymentCategoryFactory();
-            }
-            return paymentCategoryFactory;
-        }
-        @Override
-        public IPaymentCategory createPaymentCategory() {
-            IDatabase database = MySqlDatabase.instance();
-            return new PaymentCategory(createPaymentCategoriesDAOService(database));
-        }
-        @Override
-        public IPaymentCategoriesDAOService createPaymentCategoriesDAOService(IDatabase database) {
-            return new PaymentCategoriesDAOService(database);
-        }
-
-        @Override
-        public IPaymentCategory createPaymentCategory(int p_id, String paymentCategory) {
-            return new PaymentCategory(p_id, paymentCategory);
-        }
-    }
 }

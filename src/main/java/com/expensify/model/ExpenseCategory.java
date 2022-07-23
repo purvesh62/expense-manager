@@ -1,9 +1,6 @@
 package com.expensify.model;
 
-import com.expensify.model.IExpenseCategory;
-import com.expensify.persistenceLayer.ExpenseCategoriesDAOService;
 import com.expensify.persistenceLayer.IExpenseCategoriesDAOService;
-import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
 
 import java.sql.SQLException;
 import java.util.List;

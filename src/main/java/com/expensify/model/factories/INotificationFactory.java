@@ -10,4 +10,7 @@ public interface INotificationFactory {
     INotficationDAOService createNotificationDAOService(IDatabase database);
 
     INotification createNotification(int id, int user_id, String email, int s_id, int status);
+
+    INotification createExpiryNotification(int userId, String email, int s_id);
+
 }

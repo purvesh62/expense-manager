@@ -1,18 +1,23 @@
 package com.expensify.controller;
 
-import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabase;
-import com.expensify.model.*;
-import com.expensify.model.factories.*;
+import com.expensify.SessionManager;
+import com.expensify.model.ISubscription;
+import com.expensify.model.Subscription;
+import com.expensify.model.factories.SubscriptionFactory;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
+
 @Controller
 public class SubscriptionController {
     private ISubscription subscriptionObj;
@@ -23,47 +28,64 @@ public class SubscriptionController {
     }
 
     @GetMapping(value = "/api/v1/subscription", produces = "text/html")
-    private String getAllSubscriptionDetails(@RequestParam("user_id") int userId, Model model) throws SQLException {
-        List<ISubscription> subscriptionList = subscriptionObj.getAllSubscriptionDetails(userId);
-        model.addAttribute("subscription_list", subscriptionList);
-        model.addAttribute("subscription", subscriptionObj);
-        return "subscription";
+    private String getAllSubscriptionDetails(Model model, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            List<ISubscription> subscriptionList = subscriptionObj.getAllSubscriptionDetails(userId);
+            model.addAttribute("subscription_list", subscriptionList);
+            model.addAttribute("subscription", subscriptionObj);
+            return "subscription";
+        } else {
+            return "redirect:/";
+        }
     }
 
     @PostMapping(value = "/api/v1/subscription")
-    private String addSubscription(@Valid Subscription newSubscription, BindingResult result, RedirectAttributes redirAttrs) throws SQLException {
-        System.out.println("Add called");
-        if (result.hasErrors()) {
-            return "redirect:/api/v1/subscription?user_id=1";
+    private String addSubscription(Subscription newSubscription, BindingResult result, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            if (result.hasErrors()) {
+                return "redirect:/api/v1/subscription? " + userId;
 
+            }
+            newSubscription.setSubscriptionDAOService(subscriptionObj);
+            newSubscription.setUserId(1);
+            newSubscription.saveSubscription();
+            redirAttrs.addFlashAttribute("SUCCESS", "Subscription Added");
+            return "redirect:/api/v1/subscription? " + userId;
+        } else {
+            return "redirect:/";
         }
-        newSubscription.setSubscriptionDAOService(subscriptionObj);
-        newSubscription.setUserId(1);
-        newSubscription.saveSubscription();
-        redirAttrs.addFlashAttribute("SUCCESS", "Subscription Added");
-        return "redirect:/api/v1/subscription?user_id=1";
     }
 
     @GetMapping(value = "/api/v1/subscription/subscription_id/{subscription_id}")
-    private String deleteSubscription(@PathVariable(value = "subscription_id") int subscriptionId, RedirectAttributes redirAttrs) throws SQLException {
-        subscriptionObj.deleteSubscription(subscriptionId);
-        redirAttrs.addFlashAttribute("SUCCESS", "Subscription Deleted");
-        return "redirect:/api/v1/subscription?user_id=1";
+    private String deleteSubscription(@PathVariable(value = "subscription_id") int subscriptionId, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            subscriptionObj.deleteSubscription(subscriptionId);
+            redirAttrs.addFlashAttribute("SUCCESS", "Subscription Deleted");
+            return "redirect:/api/v1/subscription? " + userId;
+        } else {
+            return "redirect:/";
+        }
     }
 
     @PostMapping(value = "/api/v1/updatesubscription")
-    private String updateSubscription(@ModelAttribute("subscription") Subscription subscription, RedirectAttributes redirAttrs) throws SQLException {
-//        wallet = this.wallet;
-//        System.out.println("Put Mapping called");
-//        System.out.println(wallet.getWalletId());
-//        System.out.println(wallet.getUserId());
-//        System.out.println("-------------------------------------------------");
-//        System.out.println(wallet.getWalletId()+" " +wallet.getAmount()+" " +wallet.getWalletLabel());
-//        System.out.println(wallet.getUserId());
-        subscription.setSubscriptionDAOService(subscriptionObj);
-        subscription.updateSubscription();
-        redirAttrs.addFlashAttribute("SUCCESS", "Subscription Updated");
-        return "redirect:/api/v1/subscription?user_id=1";
+    private String updateSubscription(@ModelAttribute("subscription") Subscription subscription, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+
+            subscription.setSubscriptionDAOService(subscriptionObj);
+            subscription.updateSubscription();
+            redirAttrs.addFlashAttribute("SUCCESS", "Subscription Updated");
+            return "redirect:/api/v1/subscription? " + userId;
+        } else {
+            return "redirect:/";
+        }
     }
 }
 

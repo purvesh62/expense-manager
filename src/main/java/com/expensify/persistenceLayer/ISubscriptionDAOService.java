@@ -1,7 +1,6 @@
 package com.expensify.persistenceLayer;
 
 import com.expensify.model.ISubscription;
-import com.expensify.model.IWallet;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,5 +15,4 @@ public interface ISubscriptionDAOService {
 
     void deleteSubscription(int subscriptionId) throws SQLException;
 
-    ISubscription getSubscriptionById(int subscriptionId) throws SQLException;
 }

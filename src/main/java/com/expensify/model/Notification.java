@@ -20,6 +20,12 @@ public class Notification implements INotification {
         this.notificationStatus = notificationStatus;
     }
 
+    public Notification(int userId, String email, int notificationType){
+        this.userId = userId;
+        this.email = email;
+        this.notificationType = notificationType;
+    }
+
     public Notification(INotficationDAOService notficationDAOService) {
         this.notficationDAOService = notficationDAOService;
     }

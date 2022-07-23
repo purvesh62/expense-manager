@@ -34,4 +34,9 @@ public class NotificationFactory implements INotificationFactory {
     public INotification createNotification(int id, int user_id, String email, int s_id, int status) {
         return new Notification(id, user_id, email, s_id, status);
     }
+
+    @Override
+    public INotification createExpiryNotification(int userId, String email, int s_id) {
+        return new Notification(userId,email ,s_id);
+    }
 }

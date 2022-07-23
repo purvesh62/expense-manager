@@ -3,6 +3,7 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
 import com.expensify.model.factories.IPaymentCategoryFactory;
+import com.expensify.model.factories.PaymentCategoryFactory;
 import com.expensify.model.factories.SubscriptionFactory;
 
 import java.sql.ResultSet;
@@ -24,8 +25,7 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
             ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    IPaymentCategoryFactory paymentCategoryFactory = new SubscriptionFactory.PaymentCategoryFactory();
-                    IPaymentCategory paymentCategory = paymentCategoryFactory.createPaymentCategory(
+                    IPaymentCategory paymentCategory = PaymentCategoryFactory.instance().createPaymentCategory(
                             resultSet.getInt("p_id"),
                             resultSet.getString("payment_category")
                     );

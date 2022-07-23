@@ -6,7 +6,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IExpenseCategory {
-    List<IExpenseCategory> getAllExpenseCategoriesList() throws SQLException;;
+    List<IExpenseCategory> getAllExpenseCategoriesList() throws SQLException;
+
+    ;
 
     IExpenseCategoriesDAOService getExpenseCategoriesDAOService();
 }
