@@ -1,4 +1,5 @@
 package com.expensify.controller;
+
 import com.expensify.SessionManager;
 import com.expensify.model.*;
 import com.expensify.model.factories.BudgetFactory;
@@ -23,31 +24,41 @@ public class BudgetController {
     }
 
     @PostMapping(value = "/budget")
-    private String updateBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
-        budget.setBudgetDAOService(budgetObj);
-        boolean status = budget.updateBudget();
-        return "redirect:/budget";
+    private String updateBudget(@ModelAttribute("budget") Budget budget, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            budget.setBudgetDAOService(budgetObj);
+            boolean status = budget.updateBudget();
+            return "redirect:/budget";
+        }
+        return null;
     }
 
     @PostMapping(value = "/budget/add")
-    private String addBudget(@ModelAttribute("budget") Budget budget) throws SQLException {
-        System.out.println(budget);
-        budget.setBudgetDAOService(budgetObj);
-        budget.setUserId(1);
-        boolean status = budget.saveBudget();
-        return "redirect:/budget";
+    private String addBudget(@ModelAttribute("budget") Budget budget, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            budget.setBudgetDAOService(budgetObj);
+            budget.setUserId(1);
+            boolean status = budget.saveBudget();
+            return "redirect:/budget";
+        }
+        return null;
     }
 
     @GetMapping(value = "/budget/delete/{budget_id}", produces = "text/html")
-    private String deleteBudget(@PathVariable("budget_id") int budgetId) throws SQLException {
-        boolean status = budgetObj.deleteBudget(budgetId);
-        return "redirect:/budget";
+    private String deleteBudget(@PathVariable("budget_id") int budgetId, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            boolean status = budgetObj.deleteBudget(budgetId);
+            return "redirect:/budget";
+        }
+        return null;
     }
 
     @GetMapping(value = "/budget", produces = "text/html")
     public String getAllBudgetDetails(@RequestParam("month") Optional<String> month, Model model, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
-
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
 
@@ -87,20 +98,31 @@ public class BudgetController {
     }
 
     @GetMapping(value = "/budget/budgetId/{budget_id}", produces = "text/html")
-    private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model) throws SQLException {
-        IBudget budgetDetails = budgetObj.getBudgetById(budgetId);
-        List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(1);
-        model.addAttribute("budget", budgetDetails);
-        model.addAttribute("wallet", walletList);
-        return "updateBudget";
+    private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            IBudget budgetDetails = budgetObj.getBudgetById(budgetId);
+            List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(userId);
+            model.addAttribute("budget", budgetDetails);
+            model.addAttribute("wallet", walletList);
+            return "updateBudget";
+        }
+        return null;
     }
 
     @GetMapping(value = "/budget/add", produces = "text/html")
-    private String addBudgetPage(Model model) throws SQLException {
-        List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(1);
-        IBudget budget = budgetObj;
-        model.addAttribute("wallet", walletList);
-        model.addAttribute("budget", budget);
-        return "addBudget";
+    private String addBudgetPage(Model model, HttpSession session) throws SQLException {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(userId);
+            IBudget budget = budgetObj;
+            model.addAttribute("wallet", walletList);
+            model.addAttribute("budget", budget);
+            return "addBudget";
+        }
+        return null;
+
     }
 }
