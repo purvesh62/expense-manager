@@ -18,7 +18,7 @@ public class ExportDataToPDF implements IExportData {
         try {
             Document document = new Document(PageSize.A4);
             PdfWriter.getInstance(document, response.getOutputStream());
-
+            response.flushBuffer();
             document.open();
             Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
             font.setSize(18);
