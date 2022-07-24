@@ -16,7 +16,7 @@ build-job:
     - echo "building maven project."
     - mvn clean compile
   only:
-    # - develop
+    - develop
     - test
     - production
 
@@ -28,6 +28,7 @@ test-job:
     - echo "Execute test case"
     - mvn clean test
   only:
+    -develop
     - test
     - production
 
@@ -40,7 +41,7 @@ deploy-dev:
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+    - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=HEROKU_DEV_API_KEY
   only:
     - develop
 
