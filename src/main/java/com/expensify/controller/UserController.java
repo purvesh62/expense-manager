@@ -63,22 +63,10 @@ public class UserController {
         return "register";
     }
 
-//    @PostMapping(value="/reset", produces = "text/html")
-//    public String forgotPassword(@RequestBody User user, HttpSession session) throws SQLException{
-//        String password = user.forgotPassword();
-//        JSONObject userCache = new JSONObject();
-//        userCache.put("password",user.getPassword());
-//        SessionManager.setSession(session, userCache);
-//        return "login";
-//    }
 
     @GetMapping(path = "/reset", produces = "text/html")
     public String reset(@ModelAttribute("user") User user, Model model, HttpSession session) {
         try {
-//            String email = request.getParameter("email");
-//            String token = RandomString.make(30);
-//            String resetPasswordLink = user.getSiteURL(request) + "/reset_password?token=" + token;
-//            user.email(email, resetPasswordLink);
             model.addAttribute("user", new User());
             return "reset";
         } catch (Exception exception) {
@@ -97,7 +85,7 @@ public class UserController {
     }
 
 
-    @PostMapping(value="/login", produces = "text/html")
+    @PostMapping(value="/login")
     public String authenticateUser(@RequestBody User user, HttpSession session) throws SQLException {
         int userId = user.authenticateUser();
         if (userId > 0) {
@@ -113,8 +101,7 @@ public class UserController {
 
     @PostMapping(value="/process_register", produces="text/html")
     public String processRegister(User user) {
-        User.BCryptPasswordEncoder passwordEncoder = new User.BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        String encodedPassword = user.encode(user.getPassword());
         user.setPassword(encodedPassword);
         return "process_register";
     }

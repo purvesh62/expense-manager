@@ -5,13 +5,7 @@ import com.expensify.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,12 +14,13 @@ import java.util.List;
 
 
 @Component
-public class UserDAOService {
+public class UserDAOService implements IUserDAOService {
     private final IDatabase database;
     @Autowired
     private JavaMailSender mailSender;
 
     public UserDAOService() {
+      //  this.database = database;
         this.database = MySqlDatabase.instance();
     }
 
@@ -54,9 +49,10 @@ public class UserDAOService {
 
         return userId;
     }
-    @Bean
-    public User.BCryptPasswordEncoder passwordEncoder() {
-        return new User.BCryptPasswordEncoder();
+
+    public String encode(String password) {
+
+        return password;
     }
     public int verifyUser(User user) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
@@ -108,32 +104,7 @@ public class UserDAOService {
         return passwordUpdated;
     }
 
-    public void sendEmail(String recipientEmail, String link)
-            throws MessagingException, UnsupportedEncodingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("contact@expensify.com", "Expensify Support");
-        helper.setTo(recipientEmail);
-        String subject = "Here's the link to reset your password";
-        String content = "<p>Hello,</p>"
-                + "<p>You have requested to reset your password.</p>"
-                + "<p>Click the link below to change your password:</p>"
-                + "<p>Your OTP to change password is </p>"
-//                + "<p><a href=\"" + link + "\">Change my password</a></p>"
-                + "<br>"
-                + "<p>Ignore this email if you do remember your password, "
-                + "or you have not made the request.</p>";
-
-        helper.setSubject(subject);
-        helper.setText(content, true);
-        mailSender.send(message);
-    }
-
-    public String getSiteURL(HttpServletRequest request) {
-        String siteURL = request.getRequestURL().toString();
-        return siteURL.replace(request.getServletPath(), "");
-    }
 
     public boolean findByEmail(String email) {
         List<Object> parameterList = new ArrayList<>();
@@ -156,5 +127,7 @@ public class UserDAOService {
 
         return userExist;
     }
+
+
 
 }
