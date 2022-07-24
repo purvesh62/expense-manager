@@ -16,7 +16,7 @@ build-job:
     - echo "building maven project."
     - mvn clean compile
   only:
-    - develop
+    # - develop
     - test
     - production
 
@@ -38,10 +38,9 @@ deploy-dev:
   image: ruby:2.6
   script:
     - apt-get update -qy
-    - apt install redis-server -y
     - apt-get install -y ruby-dev
     - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=$HEROKU_DEV_API_KEY
+    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
   only:
     - develop
 
