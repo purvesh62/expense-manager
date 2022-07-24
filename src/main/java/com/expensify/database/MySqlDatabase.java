@@ -14,12 +14,12 @@ public class MySqlDatabase implements  IDatabase{
     private Connection conn;
 
     private MySqlDatabase() {
-        dbHost = "db-5308.cs.dal.ca";
+    /*    dbHost = "db-5308.cs.dal.ca";
         dbName = "CSCI5308_7_DEVINT";
         dbPort = "3306";
         dbUser = "CSCI5308_7_DEVINT_USER";
         dbPassword = "4KhAVapdN5";
-        dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
+        dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;*/
     }
     public static MySqlDatabase instance() {
         if(MySqlDatabase.instance == null){
