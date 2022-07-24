@@ -19,7 +19,7 @@ public class WalletDAOService implements IWalletDAOService {
         this.database = database;
     }
 
-    public List<IWallet> getAllWalletDetails(int userId) throws SQLException {
+    public List<IWallet> getAllWalletDetails(int userId) {
         List<IWallet> walletList = new ArrayList<>();
 
         try {
@@ -42,12 +42,15 @@ public class WalletDAOService implements IWalletDAOService {
                 }
 
             }
-//            Collections.sort(walletList);
             return walletList;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            database.closeConnection();
+            try {
+                database.closeConnection();
+            } catch (SQLException e) {
+                return walletList;
+            }
 
         }
         return walletList;

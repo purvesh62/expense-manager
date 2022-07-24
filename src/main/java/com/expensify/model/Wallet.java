@@ -83,7 +83,7 @@ public class Wallet implements IWallet {
         this.amount = amount;
     }
    @Override
-    public List<IWallet> getAllWalletDetails(int userId) throws SQLException {
+    public List<IWallet> getAllWalletDetails(int userId){
         return walletDAOService.getAllWalletDetails(userId);
     }
   @Override

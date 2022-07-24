@@ -91,7 +91,7 @@ public class ExpenseController {
                 boolean status = expense.addUserExpense();
             }
 
-            BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(expense);
+            BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(userId,expense.getWalletId(),expense.getExpenseDate());
 
             return "redirect:/";
         }

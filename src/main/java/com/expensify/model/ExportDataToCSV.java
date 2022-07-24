@@ -12,19 +12,29 @@ import java.util.ListIterator;
 
 public class ExportDataToCSV implements IExportData {
     @Override
-    public void exportExpenseData(List<IExpense> expenseList, HttpServletResponse response) throws IOException {
-        ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
-        String[] csvHeader = {"Title", "Description", "Amount", "Date", "Expense Category"};
-        String[] nameMapping = {"expenseTitle", "description", "amount", "expenseDate", "expenseCategoryName"};
+    public boolean exportExpenseData(List<IExpense> expenseList, HttpServletResponse response) {
+        try {
+            ICsvBeanWriter csvWriter = new CsvBeanWriter(response.getWriter(), CsvPreference.STANDARD_PREFERENCE);
+            String[] csvHeader = {"Title", "Description", "Amount", "Date", "Expense Category"};
+            String[] nameMapping = {"expenseTitle", "description", "amount", "expenseDate", "expenseCategoryName"};
 
-        csvWriter.writeHeader(csvHeader);
+            csvWriter.writeHeader(csvHeader);
 
-        ListIterator itr = expenseList.listIterator();
+            if(expenseList.size() > 0){
+                ListIterator itr = expenseList.listIterator();
 
-        while (itr.hasNext()) {
-            Expense expense = (Expense) itr.next();
-            csvWriter.write(expense, nameMapping);
+                while (itr.hasNext()) {
+                    Expense expense = (Expense) itr.next();
+                    csvWriter.write(expense, nameMapping);
+                }
+            }
+
+            csvWriter.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-        csvWriter.close();
+
     }
 }
