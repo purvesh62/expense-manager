@@ -7,7 +7,9 @@ import com.expensify.model.factories.WalletFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -24,27 +26,41 @@ public class BudgetController {
     }
 
     @PostMapping(value = "/budget")
-    private String updateBudget(@ModelAttribute("budget") Budget budget, HttpSession session) {
+    private String updateBudget(@ModelAttribute("budget") Budget budget, HttpSession session, RedirectAttributes redirectAttributes) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             budget.setBudgetDAOService(budgetObj);
-            boolean status = budget.updateBudget();
-            if (status) {
-                return "redirect:/budget";
+            System.out.println(budget);
+            String msg = BudgetFactory.instance().createBudgetValidator().validate(budget);
+            if (msg == null) {
+                boolean status = budget.updateBudget();
+                if (status) {
+                    return "redirect:/budget";
+                }
+            }else {
+                redirectAttributes.addFlashAttribute("errorMessage", msg);
+                return "redirect:/budget/budgetId/" + budget.getBudgetId();
             }
+
         }
         return "error";
     }
 
     @PostMapping(value = "/budget/add")
-    private String addBudget(@ModelAttribute("budget") Budget budget, HttpSession session) {
+    private String addBudget(@ModelAttribute("budget") Budget budget, HttpSession session, RedirectAttributes redirectAttributes) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             budget.setBudgetDAOService(budgetObj);
             budget.setUserId(1);
-            boolean status = budget.saveBudget();
-            if (status) {
-                return "redirect:/budget";
+            String msg = BudgetFactory.instance().createBudgetValidator().validate(budget);
+            if (msg == null) {
+                boolean status = budget.saveBudget();
+                if (status) {
+                    return "redirect:/budget";
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("errorMessage", msg);
+                return "redirect:/budget/add";
             }
         }
         return "error";

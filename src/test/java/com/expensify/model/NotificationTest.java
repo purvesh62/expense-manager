@@ -27,8 +27,9 @@ public class NotificationTest {
     @Test
     public void getDailyExpenseSubscribedUserFailureTest() {
         NotificationDAOServiceMock notificationDAOServiceMock = new NotificationDAOServiceMock();
+        notificationDAOServiceMock.getNullNotificationMock();
         List<INotification> notificationList = notificationDAOServiceMock.dailyDailyExpenseSubscribedUsers();
-        Assertions.assertEquals(0, notificationList.size());
+        Assertions.assertEquals(null, notificationList);
     }
 
     @Test

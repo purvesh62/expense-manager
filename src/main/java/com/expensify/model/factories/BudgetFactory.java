@@ -3,6 +3,7 @@ package com.expensify.model.factories;
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.Budget;
+import com.expensify.model.BudgetValidator;
 import com.expensify.model.IBudget;
 import com.expensify.persistenceLayer.BudgetDAOService;
 import com.expensify.persistenceLayer.IBudgetDAOService;
@@ -32,7 +33,12 @@ public class BudgetFactory implements IBudgetFactory {
     }
 
     @Override
-    public IBudget createBudget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses) {
-        return new Budget(budgetId, walletId, walletName, userId, budgetLimit, totalExpenses);
+    public IBudget createBudget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses, String month) {
+        return new Budget(budgetId, walletId, walletName, userId, budgetLimit, totalExpenses, month);
+    }
+
+    @Override
+    public BudgetValidator createBudgetValidator() {
+        return new BudgetValidator();
     }
 }

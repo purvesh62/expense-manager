@@ -27,7 +27,7 @@
         <div class="p-4">
             <div class="form-group">
                 <label>Limit</label>
-                <input type="text" th:field="${budget.budgetLimit}"/>
+                <input type="number" th:field="${budget.budgetLimit}" min="0" required/>
                 <input type="hidden" th:field="${budget.budgetId}"/>
                 <!--            <input type="hidden" th:field="${budget.walletId}"/>-->
                 <input type="hidden" th:field="${budget.walletName}"/>
@@ -40,6 +40,9 @@
                 <select class="form-control" id="walletId" th:field="${budget.walletId}">
                     <option th:each="i : ${wallet}" th:value="${i.walletId}" th:text="${i.walletLabel}"></option>
                 </select>
+            </div>
+            <div>
+                <small class="my-1 text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></small>
             </div>
             <button type="submit" class="btn">Update</button>
         </div>
