@@ -11,26 +11,26 @@
 <body>
 <div class="container-fluid text-center">
 
-    <form th:action="@{/registerUser}" th:object="${user}" method="post" style="max-width: 350px; margin: 0 auto;">
+    <form th:action="@{/register}" th:object="${user}" method="post" style="max-width: 350px; margin: 0 auto;">
 
 
         <div class="border border-secondary p-3 rounded">
             <p>Signup Page</p>
             <p>
 
-                <input th:field="*{firstname}"  type="firstname" name="firstname" class="form-control" placeholder="Firstname" required autofocus/>
+                <input th:field="${user.firstName}"  type="firstName" name="firstName" class="form-control" placeholder="Firstname" required autofocus />
             </p>
             <p>
-                <input type="lastname" name="lastname" class="form-control" placeholder="Lastname" th:field="*{lastname}" required />
+                <input type="lastName" name="lastName" class="form-control" placeholder="Lastname" th:field="${user.lastName}" required />
             </p>
             <p>
-                <input type="email" name="email" class="form-control" placeholder="email" th:field="*{email}" required />
+                <input type="email" name="email" class="form-control" placeholder="email" th:field="${user.email}" required />
             </p>
             <p>
-                <input type="password" name="password" class="form-control" placeholder="password" th:field="*{password}" required />
+                <input type="password" name="password" class="form-control" placeholder="password" th:field="${user.password}" required />
             </p>
             <p>
-                <input type="contact" name="contact" class="form-control" placeholder="contact" th:field="*{contact}" required />
+                <input type="contact" name="contact" class="form-control" placeholder="contact" th:field="${user.contact}" required />
             </p>
             <p>
                 <input type="submit" value="Register" class="btn btn-primary" />

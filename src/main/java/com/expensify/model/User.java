@@ -1,17 +1,11 @@
 package com.expensify.model;
 
-import com.expensify.SessionManager;
 import com.expensify.persistenceLayer.UserDAOService;
-import org.json.JSONException;
-import org.json.simple.JSONObject;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
+import java.util.UUID;
 
 public class User {
     private UserDAOService authenticationDAO;
@@ -40,6 +34,13 @@ public class User {
         authenticationDAO = new UserDAOService();
     }
 
+    public UserDAOService getAuthenticationDAO() {
+        return authenticationDAO;
+    }
+
+    public void setAuthenticationDAO(UserDAOService authenticationDAO) {
+        this.authenticationDAO = authenticationDAO;
+    }
 
     public int getUserId() {
         return userId;
@@ -64,7 +65,6 @@ public class User {
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
-
 
     public String getEmail() {
         return email;
@@ -97,9 +97,9 @@ public class User {
     public int authenticateUser() throws SQLException {
         return authenticationDAO.verifyUser(this);
     }
-    public String forgotPassword() throws SQLException{
-        return authenticationDAO.updatePassword(this);
-    }
+//    public String forgotPassword() throws SQLException{
+//        return authenticationDAO.updatePassword(this);
+//    }
 
     public String getSiteURL(HttpServletRequest request){
         return authenticationDAO.getSiteURL((HttpServletRequest) this);
@@ -108,14 +108,21 @@ public class User {
     public void email(String recipientEmail, String link) throws MessagingException, UnsupportedEncodingException {
         authenticationDAO.sendEmail(recipientEmail, link);
     }
-/*
-    public String findByEmail(String email){
-        return authenticationDAO.findByEmail(this);
+    public boolean findByEmail(String email){
+        boolean userExist = authenticationDAO.findByEmail(email);
+        if(userExist) {
+            String generatedPassword = UUID.randomUUID().toString().substring(0,20);
+            if (authenticationDAO.updatePassword(email,generatedPassword)){
+                SMTPEmailService.instance(email, "Your new password is " + generatedPassword, "Expensify reset password").sendEmail();
+                return true;
+            }
+        }
+        return false;
     }
-    public String findByResetPasswordToken(String token){
-        return authenticationDAO.findByResetPasswordToken(this);
-    }
-*/
+
+//    public String findByResetPasswordToken(String token){
+//        return authenticationDAO.findByResetPasswordToken(this);
+//    }
 
     public static class BCryptPasswordEncoder {
         public String encode(String password) {

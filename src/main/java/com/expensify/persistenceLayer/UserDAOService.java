@@ -81,27 +81,31 @@ public class UserDAOService {
         return userId;
     }
 
-    public String updatePassword(User user) throws SQLException {
+    public boolean updatePassword(String email, String password)  {
         List<Object> parameterList = new ArrayList<>();
-        String password = null;
+        boolean passwordUpdated = false;
         try {
-            parameterList.add(user.getPassword());
-            User.BCryptPasswordEncoder passwordEncoder = new User.BCryptPasswordEncoder();
+            parameterList.add(email);
+            parameterList.add(password);
+            /*User.BCryptPasswordEncoder passwordEncoder = new User.BCryptPasswordEncoder();
             String encodedPassword = passwordEncoder.encode(password);
-            user.setPassword(encodedPassword);
-            ResultSet resultSet = database.executeProcedure("CALL update_password(?)", parameterList);
+            user.setPassword(encodedPassword);*/
+            ResultSet resultSet = database.executeProcedure("CALL update_user_password(?,?)", parameterList);
             if (resultSet != null) {
-                while (resultSet.next()) {
-                    encodedPassword = resultSet.getString("password");
+                passwordUpdated = true;
                 }
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            database.closeConnection();
+            try {
+                database.closeConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
-        return password;
+        return passwordUpdated;
     }
 
     public void sendEmail(String recipientEmail, String link)
@@ -109,13 +113,14 @@ public class UserDAOService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message);
 
-        helper.setFrom("contact@shopme.com", "Shopme Support");
+        helper.setFrom("contact@expensify.com", "Expensify Support");
         helper.setTo(recipientEmail);
         String subject = "Here's the link to reset your password";
         String content = "<p>Hello,</p>"
                 + "<p>You have requested to reset your password.</p>"
                 + "<p>Click the link below to change your password:</p>"
-                + "<p><a href=\"" + link + "\">Change my password</a></p>"
+                + "<p>Your OTP to change password is </p>"
+//                + "<p><a href=\"" + link + "\">Change my password</a></p>"
                 + "<br>"
                 + "<p>Ignore this email if you do remember your password, "
                 + "or you have not made the request.</p>";
@@ -130,5 +135,26 @@ public class UserDAOService {
         return siteURL.replace(request.getServletPath(), "");
     }
 
+    public boolean findByEmail(String email) {
+        List<Object> parameterList = new ArrayList<>();
+        parameterList.add(email);
+        boolean userExist = false;
+        try {
+            ResultSet resultSet = database.executeProcedure("CALL check_user_exist(?)", parameterList);
+            if (resultSet != null) {
+               userExist = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                database.closeConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return userExist;
+    }
 
 }
