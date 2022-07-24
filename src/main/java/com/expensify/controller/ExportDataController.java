@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -30,9 +31,10 @@ public class ExportDataController {
             LocalDate currentdate = LocalDate.now();
             String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
             String endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
-            DateRange dateRange = new DateRange(startDate, endDate);
-            model.addAttribute("csvDateRange", dateRange);
-            model.addAttribute("pdfDateRange", dateRange);
+            DateRange dateRangeForCSV = new DateRange(startDate, endDate);
+            DateRange dateRangeForPDF = new DateRange(startDate, endDate);
+            model.addAttribute("csvDateRange", dateRangeForCSV);
+            model.addAttribute("pdfDateRange", dateRangeForPDF);
             return "exportData";
         } else {
             return "error";
@@ -64,7 +66,7 @@ public class ExportDataController {
     }
 
     @PostMapping(value = "/export-pdf")
-    public String exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session, HttpServletResponse response) {
+    public void exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, HttpSession session, HttpServletResponse response) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             response.setContentType("application/pdf");
@@ -80,10 +82,9 @@ public class ExportDataController {
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom)),
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo)));
             } catch (ParseException e) {
-                return "error";
+
             }
             boolean status = ExportDataFactory.instance().createExportDataToPDF().exportExpenseData(expenseList, response);
         }
-        return "error";
     }
 }
