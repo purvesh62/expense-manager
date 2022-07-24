@@ -20,4 +20,6 @@ public interface IBudget {
     void checkIfBudgetLimitExceeds(int userId,int walletId, String expenseDate) throws SQLException, ParseException;
 
     IBudgetDAOService getBudgetDAOService();
+
+    boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month);
 }

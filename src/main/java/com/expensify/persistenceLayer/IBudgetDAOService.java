@@ -1,6 +1,5 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.model.Expense;
 import com.expensify.model.IBudget;
 
 import java.sql.SQLException;
@@ -20,4 +19,5 @@ public interface IBudgetDAOService {
 
     int checkIfBudgetLimitExceeds(int userId,int walletId, String expenseDate) throws ParseException, SQLException;
 
+    boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month);
 }
