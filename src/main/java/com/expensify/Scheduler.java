@@ -19,9 +19,9 @@ public class Scheduler {
     public void sendDailyReminderToFillExpense() {
         List<INotification> notificationList = NotificationFactory.instance().createNotification().getDailyExpenseSubscribedUser();
         ListIterator<INotification> iter = notificationList.listIterator();
-        if (iter.hasNext()) {
+        while (iter.hasNext()) {
             INotification notification = (INotification) iter.next();
-            notification.notifyUsers("Reminder to add expense","Reminder");
+            notification.notifyUsers("Reminder to add expense", "Reminder");
         }
     }
 }

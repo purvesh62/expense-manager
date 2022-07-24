@@ -46,7 +46,7 @@ public class Notification implements INotification {
 
     @Override
     public void notifyBudgetLimitExceeds(int userId) {
-        INotification subscription = notficationDAOService.getBudgetLimitExceedSubscribedUsers(userId);
-        subscription.notifyUsers("Your budget limit has been exceeded!!", "Budget Limit Exceeds");
+        INotification notification = notficationDAOService.getBudgetLimitExceedSubscribedUsers(userId);
+        notification.notifyUsers("Your budget limit has been exceeded!!", "Budget Limit Exceeds");
     }
 }

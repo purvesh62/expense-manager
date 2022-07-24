@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IWallet {
 
-    List <IWallet> getAllWalletDetails(int userId) throws SQLException;
+    List <IWallet> getAllWalletDetails(int userId);
     IWallet saveWallet() throws SQLException;
     IWallet updateWallet() throws SQLException;
     void deleteWallet(int walletId) throws SQLException;

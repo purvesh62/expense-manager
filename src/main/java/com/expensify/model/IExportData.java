@@ -5,5 +5,5 @@ import java.io.IOException;
 import java.util.List;
 
 public interface IExportData {
-    void exportExpenseData(List<IExpense> expenseList, HttpServletResponse response) throws IOException;
+    boolean exportExpenseData(List<IExpense> expenseList, HttpServletResponse response);
 }

@@ -1,6 +1,7 @@
 package com.expensify.model;
-
 import com.expensify.persistenceLayer.IWalletDAOService;
+import com.expensify.persistenceLayer.WalletDAOService;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -30,16 +31,16 @@ public class Wallet implements IWallet {
 
     }
 
-    public Wallet(IWalletDAOService database) {
+    public Wallet(IWalletDAOService database){
         walletDAOService = database;
     }
 
-    public IWalletDAOService getWalletDAOService() {
+    public IWalletDAOService getWalletDAOService(){
         return walletDAOService;
     }
 
-    public void setWalletDAOService(IWallet wallet) {
-        this.walletDAOService = wallet.getWalletDAOService();
+    public void setWalletDAOService(IWalletDAOService walletDAOService){
+        this.walletDAOService = walletDAOService;
     }
 
     public int getWalletId() {
@@ -81,32 +82,27 @@ public class Wallet implements IWallet {
     public void setAmount(float amount) {
         this.amount = amount;
     }
-
-    @Override
-    public List<IWallet> getAllWalletDetails(int userId) throws SQLException {
+   @Override
+    public List<IWallet> getAllWalletDetails(int userId){
         return walletDAOService.getAllWalletDetails(userId);
     }
-
-    @Override
+  @Override
     public IWallet getWalletById(int walletId) throws SQLException {
         return walletDAOService.getWalletById(walletId);
     }
-
-    @Override
+   @Override
     public IWallet saveWallet() throws SQLException {
-        walletDAOService.addNewWallet(userId, walletLabel, paymentType, amount);
+        walletDAOService.addNewWallet(userId, walletLabel,paymentType, amount);
         return this;
     }
-
-    @Override
+  @Override
     public void deleteWallet(int walletId) throws SQLException {
         walletDAOService.deleteWallet(walletId);
     }
-
-    @Override
+   @Override
     public IWallet updateWallet() throws SQLException {
-        walletDAOService.updateWallet(walletId, amount, walletLabel);
-        return this;
+       walletDAOService.updateWallet(walletId, amount, walletLabel);
+       return this;
     }
 
 //    @Override
