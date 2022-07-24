@@ -4,6 +4,8 @@ import com.expensify.model.IQuartzNotificationService;
 import com.expensify.model.ISubscription;
 import com.expensify.model.QuartzNotification;
 import com.expensify.model.factories.SubscriptionFactory;
+import org.quartz.SchedulerException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class SubscriptionDAOService implements ISubscriptionDAOService {
     private IDatabase database;
     private IQuartzNotificationService service;
 
-    public SubscriptionDAOService(IDatabase database) {
+    public SubscriptionDAOService(IDatabase database) throws SchedulerException {
         this.database = database;
         service = new QuartzNotification();
     }
@@ -81,11 +83,31 @@ public class SubscriptionDAOService implements ISubscriptionDAOService {
     @Override
     public void updateSubscription(int subscriptionId, String subscriptionName, String expiryDate) throws SQLException {
         try {
+            String firstName = null;
+            String email = null;
+            int userId = 0;
+            String oldSubscriptionName = null;
+            String oldExpiryDate = null;
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(subscriptionId);
             parameterList.add(subscriptionName);
             parameterList.add(expiryDate);
             database.executeProcedure("CALL update_user_subscription(?,?,?)", parameterList);
+            parameterList.remove(subscriptionName);
+            parameterList.remove(expiryDate);
+            ResultSet resultSet = database.executeProcedure("CALL get_userid_from_subscription(?)", parameterList);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    firstName = resultSet.getString("first_name");
+                    email = resultSet.getString("email");
+                    userId = resultSet.getInt("user_id");
+                    oldSubscriptionName = resultSet.getString("subscription_name");
+                    oldExpiryDate = resultSet.getString("expiry_date");
+                }
+            }
+            service.deleteJob(userId, oldSubscriptionName, oldExpiryDate);
+            service.scheduleExpiryNotification(userId,firstName,email,expiryDate,subscriptionName);
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -98,9 +120,21 @@ public class SubscriptionDAOService implements ISubscriptionDAOService {
     @Override
     public void deleteSubscription(int subscriptionId) throws SQLException {
         try {
+            String expiryDate = null;
+            int userId = 0;
+            String subscriptionName = null;
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(subscriptionId);
             database.executeProcedure("CALL delete_user_subscription(?)", parameterList);
+            ResultSet resultSet = database.executeProcedure("CALL get_userid_from_subscription(?)", parameterList);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    userId = resultSet.getInt("user_id");
+                    subscriptionName = resultSet.getString("subscription_name");
+                    expiryDate = resultSet.getString("expiry_date");
+                }
+            }
+            service.deleteJob(userId, subscriptionName, expiryDate);
 
         } catch (Exception e) {
             e.printStackTrace();

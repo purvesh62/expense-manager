@@ -7,6 +7,7 @@ import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
 import com.expensify.persistenceLayer.PaymentCategoriesDAOService;
 import com.expensify.persistenceLayer.SubscriptionDAOService;
+import org.quartz.SchedulerException;
 
 public class SubscriptionFactory implements ISubscriptionFactory {
 
@@ -24,14 +25,14 @@ public class SubscriptionFactory implements ISubscriptionFactory {
     }
 
     @Override
-    public ISubscription createSubscription() {
+    public ISubscription createSubscription() throws SchedulerException {
         IDatabase database = MySqlDatabase.instance();
         return new Subscription(createSubscriptionDAOService(database));
 
     }
 
     @Override
-    public ISubscriptionDAOService createSubscriptionDAOService(IDatabase database) {
+    public ISubscriptionDAOService createSubscriptionDAOService(IDatabase database) throws SchedulerException {
         return new SubscriptionDAOService(database);
     }
 
@@ -40,5 +41,32 @@ public class SubscriptionFactory implements ISubscriptionFactory {
         return new Subscription(subscriptionId, subscriptionName, userId, expiryDate);
     }
 
+    public static class PaymentCategoryFactory implements IPaymentCategoryFactory {
 
+        private static PaymentCategoryFactory paymentCategoryFactory;
+
+        private  PaymentCategoryFactory(){
+
+        }
+        public static PaymentCategoryFactory instance() {
+            if (paymentCategoryFactory == null) {
+                paymentCategoryFactory = new PaymentCategoryFactory();
+            }
+            return paymentCategoryFactory;
+        }
+        @Override
+        public IPaymentCategory createPaymentCategory() {
+            IDatabase database = MySqlDatabase.instance();
+            return new PaymentCategory(createPaymentCategoriesDAOService(database));
+        }
+        @Override
+        public IPaymentCategoriesDAOService createPaymentCategoriesDAOService(IDatabase database) {
+            return new PaymentCategoriesDAOService(database);
+        }
+
+        @Override
+        public IPaymentCategory createPaymentCategory(int p_id, String paymentCategory) {
+            return new PaymentCategory(p_id, paymentCategory);
+        }
+    }
 }

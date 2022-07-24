@@ -5,6 +5,7 @@ import com.expensify.model.ISubscription;
 import com.expensify.model.Subscription;
 import com.expensify.model.factories.SubscriptionFactory;
 import org.json.simple.JSONObject;
+import org.quartz.SchedulerException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,7 +23,7 @@ import java.util.List;
 public class SubscriptionController {
     private ISubscription subscriptionObj;
 
-    public SubscriptionController() {
+    public SubscriptionController() throws SchedulerException {
         subscriptionObj = SubscriptionFactory.instance().createSubscription();
 
     }
