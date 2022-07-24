@@ -154,17 +154,17 @@ public class BudgetDAOService implements IBudgetDAOService {
         return budget;
     }
 
-    public int checkIfBudgetLimitExceeds(Expense expense) throws ParseException, SQLException {
+    public int checkIfBudgetLimitExceeds(int userId, int walletId, String expenseDate) throws SQLException {
 
-        int userId = 0;
+        int userIdExists = 0;
 
         try {
             List<Object> parameterList = new ArrayList<>();
 
-            parameterList.add(expense.getUserID());
-            parameterList.add(expense.getWalletId());
+            parameterList.add(userId);
+            parameterList.add(walletId);
 
-            Date date = formatter.parse(expense.getExpenseDate());
+            Date date = formatter.parse(expenseDate);
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(date);
 
@@ -183,15 +183,15 @@ public class BudgetDAOService implements IBudgetDAOService {
             ResultSet resultSet = database.executeProcedure("CALL budget_limit_exceeds(?,?,?,?)", parameterList);
 
             while (resultSet.next()) {
-                userId = resultSet.getInt("user_id");
+                userIdExists = resultSet.getInt("user_id");
             }
-            return userId;
+            return userIdExists;
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
         }
-        return userId;
+        return userIdExists;
     }
 }

@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IWalletDAOService {
-    List<IWallet> getAllWalletDetails(int userId) throws SQLException;
+    List<IWallet> getAllWalletDetails(int userId);
 
     void addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException;
 

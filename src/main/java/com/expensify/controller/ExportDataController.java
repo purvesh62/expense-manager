@@ -2,8 +2,7 @@ package com.expensify.controller;
 
 import com.expensify.SessionManager;
 import com.expensify.model.DateRange;
-import com.expensify.model.ExportDataToCSV;
-import com.expensify.model.ExportDataToPDF;
+
 import com.expensify.model.IExpense;
 import com.expensify.model.factories.ExpenseFactory;
 import com.expensify.model.factories.ExportDataFactory;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +24,7 @@ import java.util.List;
 public class ExportDataController {
 
     @GetMapping(path = "/export", produces = "text/html")
-    public String export(Model model, HttpSession session) throws ParseException {
+    public String export(Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             LocalDate currentdate = LocalDate.now();
@@ -37,12 +35,12 @@ public class ExportDataController {
             model.addAttribute("pdfDateRange", dateRange);
             return "exportData";
         } else {
-            return "redirect:/error";
+            return "error";
         }
     }
 
     @PostMapping(value = "/export-csv")
-    public String exportCSV(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String exportCSV(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, HttpSession session, HttpServletResponse response) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             response.setContentType("text/csv");
@@ -57,17 +55,16 @@ public class ExportDataController {
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom)),
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo)));
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                return "error";
             }
 
-            ExportDataFactory.instance().createExportDataToCSV().exportExpenseData(expenseList, response);
+            boolean status = ExportDataFactory.instance().createExportDataToCSV().exportExpenseData(expenseList, response);
         }
-        model.addAttribute("dateRange", new DateRange(dateFrom, dateTo));
-        return "saved";
+        return "error";
     }
 
     @PostMapping(value = "/export-pdf")
-    public void exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session, HttpServletResponse response) throws IOException {
+    public String exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, Model model, HttpSession session, HttpServletResponse response) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             response.setContentType("application/pdf");
@@ -83,10 +80,10 @@ public class ExportDataController {
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom)),
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo)));
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                return "error";
             }
-
-            ExportDataFactory.instance().createExportDataToPDF().exportExpenseData(expenseList, response);
+            boolean status = ExportDataFactory.instance().createExportDataToPDF().exportExpenseData(expenseList, response);
         }
+        return "error";
     }
 }

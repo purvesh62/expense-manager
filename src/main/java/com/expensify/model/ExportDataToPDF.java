@@ -14,43 +14,52 @@ import java.util.ListIterator;
 
 public class ExportDataToPDF implements IExportData {
     @Override
-    public void exportExpenseData(List<IExpense> expenseList, HttpServletResponse response) throws IOException {
-        Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, response.getOutputStream());
+    public boolean exportExpenseData(List<IExpense> expenseList, HttpServletResponse response) {
+        try {
+            Document document = new Document(PageSize.A4);
+            PdfWriter.getInstance(document, response.getOutputStream());
 
-        document.open();
-        Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-        font.setSize(18);
-        font.setColor(Color.BLACK);
+            document.open();
+            Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+            font.setSize(18);
+            font.setColor(Color.BLACK);
 
-        Paragraph p = new Paragraph("Expenses", font);
-        p.setAlignment(Paragraph.ALIGN_CENTER);
+            Paragraph p = new Paragraph("Expenses", font);
+            p.setAlignment(Paragraph.ALIGN_CENTER);
 
-        document.add(p);
+            document.add(p);
 
-        PdfPTable table = new PdfPTable(5);
-        table.setWidthPercentage(100f);
-        table.setWidths(new float[]{1.5f, 3.5f, 3.0f, 3.0f, 1.5f});
-        table.setSpacingBefore(10);
+            PdfPTable table = new PdfPTable(5);
+            table.setWidthPercentage(100f);
+            table.setWidths(new float[]{1.5f, 3.5f, 3.0f, 3.0f, 1.5f});
+            table.setSpacingBefore(10);
 
-        writeTableHeader(table, expenseList);
-        writeTableData(table, expenseList);
+            writeTableHeader(table, expenseList);
+            writeTableData(table, expenseList);
 
-        document.add(table);
+            document.add(table);
 
-        document.close();
+            document.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     private void writeTableData(PdfPTable table, List<IExpense> expenseList) {
-        ListIterator itr = expenseList.listIterator();
+        if (expenseList.size() > 0) {
+            ListIterator itr = expenseList.listIterator();
 
-        while (itr.hasNext()) {
-            Expense expense = (Expense) itr.next();
-            table.addCell(String.valueOf(expense.getExpenseTitle()));
-            table.addCell(String.valueOf(expense.getDescription()));
-            table.addCell(String.valueOf(expense.getAmount()));
-            table.addCell(String.valueOf(expense.getExpenseDate()));
-            table.addCell(String.valueOf(expense.getExpenseCategoryName()));
+            while (itr.hasNext()) {
+                Expense expense = (Expense) itr.next();
+                table.addCell(String.valueOf(expense.getExpenseTitle()));
+                table.addCell(String.valueOf(expense.getDescription()));
+                table.addCell(String.valueOf(expense.getAmount()));
+                table.addCell(String.valueOf(expense.getExpenseDate()));
+                table.addCell(String.valueOf(expense.getExpenseCategoryName()));
+            }
         }
     }
 

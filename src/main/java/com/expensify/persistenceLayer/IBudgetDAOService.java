@@ -18,6 +18,6 @@ public interface IBudgetDAOService {
 
     IBudget getBudgetById(int budgetId) throws SQLException;
 
-    int checkIfBudgetLimitExceeds(Expense expense) throws ParseException, SQLException;
+    int checkIfBudgetLimitExceeds(int userId,int walletId, String expenseDate) throws ParseException, SQLException;
 
 }

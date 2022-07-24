@@ -102,34 +102,54 @@ public class Budget implements IBudget {
     }
 
     @Override
-    public List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
-        return budgetDAOService.getAllBudgetDetails(user_id, startDate, endDate);
+    public List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) {
+        try {
+            return budgetDAOService.getAllBudgetDetails(user_id, startDate, endDate);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     @Override
-    public boolean saveBudget() throws SQLException {
-        return budgetDAOService.addNewBudget(walletId, userId, budgetLimit, month);
+    public boolean saveBudget() {
+        try {
+            return budgetDAOService.addNewBudget(walletId, userId, budgetLimit, month);
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean updateBudget() throws SQLException {
-        return budgetDAOService.updateBudget(budgetId, walletId, budgetLimit);
+    public boolean updateBudget() {
+        try {
+            return budgetDAOService.updateBudget(budgetId, walletId, budgetLimit);
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
-    public boolean deleteBudget(int budgetId) throws SQLException {
-        return budgetDAOService.deleteBudget(budgetId);
+    public boolean deleteBudget(int budgetId) {
+        try {
+            return budgetDAOService.deleteBudget(budgetId);
+        } catch (SQLException e) {
+            return false;
+        }
     }
 
     @Override
-    public IBudget getBudgetById(int budgetId) throws SQLException {
-        return budgetDAOService.getBudgetById(budgetId);
+    public IBudget getBudgetById(int budgetId) {
+        try {
+            return budgetDAOService.getBudgetById(budgetId);
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     @Override
-    public void checkIfBudgetLimitExceeds(Expense expense) throws SQLException, ParseException {
+    public void checkIfBudgetLimitExceeds(int user,int walletId, String expenseDate) throws SQLException, ParseException {
 
-        int userId = budgetDAOService.checkIfBudgetLimitExceeds(expense);
+        int userId = budgetDAOService.checkIfBudgetLimitExceeds(user,walletId,expenseDate);
         if (userId > 0) {
             INotification notification = NotificationFactory.instance().createNotification();
             notification.notifyBudgetLimitExceeds(userId);

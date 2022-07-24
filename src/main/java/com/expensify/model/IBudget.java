@@ -7,17 +7,17 @@ import java.text.ParseException;
 import java.util.List;
 
 public interface IBudget {
-    List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException;
+    List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate);
 
-    boolean saveBudget() throws SQLException;
+    boolean saveBudget();
 
-    boolean updateBudget() throws SQLException;
+    boolean updateBudget();
 
-    boolean deleteBudget(int budgetId) throws SQLException;
+    boolean deleteBudget(int budgetId);
 
-    IBudget getBudgetById(int budgetId) throws SQLException;
+    IBudget getBudgetById(int budgetId);
 
-    void checkIfBudgetLimitExceeds(Expense expense) throws SQLException, ParseException;
+    void checkIfBudgetLimitExceeds(int userId,int walletId, String expenseDate) throws SQLException, ParseException;
 
     IBudgetDAOService getBudgetDAOService();
 }
