@@ -71,7 +71,7 @@ public class ExpenseDAOService implements IExpenseDOAService {
     }
 
     @Override
-    public boolean addUserExpenses(int expenseId, int userId, String expenseTitle, String description, Float amount, int expenseCategory, int walletId, String expenseDate) {
+    public boolean addUserExpenses(int userId, String expenseTitle, String description, Float amount, int expenseCategory, int walletId, String expenseDate) {
         List<Object> parameterList = new ArrayList<>();
         try {
             parameterList.add(expenseTitle);

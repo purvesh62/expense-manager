@@ -9,7 +9,7 @@ public class DateUtil {
     public static String getFirstDayOfMonth(LocalDate date) {
         String startDay = "01";
         String month;
-        int m = date.getMonth().ordinal();
+        int m = date.getMonth().ordinal() + 1;
         if (m < 10) {
             month = "0" + m;
         } else {
@@ -22,7 +22,7 @@ public class DateUtil {
     public static String getLastDayOfMonth(LocalDate date) {
         String lastDay = String.valueOf(date.lengthOfMonth());
         String month;
-        int m = date.getMonth().ordinal();
+        int m = date.getMonth().ordinal() + 1;
         if (m < 10) {
             month = "0" + m;
         } else {
