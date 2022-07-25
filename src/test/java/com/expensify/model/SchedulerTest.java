@@ -1,6 +1,5 @@
 package com.expensify.model;
 
-import com.expensify.model.INotification;
 import com.expensify.persistenceLayerMock.NotificationDAOServiceMock;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -9,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-public class SchedularTest {
+public class SchedulerTest {
     @Test
     public void sendDailyReminderToFillExpenseSuccessTest() {
         NotificationDAOServiceMock notificationDAOServiceMock = new NotificationDAOServiceMock();
