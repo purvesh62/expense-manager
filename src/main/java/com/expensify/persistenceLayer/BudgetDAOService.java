@@ -23,16 +23,15 @@ public class BudgetDAOService implements IBudgetDAOService {
 
     @Override
     public List<IBudget> getAllBudgetDetails(int userId, String startDate, String endDate) throws SQLException {
-        List<IBudget> budgetList = new ArrayList<>(10);
+        List<IBudget> budgetList = new ArrayList<>();
         try {
-            List<Object> parameterList = new ArrayList<>(10);
+            List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
             Date start = formatter.parse(startDate);
             java.sql.Date budgetStartDate = new java.sql.Date(start.getTime());
 
             Date end = formatter.parse(endDate);
             java.sql.Date budgetEndDate = new java.sql.Date(end.getTime());
-
 
             parameterList.add(budgetStartDate);
             parameterList.add(budgetEndDate);
@@ -62,7 +61,7 @@ public class BudgetDAOService implements IBudgetDAOService {
     @Override
     public boolean addNewBudget(int walletId, int userId, float budgetLimit, String month) throws SQLException {
         try {
-            List<Object> parameterList = new ArrayList<>(10);
+            List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
             parameterList.add(userId);
             parameterList.add(budgetLimit);
@@ -92,7 +91,7 @@ public class BudgetDAOService implements IBudgetDAOService {
     @Override
     public boolean updateBudget(int budgetId, int walletId, float budgetLimit) throws SQLException {
         try {
-            List<Object> parameterList = new ArrayList<>(10);
+            List<Object> parameterList = new ArrayList<>();
             parameterList.add(budgetId);
             parameterList.add(walletId);
             parameterList.add(budgetLimit);
@@ -111,7 +110,7 @@ public class BudgetDAOService implements IBudgetDAOService {
     @Override
     public boolean deleteBudget(int budgetId) throws SQLException {
         try {
-            List<Object> parameterList = new ArrayList<>(10);
+            List<Object> parameterList = new ArrayList<>();
             parameterList.add(budgetId);
 
             try (ResultSet resultSet = database.executeProcedure("CALL delete_budget(?)", parameterList)) {
@@ -129,7 +128,7 @@ public class BudgetDAOService implements IBudgetDAOService {
     public IBudget getBudgetById(int budgetId) throws SQLException {
         IBudget budget = BudgetFactory.instance().createBudget();
         try {
-            List<Object> parameterList = new ArrayList<>(10);
+            List<Object> parameterList = new ArrayList<>();
             parameterList.add(budgetId);
 
             ResultSet resultSet = database.executeProcedure("CALL get_budget_by_id(?)", parameterList);
@@ -197,7 +196,7 @@ public class BudgetDAOService implements IBudgetDAOService {
     @Override
     public boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month) {
         try {
-            List<Object> parameterList = new ArrayList<>(10);
+            List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
             parameterList.add(walletId);
 
