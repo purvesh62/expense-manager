@@ -40,7 +40,7 @@ public class ExpenseDAOServiceMock implements IExpenseDOAService {
 
     @Override
     public boolean deleteUserExpense(int expenseId) {
-        if (expenseId == 0) {
+        if (expenseId == 2) {
             return false;
         }
         return true;
