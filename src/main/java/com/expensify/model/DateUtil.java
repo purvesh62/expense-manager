@@ -1,11 +1,19 @@
 package com.expensify.model;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import static java.time.temporal.TemporalAdjusters.lastDayOfYear;
 
 public class DateUtil {
+    private static String dateFormat = "yyyy-MM-dd";
+    private static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+
     public static String getFirstDayOfMonth(LocalDate date) {
         String startDay = "01";
         String month;
@@ -38,5 +46,23 @@ public class DateUtil {
 
     public static String getLastDayOfYear(LocalDate date) {
         return String.valueOf(date.with(lastDayOfYear()));
+    }
+
+    public static String formatDate(String date) {
+        try {
+            return new SimpleDateFormat(dateFormat).format(new SimpleDateFormat("dd/MM/yyyy").parse(date));
+        } catch (ParseException e) {
+            return date;
+        }
+    }
+
+    public static java.sql.Date convertDate (String date) {
+        Date start = null;
+        try {
+            start = formatter.parse(date);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return new java.sql.Date(start.getTime());
     }
 }

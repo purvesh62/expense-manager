@@ -17,18 +17,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <!--  END  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
 <header th:insert="fragments/sidebar"></header>
+<script th:inline="javascript">
+    var selectedDate = [[${selectedDate}]];
+</script>
 <div class="container">
-    <div id="header" >
-        <div th:text="${dateToDisplay}">Dummy Date</div>
+    <div id="header">
+        <div id="selectedDate" th:text="${currentMonth}">Dummy Date</div>
         <div>
-            <button class="btn" id="backButton" th:onclick="|window.location.href='/budget?month='+${currentMonth-1}|">
+            <button class="btn" id="backButton" th:onclick="minusMonth()">
                 Back
             </button>
-            <button class="btn" id="nextButton" th:onclick="|window.location.href='/budget?month='+${currentMonth+1}|">
+            <button class="btn" id="nextButton" th:onclick="plusMonth()">
                 Next
             </button>
         </div>
@@ -52,10 +56,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="../js/budget.js"></script>
 <script>
     let nav_btn = document.getElementById("nav-btn");
     let sidebar = document.getElementById("sidebar");
@@ -64,5 +64,7 @@
         sidebar.classList.toggle("active");
     };
 </script>
+<script th:src="@{/js/budget.js}" defer></script>
+
 </body>
 </html>
