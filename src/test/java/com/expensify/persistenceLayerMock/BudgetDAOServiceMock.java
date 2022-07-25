@@ -7,6 +7,7 @@ import com.expensify.persistenceLayer.IBudgetDAOService;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BudgetDAOServiceMock implements IBudgetDAOService {
@@ -76,5 +77,10 @@ public class BudgetDAOServiceMock implements IBudgetDAOService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public HashMap<Integer, Float> getMonthlyBudget(int userId, String startDate, String endDate) {
+        return null;
     }
 }
