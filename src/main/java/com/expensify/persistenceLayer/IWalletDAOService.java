@@ -8,11 +8,10 @@ import java.util.List;
 public interface IWalletDAOService {
     List<IWallet> getAllWalletDetails(int userId);
 
-    void addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException;
+    boolean addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException;
 
-    void updateWallet(int walletId, float amount, String walletLabel) throws SQLException;
+    boolean updateWallet(int walletId, float amount, String walletLabel) throws SQLException;
 
-    void deleteWallet(int walletId) throws SQLException;
+    boolean deleteWallet(int walletId) throws SQLException;
 
-    IWallet getWalletById(int walletId) throws SQLException;
 }

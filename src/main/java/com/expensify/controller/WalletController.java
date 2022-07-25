@@ -32,7 +32,7 @@ public class WalletController {
 
     }
 
-    @GetMapping(value = "/api/v1/wallet", produces = "text/html")
+    @GetMapping(value = "/wallet", produces = "text/html")
     private String getAllWalletDetails(Model model, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
@@ -48,49 +48,47 @@ public class WalletController {
         }
     }
 
-    @PostMapping(value = "/api/v1/wallet")
+    @PostMapping(value = "/wallet")
     private String addWallet(Wallet newWallet, BindingResult result, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             if (result.hasErrors()) {
-                return "redirect:/api/v1/wallet? " + userId;
+                return "redirect:/wallet";
 
             }
             newWallet.setWalletDAOService(walletObj);
-            newWallet.setUserId(1);
+            newWallet.setUserId(userId);
             newWallet.saveWallet();
             redirAttrs.addFlashAttribute("SUCCESS", "Wallet Added");
-            return "redirect:/api/v1/wallet? " + userId;
+            return "redirect:/wallet";
         } else {
             return "redirect:/";
         }
     }
 
 
-    @GetMapping(value = "/api/v1/wallet/walletId/{walletId}")
+    @GetMapping(value = "/wallet/walletId/{walletId}")
     private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
-            int userId = (Integer) userCache.get("userId");
             walletObj.deleteWallet(walletId);
             redirAttrs.addFlashAttribute("SUCCESS", "Wallet Deleted");
-            return "redirect:/api/v1/wallet? " + userId;
+            return "redirect:/wallet";
         } else {
             return "redirect:/";
         }
 
     }
 
-    @PostMapping(value = "/api/v1/updatewallet")
+    @PostMapping(value = "/updatewallet")
     private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
-            int userId = (Integer) userCache.get("userId");
             wallet.setWalletDAOService(walletObj);
             wallet.updateWallet();
             redirAttrs.addFlashAttribute("SUCCESS", "Wallet Updated");
-            return "redirect:/api/v1/wallet? " + userId;
+            return "redirect:/wallet";
         } else {
             return "redirect:/";
         }

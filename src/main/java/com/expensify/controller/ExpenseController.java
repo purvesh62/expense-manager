@@ -21,9 +21,12 @@ import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 public class ExpenseController {
 
     private final IExpense expenseObj;
+    private IExpenseCategory expenseCategoryObj;
 
     public ExpenseController() {
+
         expenseObj = ExpenseFactory.instance().createExpense();
+        expenseCategoryObj = ExpenseCategoryFactory.instance().createExpenseCategory();
     }
 
 
@@ -44,7 +47,7 @@ public class ExpenseController {
                 List<IExpense> expenses = expenseObj.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
-                List<IExpenseCategory> expenseCategoriesList = ISubscriptionFactory.ExpenseCategoryFactory.instance().createExpenseCategory().getAllExpenseCategoriesList();
+                List<IExpenseCategory> expenseCategoriesList = expenseCategoryObj.getAllExpenseCategoriesList();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
                 List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails((Integer) userCache.get("userId"));

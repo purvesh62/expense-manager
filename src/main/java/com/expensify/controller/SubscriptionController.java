@@ -21,14 +21,14 @@ import java.util.List;
 
 @Controller
 public class SubscriptionController {
-    private ISubscription subscriptionObj;
+    private final ISubscription subscriptionObj;
 
     public SubscriptionController() throws SchedulerException {
         subscriptionObj = SubscriptionFactory.instance().createSubscription();
 
     }
 
-    @GetMapping(value = "/api/v1/subscription", produces = "text/html")
+    @GetMapping(value = "/subscription", produces = "text/html")
     private String getAllSubscriptionDetails(Model model, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
@@ -42,39 +42,39 @@ public class SubscriptionController {
         }
     }
 
-    @PostMapping(value = "/api/v1/subscription")
+    @PostMapping(value = "/subscription")
     private String addSubscription(Subscription newSubscription, BindingResult result, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             if (result.hasErrors()) {
-                return "redirect:/api/v1/subscription? " + userId;
+                return "redirect:/subscription";
 
             }
             newSubscription.setSubscriptionDAOService(subscriptionObj);
-            newSubscription.setUserId(1);
+            newSubscription.setUserId(userId);
             newSubscription.saveSubscription();
             redirAttrs.addFlashAttribute("SUCCESS", "Subscription Added");
-            return "redirect:/api/v1/subscription? " + userId;
+            return "redirect:/subscription";
         } else {
             return "redirect:/";
         }
     }
 
-    @GetMapping(value = "/api/v1/subscription/subscription_id/{subscription_id}")
+    @GetMapping(value = "/subscription/subscription_id/{subscription_id}")
     private String deleteSubscription(@PathVariable(value = "subscription_id") int subscriptionId, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             subscriptionObj.deleteSubscription(subscriptionId);
             redirAttrs.addFlashAttribute("SUCCESS", "Subscription Deleted");
-            return "redirect:/api/v1/subscription? " + userId;
+            return "redirect:/subscription";
         } else {
             return "redirect:/";
         }
     }
 
-    @PostMapping(value = "/api/v1/updatesubscription")
+    @PostMapping(value = "/updatesubscription")
     private String updateSubscription(@ModelAttribute("subscription") Subscription subscription, RedirectAttributes redirAttrs, HttpSession session) throws SQLException {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
@@ -83,7 +83,7 @@ public class SubscriptionController {
             subscription.setSubscriptionDAOService(subscriptionObj);
             subscription.updateSubscription();
             redirAttrs.addFlashAttribute("SUCCESS", "Subscription Updated");
-            return "redirect:/api/v1/subscription? " + userId;
+            return "redirect:/subscription";
         } else {
             return "redirect:/";
         }

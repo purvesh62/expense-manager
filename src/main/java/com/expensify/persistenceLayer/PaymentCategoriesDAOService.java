@@ -17,7 +17,7 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
     public PaymentCategoriesDAOService(IDatabase database) {
         this.database = database;
     }
-    public List<IPaymentCategory> getAllPaymentCategories() {
+    public List<IPaymentCategory> getAllPaymentCategories() throws SQLException {
         List<IPaymentCategory> paymentCategoryList = new ArrayList<>();
 
         try {
@@ -37,13 +37,9 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
                 database.closeConnection();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
 
-        }
         return paymentCategoryList;
     }
 

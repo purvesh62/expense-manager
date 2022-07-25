@@ -26,7 +26,7 @@ public class QuartzExpiryScheduler extends QuartzJobBean {
         );
         String firstName = jobDataMap.getString("first_name");
         String emailBody = "Hi " +firstName + ",<br>" + "Your " +jobDataMap.getString("subscription_name")+ " Subscription about to expire";
-        notification.notifyUsers(emailBody, "<h1>Subscription Expiry Notification <h1> ");
+        notification.notifyUsers(emailBody, "Subscription Expiry Notification");
     }
 
 }

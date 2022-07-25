@@ -8,6 +8,18 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--  END  -->
 
 </head>
 <style>
@@ -36,8 +48,14 @@
         font-size: 35px;
         font-weight: 600;
     }
+    .container{
+        position: absolute;
+        left: 20%;
+    }
 </style>
 <body>
+<header th:insert="fragments/sidebar"></header>
+<div class="container">
 <div class="heading">
     <span th:text="'User Subscription'"></span>
 </div>
@@ -50,20 +68,15 @@
         <div class="col-4" th:each="subscription : ${subscription_list}">
             <div class="card" >
                 <div class="card-body">
-                    <!--                    <p>Wallet ID: <span th:text="${wallet.walletId}">Dummy Limit</span></p>-->
                     <p><span th:text="${subscription.subscriptionName}">Dummy Expenses</span></p>
                     <p>Expiry Date: <span th:text="${subscription.expiryDate}">Dummy Expenses</span></p>
-<!--                    <p>Amount: $<span th:text="${wallet.amount}">Dummy Expenses</span></p>-->
-                    <a th:href="@{/api/v1/subscription/subscription_id/{subscription_id}(subscription_id = ${subscription.subscriptionId})}" class="btn btn-primary">Delete</a>
+                    <a th:href="@{/subscription/subscription_id/{subscription_id}(subscription_id = ${subscription.subscriptionId})}" class="btn btn-danger">Delete</a>
                     <button data-toggle="modal" th:data-subscription="${subscription}" th:attr="data-target=${'#editSubscriptionModal' + subscription.subscriptionId}" class="btn btn-primary">Edit</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- Modal-->
 <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionModal" aria-hidden="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -75,35 +88,15 @@
             </div>
 
             <div class="modal-body">
-                <form action="#" method="POST" th:action="@{/api/v1/subscription}" th:object="${subscription}">
-                    <!--                <label for="PaymentCategories"> Payment Categories:</label>-->
-                    <!--                <select id ="PaymentCategories" th:field="*{paymentType}">-->
-                    <!--                    <option value="0">Select Option</option>-->
-                    <!--                    <option th:each="category:${payment_categories}" th:value="${category.paymentId}" th:text="${category.paymentCategory}"></option>-->
-                    <!--                </select>-->
-                    <!--                 <br>-->
-                    <!--                <label for="walletLabel">Wallet Label</label><input id="walletLabel" type="text" th:field="*{walletLabel}">-->
-                    <!--                <br>-->
-                    <!--                <label for="Amount">Amount</label><input id="Amount" type="number" th:field="*{amount}">-->
-                    <!--                <br>-->
-                    <!--                    <input type="hidden" th:value="${wallet.getUserId()}" th:field="*{userId}">-->
+                <form action="#" method="POST" th:action="@{/subscription}" th:object="${subscription}">
                     <div class="form-group">
                         <label for="SubscriptionName">Subscription Name</label>
                         <input type = "text" class="form-control" id ="SubscriptionName" th:field="*{subscriptionName}">
-
-                        <!--                        <div class="alert alert-warning" th:if="${#fields.hasErrors('PaymentCategories')}" th:errors="*{PaymentCategories}"></div>-->
                     </div>
                     <div class="form-group">
                         <label for="ExpiryDate">Expiry Date</label>
                         <input type = "date" class="form-control" th:field="*{expiryDate}" id="ExpiryDate">
-<!--                        <div class="alert alert-warning" th:if="${#fields.hasErrors('walletLabel')}" th:errors="*{walletLabel}"></div>-->
                     </div>
-<!--                    <div class="form-group">-->
-<!--                        <label for="Amount">Amount</label>-->
-<!--                        <input class="form-control" type="text" th:field="*{amount}" id="Amount" placeholder="Amount">-->
-<!--                        <div class="alert alert-warning" th:if="${#fields.hasErrors('Amount')}" th:errors="*{amount}"></div>-->
-<!--                    </div>-->
-
                     <button class="btn btn-primary" type="submit">ADD</button>
                 </form>
             </div>
@@ -121,43 +114,24 @@
             </div>
             <div class="modal-body">
 
-                <form  method="POST" th:action="@{/api/v1/updatesubscription}" th:object="${subscription}" >
+                <form  method="POST" th:action="@{/updatesubscription}" th:object="${subscription}" >
                     <input hidden type="number" th:value="${subscription.subscriptionId}" name="subscriptionId"/>
                     <input hidden type="number" th:value="${subscription.userId}" name="userId"/>
-                    <!--                        <input type="text" th:value="${wallet.walletLabel}"  name="walletLabel"/>-->
-                    <!--                        <input type="text" th:value="${wallet.amount}"  name="amount"/>-->
-                    <!--                        <input type="submit">Submit</input>-->
                     <div class="form-group">
                         <label for="EditSubscriptionName">Subscription Name</label>
                         <input type = "text"  th:value="${subscription.subscriptionName}" class="form-control" id ="EditSubscriptionName" name="subscriptionName">
-
-                        <!--                        <div class="alert alert-warning" th:if="${#fields.hasErrors('PaymentCategories')}" th:errors="*{PaymentCategories}"></div>-->
                     </div>
                     <div class="form-group">
                         <label for="EditExpiryDate">Expiry Date</label>
                         <input type = "date" th:value="${subscription.expiryDate}" class="form-control"  name="expiryDate" id="EditExpiryDate">
-
-
-                        <!--                        <div class="alert alert-warning" th:if="${#fields.hasErrors('walletLabel')}" th:errors="*{walletLabel}"></div>-->
                     </div>
-
-
-                    <!--                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>&ndash;&gt;-->
                     <button type="submit" class="btn btn-primary">Update</button>
 
                 </form>
-                <!--                    <form  method="PUT" th:action="@{/api/v1/wallet}" th:object="${wallet}" >-->
-                <!--                        <input type="text" th:field="${wallet.walletId}" th:value="${wallet.walletId}"/>-->
-                <!--                        <p>Wallet Label: <input type="text" th:field="${wallet.walletLabel}"  name="walletLabel"/></p>-->
-                <!--                        <p>Amount: <input type="text" th:field="${wallet.amount}"  name="amount"/></p>-->
-                <!--                        <div class="modal-footer">-->
-                <!--                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
-                <!--                            <button type="submit" class="btn btn-primary">Update</button>-->
-                <!--                        </div>-->
-                <!--                    </form>-->
             </div>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

@@ -1,7 +1,6 @@
 package com.expensify.model;
-import com.expensify.persistenceLayer.IWalletDAOService;
-import com.expensify.persistenceLayer.WalletDAOService;
 
+import com.expensify.persistenceLayer.IWalletDAOService;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -31,16 +30,16 @@ public class Wallet implements IWallet {
 
     }
 
-    public Wallet(IWalletDAOService database){
+    public Wallet(IWalletDAOService database) {
         walletDAOService = database;
     }
 
-    public IWalletDAOService getWalletDAOService(){
+    public IWalletDAOService getWalletDAOService() {
         return walletDAOService;
     }
 
-    public void setWalletDAOService(IWalletDAOService walletDAOService){
-        this.walletDAOService = walletDAOService;
+    public void setWalletDAOService(IWallet wallet) {
+        this.walletDAOService = wallet.getWalletDAOService();
     }
 
     public int getWalletId() {
@@ -82,37 +81,27 @@ public class Wallet implements IWallet {
     public void setAmount(float amount) {
         this.amount = amount;
     }
-   @Override
-    public List<IWallet> getAllWalletDetails(int userId){
+
+    @Override
+    public List<IWallet> getAllWalletDetails(int userId) {
         return walletDAOService.getAllWalletDetails(userId);
     }
-  @Override
-    public IWallet getWalletById(int walletId) throws SQLException {
-        return walletDAOService.getWalletById(walletId);
-    }
-   @Override
+    @Override
     public IWallet saveWallet() throws SQLException {
-        walletDAOService.addNewWallet(userId, walletLabel,paymentType, amount);
+        walletDAOService.addNewWallet(userId, walletLabel, paymentType, amount);
         return this;
     }
-  @Override
+
+    @Override
     public void deleteWallet(int walletId) throws SQLException {
         walletDAOService.deleteWallet(walletId);
     }
-   @Override
-    public IWallet updateWallet() throws SQLException {
-       walletDAOService.updateWallet(walletId, amount, walletLabel);
-       return this;
-    }
 
-//    @Override
-//    public int compareTo(IWallet wallet) {
-//        if (this.walletId > wallet.walletId) {
-//            return 1;
-//        } else {
-//            return -1;
-//        }
-//    }
+    @Override
+    public IWallet updateWallet() throws SQLException {
+        walletDAOService.updateWallet(walletId, amount, walletLabel);
+        return this;
+    }
 
 
 }

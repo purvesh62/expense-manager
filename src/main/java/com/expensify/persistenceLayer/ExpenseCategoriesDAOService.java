@@ -2,6 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
+import com.expensify.model.factories.ExpenseCategoryFactory;
 import com.expensify.model.factories.IExpenseCategoryFactory;
 import com.expensify.model.factories.ISubscriptionFactory;
 
@@ -16,7 +17,7 @@ public class ExpenseCategoriesDAOService implements IExpenseCategoriesDAOService
     public ExpenseCategoriesDAOService(IDatabase database) {
         this.database = database;
     }
-    public List<IExpenseCategory> getAllExpenseCategories() {
+    public List<IExpenseCategory> getAllExpenseCategories() throws SQLException {
         List<IExpenseCategory> categoryList = new ArrayList<>();
 
         try {
@@ -24,8 +25,7 @@ public class ExpenseCategoriesDAOService implements IExpenseCategoriesDAOService
             ResultSet resultSet = database.executeProcedure("CALL get_all_expense_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    IExpenseCategoryFactory expenseCategoryFactory = new ISubscriptionFactory.ExpenseCategoryFactory();
-                    IExpenseCategory expenseCategory = expenseCategoryFactory.createExpenseCategory(
+                    IExpenseCategory expenseCategory = ExpenseCategoryFactory.instance().createExpenseCategory(
                             resultSet.getInt("c_id"),
                             resultSet.getString("expense_category")
                     );
@@ -36,13 +36,8 @@ public class ExpenseCategoriesDAOService implements IExpenseCategoriesDAOService
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+            database.closeConnection();
             }
-
-        }
         return categoryList;
     }
 

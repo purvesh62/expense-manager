@@ -31,11 +31,11 @@ public class WalletDAOService implements IWalletDAOService {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     IWallet wallet = WalletFactory.instance().createWallet(
-                        resultSet.getInt("wallet_id"),
-                        resultSet.getString("wallet_label"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("p_type"),
-                        resultSet.getFloat("amount")
+                            resultSet.getInt("wallet_id"),
+                            resultSet.getString("wallet_label"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getInt("p_type"),
+                            resultSet.getFloat("amount")
                     );
                     walletList.add(wallet);
                 }
@@ -44,86 +44,61 @@ public class WalletDAOService implements IWalletDAOService {
             return walletList;
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                return walletList;
-            }
-
         }
         return walletList;
     }
-    public IWallet getWalletById(int walletId) throws SQLException {
-        IWallet wallet = WalletFactory.instance().createWallet();
-        try {
-            List<Object> parameterList = new ArrayList<>();
-            parameterList.add(walletId);
 
-
-            ResultSet resultSet = database.executeProcedure("CALL get_wallet_by_id(?)", parameterList);
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                        wallet = WalletFactory.instance().createWallet(
-                        resultSet.getInt("wallet_id"),
-                        resultSet.getString("wallet_label"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("p_type"),
-                        resultSet.getFloat("amount")
-                    );
-                }
-            }
-            return wallet;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            database.closeConnection();
-        }
-        return wallet;
-    }
-
-    public void deleteWallet(int walletId) throws SQLException {
-        try {
-            List<Object> parameterList = new ArrayList<>();
-            parameterList.add(walletId);
-            database.executeProcedure("CALL delete_wallet(?)", parameterList);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            database.closeConnection();
-        }
-    }
-
-    public void addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException {
+    public boolean addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
             parameterList.add(walletLabel);
             parameterList.add(paymentType);
             parameterList.add(amount);
-            database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList);
+            try (ResultSet resultSet = database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList)) {
+                return true;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
 
     }
 
-    public void updateWallet(int walletId, float amount, String walletLabel) throws SQLException {
+    public boolean deleteWallet(int walletId) throws SQLException {
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(walletId);
+            try (ResultSet resultSet = database.executeProcedure("CALL delete_wallet(?)", parameterList)) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return false;
+    }
+
+
+    public boolean updateWallet(int walletId, float amount, String walletLabel) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
             parameterList.add(amount);
             parameterList.add(walletLabel);
-            database.executeProcedure("CALL update_wallet(?,?,?)", parameterList);
+            try (ResultSet resultSet = database.executeProcedure("CALL update_wallet(?,?,?)", parameterList)) {
+                return true;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
     }
 
 
