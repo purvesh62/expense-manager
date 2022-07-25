@@ -1,12 +1,11 @@
-package com.expensify.model;
+package com.expensify.model.factories;
 
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
-import com.expensify.model.factories.IExpenseCategoryFactory;
+import com.expensify.model.ExpenseCategory;
+import com.expensify.model.IExpenseCategory;
 import com.expensify.persistenceLayer.ExpenseCategoriesDAOService;
 import com.expensify.persistenceLayer.IExpenseCategoriesDAOService;
-import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
-import com.expensify.persistenceLayer.PaymentCategoriesDAOService;
 
 public class ExpenseCategoryFactory implements IExpenseCategoryFactory {
 

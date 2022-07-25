@@ -1,11 +1,9 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
+import com.expensify.model.factories.ExpenseCategoryFactory;
 import com.expensify.model.factories.IExpenseCategoryFactory;
-import com.expensify.model.factories.IPaymentCategoryFactory;
-import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

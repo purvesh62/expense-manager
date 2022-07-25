@@ -1,11 +1,11 @@
 package com.expensify.persistenceLayerMock;
 
-import com.expensify.model.Expense;
 import com.expensify.model.IExpense;
 import com.expensify.model.factories.ExpenseFactory;
 import com.expensify.persistenceLayer.IExpenseDOAService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ExpenseDAOServiceMock implements IExpenseDOAService {
@@ -27,5 +27,15 @@ public class ExpenseDAOServiceMock implements IExpenseDOAService {
     @Override
     public boolean deleteUserExpense(int expenseId) {
         return true;
+    }
+
+    @Override
+    public HashMap<Integer, Float> getMonthlyExpense(int userId, String startDate, String endDate) {
+        return null;
+    }
+
+    @Override
+    public HashMap<String, Float> getMonthlyAnalyticsByCategories(int userId, String startDate, String endDate) {
+        return null;
     }
 }

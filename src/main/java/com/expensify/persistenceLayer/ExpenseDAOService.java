@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -42,7 +43,16 @@ public class ExpenseDAOService implements IExpenseDOAService {
             try (ResultSet resultSet = this.database.executeProcedure("CALL get_all_user_expense(?, ?, ?)", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {
-                        IExpense expense = ExpenseFactory.instance().createExpense(resultSet.getInt("expense_id"), resultSet.getInt("user_id"), resultSet.getString("title"), resultSet.getString("description"), resultSet.getFloat("amount"), resultSet.getInt("c_id"), resultSet.getInt("w_id"), String.valueOf(resultSet.getDate("expense_date")), resultSet.getString("expense_category"));
+                        IExpense expense = ExpenseFactory.instance().createExpense(
+                                resultSet.getInt("expense_id"),
+                                resultSet.getInt("user_id"),
+                                resultSet.getString("title"),
+                                resultSet.getString("description"),
+                                resultSet.getFloat("amount"),
+                                resultSet.getInt("c_id"),
+                                resultSet.getInt("w_id"),
+                                String.valueOf(resultSet.getDate("expense_date")),
+                                resultSet.getString("expense_category"));
                         userExpenseList.add(expense);
                     }
                 }
@@ -92,4 +102,73 @@ public class ExpenseDAOService implements IExpenseDOAService {
         }
         return false;
     }
+
+    @Override
+    public HashMap<Integer, Float> getMonthlyExpense(int userId, String startDate, String endDate) {
+        HashMap<Integer, Float> userMonthlyExpense = new HashMap<>();
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(userId);
+
+            Date start = formatter.parse(startDate);
+            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
+            parameterList.add(expenseStartDate);
+
+            Date end = formatter.parse(endDate);
+            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
+            parameterList.add(expenseEndDate);
+
+            try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_monthly_expense(?, ?, ?)", parameterList)) {
+                if (resultSet != null) {
+                    while (resultSet.next()) {
+                        userMonthlyExpense.put(resultSet.getInt("expense_month"), resultSet.getFloat("total"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                this.database.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return userMonthlyExpense;
+    }
+
+    @Override
+    public HashMap<String, Float> getMonthlyAnalyticsByCategories(int userId, String startDate, String endDate) {
+        HashMap<String, Float> userMonthlyExpense = new HashMap<>();
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(userId);
+
+            Date start = formatter.parse(startDate);
+            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
+            parameterList.add(expenseStartDate);
+
+            Date end = formatter.parse(endDate);
+            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
+            parameterList.add(expenseEndDate);
+
+            try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_expense_with_categories(?, ?, ?)", parameterList)) {
+                if (resultSet != null) {
+                    while (resultSet.next()) {
+                        userMonthlyExpense.put(resultSet.getString("category"), resultSet.getFloat("total"));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                this.database.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return userMonthlyExpense;
+    }
+
 }

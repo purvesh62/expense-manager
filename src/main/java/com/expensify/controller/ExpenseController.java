@@ -1,13 +1,8 @@
 package com.expensify.controller;
 
 import com.expensify.SessionManager;
-import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabase;
 import com.expensify.model.*;
-import com.expensify.model.factories.BudgetFactory;
-import com.expensify.model.factories.ExpenseFactory;
-import com.expensify.model.factories.IBudgetFactory;
-import com.expensify.model.factories.WalletFactory;
+import com.expensify.model.factories.*;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +32,7 @@ public class ExpenseController {
         try {
             // TODO: Remove later
             JSONObject userCache = new JSONObject();
-            userCache.put("userId", 1);
+            userCache.put("userId", 5);
             SessionManager.setSession(session, userCache);
 
             userCache = SessionManager.getSession(session);
