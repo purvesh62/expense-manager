@@ -1,8 +1,8 @@
 package com.expensify.controller;
 
+import com.expensify.factories.PaymentCategoryFactory;
 import com.expensify.factories.WalletFactory;
 import com.expensify.model.*;
-import com.expensify.model.PaymentCategoryFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -79,7 +78,7 @@ public class WalletController {
     }
 
     @PostMapping(value = "/updatewallet")
-    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session){
+    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             wallet.setWalletDAOService(walletObj);

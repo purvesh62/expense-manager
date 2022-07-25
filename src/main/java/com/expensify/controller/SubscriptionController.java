@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
-import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -28,7 +27,7 @@ public class SubscriptionController {
     }
 
     @GetMapping(value = "/subscription", produces = "text/html")
-    private String getAllSubscriptionDetails(Model model, HttpSession session){
+    private String getAllSubscriptionDetails(Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
@@ -42,7 +41,7 @@ public class SubscriptionController {
     }
 
     @PostMapping(value = "/subscription")
-    private String addSubscription(Subscription newSubscription, BindingResult result, RedirectAttributes redirAttrs, HttpSession session){
+    private String addSubscription(Subscription newSubscription, BindingResult result, RedirectAttributes redirAttrs, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
@@ -73,7 +72,7 @@ public class SubscriptionController {
     }
 
     @PostMapping(value = "/updatesubscription")
-    private String updateSubscription(@ModelAttribute("subscription") Subscription subscription, RedirectAttributes redirAttrs, HttpSession session){
+    private String updateSubscription(@ModelAttribute("subscription") Subscription subscription, RedirectAttributes redirAttrs, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             subscription.setSubscriptionDAOService(subscriptionObj);

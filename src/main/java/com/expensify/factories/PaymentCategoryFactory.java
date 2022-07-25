@@ -1,8 +1,9 @@
-package com.expensify.model;
+package com.expensify.factories;
 
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
-import com.expensify.factories.IPaymentCategoryFactory;
+import com.expensify.model.IPaymentCategory;
+import com.expensify.model.PaymentCategory;
 import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
 import com.expensify.persistenceLayer.PaymentCategoriesDAOService;
 

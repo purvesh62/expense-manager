@@ -76,7 +76,7 @@ public class Subscription implements ISubscription {
     }
 
     @Override
-    public List<ISubscription> getAllSubscriptionDetails(int userId){
+    public List<ISubscription> getAllSubscriptionDetails(int userId) {
         try {
             return subscriptionDAOService.getAllSubscriptionDetails(userId);
         } catch (SQLException e) {

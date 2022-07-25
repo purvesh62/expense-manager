@@ -52,6 +52,17 @@
         position: absolute;
         left : 20%
     }
+    .btn {
+        width: 110px;
+        cursor: pointer;
+        box-shadow: 0px 0px 2px gray;
+        border: none;
+        outline: none;
+        padding: 5px;
+        border-radius: 5px;
+        color: white;
+        background-color: #6f95aa;
+    }
 </style>
 <body>
 <header th:insert="fragments/sidebar"></header>
@@ -62,7 +73,7 @@
     <div class = "alert alert-success" id ="hideMe" role = "alert" th:text = "${SUCCESS}" th:if = "${SUCCESS}"></div>
 
     <div class="p-4">
-        <div><button type="button" class="btn btn-primary mb-2"  data-toggle="modal" data-target="#addWalletModal" >Add Wallet</button></div>
+        <div><button type="button" class="btn"  data-toggle="modal" data-target="#addWalletModal" >Add Wallet</button></div>
 
         <div class="row">
             <div class="col-4" th:each="wallet : ${wallet_list}">
@@ -71,8 +82,8 @@
                         <p>Wallet Label: <span th:text="${wallet.walletLabel}">Dummy Expenses</span></p>
                         <p>Payment Type: <span th:text="${wallet.paymentType}">Dummy Expenses</span></p>
                         <p>Amount: $<span th:text="${wallet.amount}">Dummy Expenses</span></p>
-                        <a th:href="@{/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn btn-danger">Delete</a>
-                        <button  class="btn btn-primary" data-toggle="modal" th:data-wallet="${wallet}" th:attr="data-target=${'#editWalletModal' + wallet.walletId}" >Edit</button>
+                        <a th:href="@{/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn">Delete</a>
+                        <button  class="btn"  data-toggle="modal" th:data-wallet="${wallet}" th:attr="data-target=${'#editWalletModal' + wallet.walletId}" >Edit</button>
                     </div>
                 </div>
             </div>
@@ -109,7 +120,7 @@
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('Amount')}" th:errors="*{amount}"></div>
                         </div>
 
-                        <button class="btn btn-primary" type="submit">ADD</button>
+                        <button class="btn" type="submit">ADD</button>
                     </form>
                 </div>
             </div>
@@ -138,7 +149,7 @@
                             <input id="walletAmount" type="text" th:value="${wallet.amount}" name="amount" class="form-control"/>
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Update</button>
+                        <button type="submit" class="btn" >Update</button>
 
                     </form>
                 </div>

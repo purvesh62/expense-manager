@@ -2,7 +2,6 @@ package com.expensify.model;
 
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ISubscription {
