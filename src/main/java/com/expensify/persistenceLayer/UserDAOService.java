@@ -2,6 +2,9 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,11 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 @Component
-public class UserDAOService {
+public class UserDAOService implements IUserDAOService {
     private final IDatabase database;
+    @Autowired
+    private JavaMailSender mailSender;
 
     public UserDAOService() {
+      //  this.database = database;
         this.database = MySqlDatabase.instance();
     }
 
@@ -34,7 +41,6 @@ public class UserDAOService {
                     userId = resultSet.getInt("user_id");
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -44,6 +50,10 @@ public class UserDAOService {
         return userId;
     }
 
+    public String encode(String password) {
+
+        return password;
+    }
     public int verifyUser(User user) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
@@ -66,4 +76,58 @@ public class UserDAOService {
         }
         return userId;
     }
+
+    public boolean updatePassword(String email, String password)  {
+        List<Object> parameterList = new ArrayList<>();
+        boolean passwordUpdated = false;
+        try {
+            parameterList.add(email);
+            parameterList.add(password);
+            /*User.BCryptPasswordEncoder passwordEncoder = new User.BCryptPasswordEncoder();
+            String encodedPassword = passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);*/
+            ResultSet resultSet = database.executeProcedure("CALL update_user_password(?,?)", parameterList);
+            if (resultSet != null) {
+                passwordUpdated = true;
+                }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                database.closeConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return passwordUpdated;
+    }
+
+
+
+    public boolean findByEmail(String email) {
+        List<Object> parameterList = new ArrayList<>();
+        parameterList.add(email);
+        boolean userExist = false;
+        try {
+            ResultSet resultSet = database.executeProcedure("CALL check_user_exist(?)", parameterList);
+            if (resultSet != null) {
+               userExist = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                database.closeConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return userExist;
+    }
+
+
+
 }

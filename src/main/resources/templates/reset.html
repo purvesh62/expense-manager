@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Expensify</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous" />
+</head>
+<body>
+<div class="container-fluid text-center">
+<div>
+    <h2>Forgot Password</h2>
+</div>
+
+<!--<div th:if="${error != null}">-->
+<!--    <p class="text-danger">Username/Password is incorrect</p>-->
+<!--</div>-->
+<!--<div th:if="${message != null}">-->
+<!--    <p class="text-warning">Please enter your mail id to reset password</p>-->
+<!--</div>-->
+<form th:action="@{/reset}" th:object="${user}" method="POST" style="max-width: 420px; margin: 0 auto;">
+    <div class="border border-secondary rounded p-3">
+        <div>
+            <p>We will be sending a reset password link to your email.</p>
+        </div>
+        <div>
+            <p>
+                <input th:field="*{email}"  type="text" name="email" class="form-control" placeholder="Email" required autofocus/>
+            </p>
+            <p class="text-center">
+                <input type="submit" value="Send" class="btn btn-primary" />
+            </p>
+        </div>
+    </div>
+
+</form>
+</div>
+</body>
+</html>
