@@ -2,8 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.INotification;
-import com.expensify.model.factories.INotificationFactory;
-import com.expensify.model.factories.NotificationFactory;
+import com.expensify.factories.NotificationFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

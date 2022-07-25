@@ -1,4 +1,4 @@
-package com.expensify.model.factories;
+package com.expensify.factories;
 
 import com.expensify.model.IExportData;
 

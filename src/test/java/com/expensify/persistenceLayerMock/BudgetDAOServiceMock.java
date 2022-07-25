@@ -1,7 +1,7 @@
 package com.expensify.persistenceLayerMock;
 
 import com.expensify.model.IBudget;
-import com.expensify.model.factories.BudgetFactory;
+import com.expensify.factories.BudgetFactory;
 import com.expensify.persistenceLayer.IBudgetDAOService;
 
 import java.sql.SQLException;

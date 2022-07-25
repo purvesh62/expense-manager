@@ -1,10 +1,9 @@
-package com.expensify.model.factories;
+package com.expensify.factories;
 
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.IWallet;
 import com.expensify.model.Wallet;
-import com.expensify.model.factories.IWalletFactory;
 import com.expensify.persistenceLayer.IWalletDAOService;
 import com.expensify.persistenceLayer.WalletDAOService;
 

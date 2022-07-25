@@ -2,11 +2,9 @@ package com.expensify.model;
 
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
-import com.expensify.model.factories.IPaymentCategoryFactory;
-import com.expensify.model.factories.WalletFactory;
+import com.expensify.factories.IPaymentCategoryFactory;
 import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
 import com.expensify.persistenceLayer.PaymentCategoriesDAOService;
-import com.expensify.persistenceLayer.WalletDAOService;
 
 public class PaymentCategoryFactory implements IPaymentCategoryFactory {
 

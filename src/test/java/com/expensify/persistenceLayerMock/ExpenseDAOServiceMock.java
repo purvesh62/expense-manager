@@ -1,7 +1,7 @@
 package com.expensify.persistenceLayerMock;
 
 import com.expensify.model.IExpense;
-import com.expensify.model.factories.ExpenseFactory;
+import com.expensify.factories.ExpenseFactory;
 import com.expensify.persistenceLayer.IExpenseDOAService;
 
 import java.util.ArrayList;

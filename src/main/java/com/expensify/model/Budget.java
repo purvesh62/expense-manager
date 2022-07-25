@@ -1,6 +1,6 @@
 package com.expensify.model;
 
-import com.expensify.model.factories.NotificationFactory;
+import com.expensify.factories.NotificationFactory;
 import com.expensify.persistenceLayer.IBudgetDAOService;
 
 import java.sql.SQLException;

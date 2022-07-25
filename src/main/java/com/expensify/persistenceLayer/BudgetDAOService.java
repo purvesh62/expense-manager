@@ -2,7 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
-import com.expensify.model.factories.BudgetFactory;
+import com.expensify.factories.BudgetFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,10 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 public class BudgetDAOService implements IBudgetDAOService {
@@ -212,7 +209,7 @@ public class BudgetDAOService implements IBudgetDAOService {
 
             try (ResultSet resultSet = database.executeProcedure("CALL check_if_budget_exists(?,?,?)", parameterList)) {
                 while (resultSet.next()) {
-                    if(resultSet.getInt("budget_id") == budgetId){
+                    if (resultSet.getInt("budget_id") == budgetId) {
                         return false;
                     }
                     return true;
@@ -229,5 +226,37 @@ public class BudgetDAOService implements IBudgetDAOService {
             }
         }
         return true;
+    }
+
+    @Override
+    public HashMap<Integer, Float> getMonthlyBudget(int userId, String startDate, String endDate) {
+        HashMap<Integer, Float> userMonthlyBudget = new HashMap<>();
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(userId);
+
+            Date start = formatter.parse(startDate);
+            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
+            parameterList.add(expenseStartDate);
+
+            Date end = formatter.parse(endDate);
+            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
+            parameterList.add(expenseEndDate);
+
+            try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_monthly_budget(?, ?, ?)", parameterList)) {
+                while (resultSet.next()) {
+                    userMonthlyBudget.put(resultSet.getInt("total_expenses"), resultSet.getFloat("budgetLimit"));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                this.database.closeConnection();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return userMonthlyBudget;
     }
 }

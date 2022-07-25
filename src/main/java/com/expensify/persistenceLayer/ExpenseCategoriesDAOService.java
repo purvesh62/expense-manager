@@ -2,8 +2,8 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
-import com.expensify.model.factories.ExpenseCategoryFactory;
-import com.expensify.model.factories.IExpenseCategoryFactory;
+import com.expensify.factories.ExpenseCategoryFactory;
+import com.expensify.factories.IExpenseCategoryFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -1,8 +1,10 @@
 package com.expensify.controller;
 
-import com.expensify.SessionManager;
+import com.expensify.factories.BudgetFactory;
+import com.expensify.factories.ExpenseCategoryFactory;
+import com.expensify.factories.ExpenseFactory;
+import com.expensify.factories.WalletFactory;
 import com.expensify.model.*;
-import com.expensify.model.factories.*;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,9 +35,9 @@ public class ExpenseController {
             // TODO: Remove later
             JSONObject userCache = new JSONObject();
             userCache.put("userId", 5);
-            SessionManager.setSession(session, userCache);
+            IWallet.SessionManager.setSession(session, userCache);
 
-            userCache = SessionManager.getSession(session);
+            userCache = IWallet.SessionManager.getSession(session);
             if (userCache.containsKey("userId")) {
                 LocalDate currentdate = LocalDate.now();
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
@@ -64,7 +66,7 @@ public class ExpenseController {
     @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     List<IExpense> getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session) {
-        JSONObject userCache = SessionManager.getSession(session);
+        JSONObject userCache = IWallet.SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             return expenseObj.getAllUserExpenses(userId, startDate, endDate);
@@ -74,7 +76,7 @@ public class ExpenseController {
 
     @PostMapping(value = "/add-expense")
     public String addExpense(@ModelAttribute("expense") Expense expense, HttpSession session) throws SQLException, ParseException {
-        JSONObject userCache = SessionManager.getSession(session);
+        JSONObject userCache = IWallet.SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
 
@@ -96,7 +98,7 @@ public class ExpenseController {
     @RequestMapping(value = "expense", method = DELETE, produces = "application/json")
     public HashMap<String, Boolean> deleteExpense(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
         HashMap<String, Boolean> response = new HashMap<String, Boolean>();
-        JSONObject userCache = SessionManager.getSession(session);
+        JSONObject userCache = IWallet.SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             boolean status = expenseObj.deleteUserExpense(expenseId);
