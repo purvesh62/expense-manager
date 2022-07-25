@@ -1,6 +1,9 @@
-package com.expensify.model;
+package com.expensify.factories;
 
 import com.expensify.database.IDatabase;
+import com.expensify.factories.IUserFactory;
+import com.expensify.model.IUser;
+import com.expensify.model.User;
 import com.expensify.persistenceLayer.UserDAOService;
 import com.expensify.persistenceLayer.IUserDAOService;
 
