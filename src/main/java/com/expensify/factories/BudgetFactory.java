@@ -42,10 +42,4 @@ public class BudgetFactory implements IBudgetFactory {
     public BudgetValidator createBudgetValidator() {
         return new BudgetValidator();
     }
-
-    @Override
-    public IAnalytics createBudgetAnalytics() {
-        IDatabase database = MySqlDatabase.instance();
-        return new BudgetAnalytics(createBudgetDAOService(database));
-    }
 }

@@ -37,14 +37,10 @@ public class AnalyticsController {
 
             HashMap<String, Float> userMonthlyExpenseWithCategoryMap = expenseAnalytics.getMonthlyAnalyticsByCategories(userId, DateUtil.getFirstDayOfMonth(localDate), DateUtil.getLastDayOfMonth(localDate));
 
-            IAnalytics budgetAnalytics = BudgetFactory.instance().createBudgetAnalytics();
-
-            HashMap<Integer, Float> userMonthlyBudgetMap = budgetAnalytics.getMonthlyAnalytics(userId, localDate);
-
             model.addAttribute("selectedDate", localDate);
             model.addAttribute("monthlyExpenseMap", userMonthlyExpenseMap);
             model.addAttribute("monthlyExpenseWithCategoryMap", userMonthlyExpenseWithCategoryMap);
-            model.addAttribute("monthlyBudgetMap", userMonthlyBudgetMap);
+
             return "analytics";
         }
         return "error";

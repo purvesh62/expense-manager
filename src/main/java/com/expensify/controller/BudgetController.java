@@ -46,8 +46,9 @@ public class BudgetController {
     private String addBudget(@ModelAttribute("budget") Budget budget, HttpSession session, RedirectAttributes redirectAttributes) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
             budget.setBudgetDAOService(budgetObj);
-            budget.setUserId(1);
+            budget.setUserId(userId);
             String msg = BudgetFactory.instance().createBudgetValidator().validate(budget);
             if (msg == null) {
                 boolean status = budget.saveBudget();

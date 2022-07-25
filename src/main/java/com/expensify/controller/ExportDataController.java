@@ -82,7 +82,7 @@ public class ExportDataController {
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom)),
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateTo)));
             } catch (ParseException e) {
-
+                System.out.println("Date Parse Exception");
             }
             boolean status = ExportDataFactory.instance().createExportDataToPDF().exportExpenseData(expenseList, response);
         }
