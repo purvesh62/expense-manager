@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -76,7 +77,7 @@ public class ExportDataController {
 
             response.setHeader(headerKey, headerValue);
 
-            List<IExpense> expenseList = null;
+            List<IExpense> expenseList = new ArrayList<>();
             try {
                 expenseList = ExpenseFactory.instance().createExpense().getAllUserExpenses((Integer) userCache.get("userId"),
                         new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(dateFrom)),
