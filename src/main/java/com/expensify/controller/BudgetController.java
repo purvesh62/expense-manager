@@ -24,7 +24,7 @@ public class BudgetController {
 
     @PostMapping(value = "/budget")
     private String updateBudget(@ModelAttribute("budget") Budget budget, HttpSession session, RedirectAttributes redirectAttributes) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             budget.setBudgetDAOService(budgetObj);
             String msg = BudgetFactory.instance().createBudgetValidator().validate(budget);
@@ -44,7 +44,7 @@ public class BudgetController {
 
     @PostMapping(value = "/budget/add")
     private String addBudget(@ModelAttribute("budget") Budget budget, HttpSession session, RedirectAttributes redirectAttributes) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             budget.setBudgetDAOService(budgetObj);
             budget.setUserId(1);
@@ -64,7 +64,7 @@ public class BudgetController {
 
     @GetMapping(value = "/budget/delete/{budget_id}", produces = "text/html")
     private String deleteBudget(@PathVariable("budget_id") int budgetId, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             boolean status = budgetObj.deleteBudget(budgetId);
             if (status) {
@@ -76,7 +76,7 @@ public class BudgetController {
 
     @GetMapping(value = "/budget", produces = "text/html")
     public String getAllBudgetDetails(@RequestParam("month") Optional<String> month, Model model, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
 
@@ -117,7 +117,7 @@ public class BudgetController {
 
     @GetMapping(value = "/budget/budgetId/{budget_id}", produces = "text/html")
     private String getBudgetById(@PathVariable("budget_id") int budgetId, Model model, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             IBudget budgetDetails = budgetObj.getBudgetById(budgetId);
@@ -131,7 +131,7 @@ public class BudgetController {
 
     @GetMapping(value = "/budget/add", produces = "text/html")
     private String addBudgetPage(Model model, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails(userId);
