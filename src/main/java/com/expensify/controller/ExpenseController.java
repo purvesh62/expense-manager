@@ -32,12 +32,9 @@ public class ExpenseController {
     @GetMapping(path = "/", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
-            // TODO: Remove later
-            JSONObject userCache = new JSONObject();
-            userCache.put("userId", 5);
-            SessionManager.setSession(session, userCache);
 
-            userCache = SessionManager.getSession(session);
+            JSONObject userCache = SessionManager.getSession(session);
+
             if (userCache.containsKey("userId")) {
                 LocalDate currentdate = LocalDate.now();
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
