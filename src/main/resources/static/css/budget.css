@@ -1,0 +1,32 @@
+.btn,
+button {
+    width: 110px;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px gray;
+    border: none;
+    outline: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    background-color: #6f95aa;
+}
+#header {
+    padding: 10px;
+    color: #d36c6c;
+    font-size: 26px;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: space-between;
+}
+
+.edit-btn{
+    background-color: #6f95aa;
+    color: white;
+}
+.form-control{
+    width:16%;
+}
+
+.container {
+    width: 1000px;
+}

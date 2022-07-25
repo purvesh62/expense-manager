@@ -8,7 +8,6 @@ image: maven:latest
 variables:
   GIT_STRATEGY: clone
 
-
 build-job:
   stage: build
   tags:
@@ -16,6 +15,10 @@ build-job:
   script:
     - echo "building maven project."
     - mvn clean compile
+  only:
+    - develop
+    - test
+    - production
 
 test-job:
   stage: test
@@ -24,27 +27,46 @@ test-job:
   script:
     - echo "Execute test case"
     - mvn clean test
+  only:
+    - develop
+    - test
+    - production
 
-deploy-test-env-job:
- stage: deploy
- tags:
-   - dalfcs_docker_kvm
- image: ruby:2.6
- script:
-   - apt-get update -qy
-   - apt-get install -y ruby-dev
-   - gem install dpl
-   - dpl --provider=heroku --app=$HEROKU_TEST_ENV_APP_NAME --api-key=$HEROKU_TEST_ENV_API_KEY
- only:
-   - test
-
-deploy-job:
+deploy-dev:
   stage: deploy
   tags:
     - dalfcs_docker_kvm
   image: ruby:2.6
   script:
     - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=HEROKU_DEV_API_KEY
+  only:
+    - develop
+
+deploy-test:
+  stage: deploy
+  tags:
+    - dalfcs_docker_kvm
+  image: ruby:2.6
+  script:
+    - apt-get update -qy
+    - apt install redis
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=$HEROKU_TEST_APP_NAME --api-key=$HEROKU_TEST_API_KEY
+  only:
+    - test
+
+deploy-prod:
+  stage: deploy
+  tags:
+    - dalfcs_docker_kvm
+  image: ruby:2.6
+  script:
+    - apt-get update -qy
+    - apt-get install redis
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY

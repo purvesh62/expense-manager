@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Expensify</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--  END  -->
+
+</head>
+<body>
+<header th:insert="fragments/sidebar"></header>
+<div class="container">
+    <form action="#" th:action="@{/budget}" th:object="${budget}" method="POST">
+        <div class="p-4">
+            <div class="form-group">
+                <label>Limit</label>
+                <input type="number" th:field="${budget.budgetLimit}" min="0" required/>
+                <input type="hidden" th:field="${budget.budgetId}"/>
+                <!--            <input type="hidden" th:field="${budget.walletId}"/>-->
+                <input type="hidden" th:field="${budget.walletName}"/>
+                <input type="hidden" th:field="${budget.month}"/>
+                <input type="hidden" th:field="${budget.userId}"/>
+                <input type="hidden" th:field="${budget.totalExpenses}"/>
+            </div>
+            <div class="form-group">
+                <label>Choose Wallet</label>
+                <select class="form-control" id="walletId" th:field="${budget.walletId}">
+                    <option th:each="i : ${wallet}" th:value="${i.walletId}" th:text="${i.walletLabel}"></option>
+                </select>
+            </div>
+            <div>
+                <small class="my-1 text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></small>
+            </div>
+            <button type="submit" class="btn">Update</button>
+        </div>
+    </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="../js/budget.js"></script>
+</body>
+</html>

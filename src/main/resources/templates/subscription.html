@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <title>Subscription Details</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--  END  -->
+
+</head>
+<style>
+
+    #hideMe {
+        -webkit-animation: cssAnimation 5s forwards;
+        animation: cssAnimation 5s forwards;
+        position: absolute;
+        left:0;
+        right:0;
+        margin-left: auto;
+        margin-right: auto;
+        width: 300px;
+    }
+    @keyframes cssAnimation {
+        100% {visibility: hidden;}
+    }
+    @-webkit-keyframes cssAnimation {
+        100% {visibility: hidden;}
+    }
+    .heading{
+        margin:15px auto;
+        text-align: center;
+    }
+    .heading span{
+        font-size: 35px;
+        font-weight: 600;
+    }
+    .container{
+        position: absolute;
+        left: 20%;
+    }
+</style>
+<body>
+<header th:insert="fragments/sidebar"></header>
+<div class="container">
+    <div class="heading">
+        <span th:text="'User Subscription'"></span>
+    </div>
+    <div class = "alert alert-success" id ="hideMe" role = "alert" th:text = "${SUCCESS}" th:if = "${SUCCESS}"></div>
+
+    <div class="p-4">
+        <div><button type="button" class="btn btn-primary mb-2"  data-toggle="modal" data-target="#addSubscriptionModal" >Add Subscription</button></div>
+
+        <div class="row">
+            <div class="col-4" th:each="subscription : ${subscription_list}">
+                <div class="card" >
+                    <div class="card-body">
+                        <p><span th:text="${subscription.subscriptionName}">Dummy Expenses</span></p>
+                        <p>Expiry Date: <span th:text="${subscription.expiryDate}">Dummy Expenses</span></p>
+                        <a th:href="@{/subscription/subscription_id/{subscription_id}(subscription_id = ${subscription.subscriptionId})}" class="btn btn-danger">Delete</a>
+                        <button data-toggle="modal" th:data-subscription="${subscription}" th:attr="data-target=${'#editSubscriptionModal' + subscription.subscriptionId}" class="btn btn-primary">Edit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addSubscriptionModal" tabindex="-1" role="dialog" aria-labelledby="addSubscriptionModal" aria-hidden="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addSubscriptionModalLabel">Add Subscription</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="#" method="POST" th:action="@{/subscription}" th:object="${subscription}">
+                        <div class="form-group">
+                            <label for="SubscriptionName">Subscription Name</label>
+                            <input type = "text" class="form-control" id ="SubscriptionName" th:field="*{subscriptionName}">
+                        </div>
+                        <div class="form-group">
+                            <label for="ExpiryDate">Expiry Date</label>
+                            <input type = "date" class="form-control" th:field="*{expiryDate}" id="ExpiryDate">
+                        </div>
+                        <button class="btn btn-primary" type="submit">ADD</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:each="subscription : ${subscription_list}" th:attr="id=${'editSubscriptionModal' + subscription.subscriptionId}" class="modal fade"  tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editSubscriptionModalLabel">Edit Subscription</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form  method="POST" th:action="@{/updatesubscription}" th:object="${subscription}" >
+                        <input hidden type="number" th:value="${subscription.subscriptionId}" name="subscriptionId"/>
+                        <input hidden type="number" th:value="${subscription.userId}" name="userId"/>
+                        <div class="form-group">
+                            <label for="EditSubscriptionName">Subscription Name</label>
+                            <input type = "text"  th:value="${subscription.subscriptionName}" class="form-control" id ="EditSubscriptionName" name="subscriptionName">
+                        </div>
+                        <div class="form-group">
+                            <label for="EditExpiryDate">Expiry Date</label>
+                            <input type = "date" th:value="${subscription.expiryDate}" class="form-control"  name="expiryDate" id="EditExpiryDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

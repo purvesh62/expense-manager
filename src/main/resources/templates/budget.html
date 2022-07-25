@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Expensify</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--  END  -->
+</head>
+<body>
+<header th:insert="fragments/sidebar"></header>
+<div class="container">
+    <div id="header" >
+        <div th:text="${dateToDisplay}">Dummy Date</div>
+        <div>
+            <button class="btn" id="backButton" th:onclick="|window.location.href='/budget?month='+${currentMonth-1}|">
+                Back
+            </button>
+            <button class="btn" id="nextButton" th:onclick="|window.location.href='/budget?month='+${currentMonth+1}|">
+                Next
+            </button>
+        </div>
+    </div>
+    <div class="p-4">
+        <div>
+            <button type="button" class="btn mb-2" th:onclick="|window.location.href='/budget/add'|">Add Budget</button>
+        </div>
+        <div class="row">
+            <div class="col-4" th:each="budget : ${budgetList}">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${budget.walletName}">Dummy Title</h5>
+                        <p>Limit: $<span th:text="${budget.budgetLimit}">Dummy Limit</span></p>
+                        <p>Total Expenses: $<span th:text="${budget.totalExpenses}">Dummy Expenses</span></p>
+                        <a th:href="@{'/budget/budgetId/' + ${budget.budgetId}}" class="btn">Edit</a>
+                        <a th:href="@{'/budget/delete/' + ${budget.budgetId}}" class="btn btn-danger">Delete</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="../js/budget.js"></script>
+<script>
+    let nav_btn = document.getElementById("nav-btn");
+    let sidebar = document.getElementById("sidebar");
+
+    nav_btn.onclick = function () {
+        sidebar.classList.toggle("active");
+    };
+</script>
+</body>
+</html>

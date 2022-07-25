@@ -1,30 +1,44 @@
 package com.expensify.model;
 
-import java.util.Date;
+import com.expensify.persistenceLayer.IExpenseDOAService;
 
-public class Expense {
+import java.util.List;
+
+public class Expense implements IExpense {
     private int expenseID;
     private int userID;
-    private String title;
+    private String expenseTitle;
     private String description;
     private Float amount;
     private int expenseCategory;
-    private int walletID;
-    private Date expenseDate;
+    private String expenseCategoryName;
+    private int walletId;
+    private String expenseDate;
+    private IExpenseDOAService expenseDOAService;
 
     public Expense() {
 
     }
 
-    public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, Date expenseDate) {
+    public Expense(IExpenseDOAService expenseDOAService) {
+        this.expenseDOAService = expenseDOAService;
+    }
+
+    public Expense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate, String expenseCategoryName) {
         this.expenseID = expenseID;
         this.userID = userID;
-        this.title = title;
+        this.expenseTitle = title;
         this.description = description;
         this.amount = amount;
         this.expenseCategory = expenseCategory;
-        this.walletID = walletID;
+        this.walletId = walletID;
         this.expenseDate = expenseDate;
+        this.expenseCategoryName = expenseCategoryName;
+    }
+
+    @Override
+    public String toString() {
+        return "Expense{" + "expenseID=" + expenseID + ", userID=" + userID + ", title='" + expenseTitle + '\'' + ", description='" + description + '\'' + ", amount=" + amount + ", expenseCategory=" + expenseCategory + ", walletID=" + walletId + ", expenseDate=" + expenseDate + '}';
     }
 
     public int getExpenseID() {
@@ -43,12 +57,12 @@ public class Expense {
         this.userID = userID;
     }
 
-    public String getTitle() {
-        return title;
+    public String getExpenseTitle() {
+        return expenseTitle;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setExpenseTitle(String title) {
+        this.expenseTitle = title;
     }
 
     public String getDescription() {
@@ -75,19 +89,51 @@ public class Expense {
         this.expenseCategory = expenseCategory;
     }
 
-    public int getWallet() {
-        return walletID;
+    public String getExpenseCategoryName() {
+        return expenseCategoryName;
     }
 
-    public void setWallet(int walletID) {
-        this.walletID = walletID;
+    public void setExpenseCategoryName(String expenseCategoryName) {
+        this.expenseCategoryName = expenseCategoryName;
     }
 
-    public Date getExpenseDate() {
+    public int getWalletId() {
+        return walletId;
+    }
+
+    public void setWalletId(int walletID) {
+        this.walletId = walletID;
+    }
+
+    public String getExpenseDate() {
         return expenseDate;
     }
 
-    public void setExpenseDate(Date expenseDate) {
+    public void setExpenseDate(String expenseDate) {
         this.expenseDate = expenseDate;
+    }
+
+    @Override
+    public IExpenseDOAService getExpenseDOAService() {
+        return this.expenseDOAService;
+    }
+
+    public void setExpenseDOAService(IExpense expense) {
+        this.expenseDOAService = expense.getExpenseDOAService();
+    }
+
+    @Override
+    public List<IExpense> getAllUserExpenses(int userId, String startDate, String endDate) {
+        return expenseDOAService.getAllUserExpenses(userId, startDate, endDate);
+    }
+
+    @Override
+    public boolean addUserExpense() {
+        return expenseDOAService.addUserExpenses(expenseID, userID, expenseTitle, description, amount, expenseCategory, walletId, expenseDate);
+    }
+
+    @Override
+    public boolean deleteUserExpense(int expenseId) {
+        return expenseDOAService.deleteUserExpense(expenseId);
     }
 }
