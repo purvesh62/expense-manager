@@ -24,12 +24,6 @@ public class WalletFactory implements IWalletFactory {
         IDatabase database = MySqlDatabase.instance();
         return new Wallet(createWalletDAOService(database));
     }
-
-//    @Override
-//    public IWallet createWallet() {
-//        return new Wallet();
-//    }
-
     @Override
     public IWalletDAOService createWalletDAOService(IDatabase database) {
 
