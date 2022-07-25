@@ -272,7 +272,7 @@ function deleteEvent() {
     let selectedEvent = events.filter(e => e.expenseDate == dateFormatter(clicked))[0];
     // events = events.filter(e => e.expenseDate !== dateFormatter(clicked));
     // localStorage.setItem('events', JSON.stringify(events));
-    fetch('http://localhost:8080/expense?expense_id=' + event.target.id.split('-')[1], {
+    fetch('/expense?expense_id=' + event.target.id.split('-')[1], {
         method: 'DELETE',
     }).then(() => {
         document.getElementById(event.target.id).parentNode.remove();
@@ -313,7 +313,7 @@ function initButtons() {
 
         const start_date = `${year}-${month}-01`;
         const end_date = `${year}-${month}-${daysInMonth}`;
-        fetch(`http://localhost:8080/expense?user_id=1&start_date=${start_date}&end_date=${end_date}`)
+        fetch(`/expense?user_id=1&start_date=${start_date}&end_date=${end_date}`)
             .then(response => response.json())
             .then(data => load(data));
     });
@@ -335,7 +335,7 @@ function initButtons() {
 
         const start_date = `${year}-${month}-01`;
         const end_date = `${year}-${month}-${daysInMonth}`;
-        fetch(`http://localhost:8080/expense?user_id=1&start_date=${start_date}&end_date=${end_date}`)
+        fetch(`/expense?user_id=1&start_date=${start_date}&end_date=${end_date}`)
             .then(response => response.json())
             .then(data => load(data));
     });
