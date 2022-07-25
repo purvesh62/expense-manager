@@ -44,7 +44,11 @@ public class PaymentCategory implements IPaymentCategory {
         this.paymentCategory = paymentCategory;
     }
 
-    public List<IPaymentCategory> getAllPaymentCategories() throws SQLException {
-        return paymentCategoriesDAOService.getAllPaymentCategories();
+    public List<IPaymentCategory> getAllPaymentCategories()  {
+        try {
+            return paymentCategoriesDAOService.getAllPaymentCategories();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

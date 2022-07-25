@@ -1,9 +1,8 @@
 package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
-import com.expensify.model.*;
-import com.expensify.factories.IWalletFactory;
 import com.expensify.factories.WalletFactory;
+import com.expensify.model.IWallet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ public class WalletDAOService implements IWalletDAOService {
         this.database = database;
     }
 
-    public List<IWallet> getAllWalletDetails(int userId) {
+    public List<IWallet> getAllWalletDetails(int userId) throws SQLException {
         List<IWallet> walletList = new ArrayList<>();
 
         try {
@@ -30,103 +29,77 @@ public class WalletDAOService implements IWalletDAOService {
                     executeProcedure("CALL get_user_wallet(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    IWalletFactory walletFactory = new WalletFactory();
-                    IWallet wallet = walletFactory.createWallet(
-                        resultSet.getInt("wallet_id"),
-                        resultSet.getString("wallet_label"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("p_type"),
-                        resultSet.getFloat("amount")
+                    IWallet wallet = WalletFactory.instance().createWallet(
+                            resultSet.getInt("wallet_id"),
+                            resultSet.getString("wallet_label"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getInt("p_type"),
+                            resultSet.getFloat("amount")
                     );
                     walletList.add(wallet);
                 }
 
             }
             return walletList;
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                return walletList;
-            }
-
+            database.closeConnection();
         }
         return walletList;
     }
-    public IWallet getWalletById(int walletId) throws SQLException {
-        IWalletFactory walletFactory = new WalletFactory();
-        IWallet wallet = walletFactory.createWallet();
-        try {
-            List<Object> parameterList = new ArrayList<>();
-            parameterList.add(walletId);
 
-
-            ResultSet resultSet = database.executeProcedure("CALL get_wallet_by_id(?)", parameterList);
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    wallet = walletFactory.createWallet(
-                        resultSet.getInt("wallet_id"),
-                        resultSet.getString("wallet_label"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getInt("p_type"),
-                        resultSet.getFloat("amount")
-                    );
-                }
-            }
-            return wallet;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            database.closeConnection();
-        }
-        return wallet;
-    }
-
-    public void deleteWallet(int walletId) throws SQLException {
-        try {
-            List<Object> parameterList = new ArrayList<>();
-            parameterList.add(walletId);
-
-            database.executeProcedure("CALL delete_wallet(?)", parameterList);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            database.closeConnection();
-        }
-    }
-
-    public void addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException {
+    public boolean addNewWallet(int userId, String walletLabel, int paymentType, float amount) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
             parameterList.add(walletLabel);
             parameterList.add(paymentType);
             parameterList.add(amount);
-            database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList);
-        } catch (Exception e) {
-            e.printStackTrace();
+            try (ResultSet resultSet = database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList)) {
+                return true;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
 
     }
 
-    public void updateWallet(int walletId, float amount, String walletLabel) throws SQLException {
+    public boolean deleteWallet(int walletId) throws SQLException {
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(walletId);
+            try (ResultSet resultSet = database.executeProcedure("CALL delete_wallet(?)", parameterList)) {
+                return true;
+            }
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return false;
+    }
+
+
+    public boolean updateWallet(int walletId, float amount, String walletLabel) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(walletId);
             parameterList.add(amount);
             parameterList.add(walletLabel);
-            database.executeProcedure("CALL update_wallet(?,?,?)", parameterList);
+            try (ResultSet resultSet = database.executeProcedure("CALL update_wallet(?,?,?)", parameterList)) {
+                return true;
+            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         } finally {
             database.closeConnection();
         }
+        return false;
     }
 
 

@@ -10,7 +10,7 @@ public class PaymentCategoryFactory implements IPaymentCategoryFactory {
 
     private static PaymentCategoryFactory paymentCategoryFactory;
 
-    public PaymentCategoryFactory(){
+    private PaymentCategoryFactory(){
 
     }
     public static PaymentCategoryFactory instance() {
