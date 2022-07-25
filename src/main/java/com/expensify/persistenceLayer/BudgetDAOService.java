@@ -227,36 +227,4 @@ public class BudgetDAOService implements IBudgetDAOService {
         }
         return true;
     }
-
-    @Override
-    public HashMap<Integer, Float> getMonthlyBudget(int userId, String startDate, String endDate) {
-        HashMap<Integer, Float> userMonthlyBudget = new HashMap<>();
-        try {
-            List<Object> parameterList = new ArrayList<>();
-            parameterList.add(userId);
-
-            Date start = formatter.parse(startDate);
-            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
-            parameterList.add(expenseStartDate);
-
-            Date end = formatter.parse(endDate);
-            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
-            parameterList.add(expenseEndDate);
-
-            try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_monthly_budget(?, ?, ?)", parameterList)) {
-                while (resultSet.next()) {
-                    userMonthlyBudget.put(resultSet.getInt("total_expenses"), resultSet.getFloat("budgetLimit"));
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                this.database.closeConnection();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return userMonthlyBudget;
-    }
 }

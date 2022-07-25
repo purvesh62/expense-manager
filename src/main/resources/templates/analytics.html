@@ -42,7 +42,6 @@
     <div>
         <select id="selectChart" class="form-select" aria-label="Default select example" onchange="generateChart()">
             <option value="expenseLineChart" selected>Monthly Expenses</option>
-            <option value="budgetBarChart">Monthly Budget</option>
             <option value="expensePieChart">Expense By Categories</option>
         </select>
     </div>
@@ -52,7 +51,6 @@
 <script th:inline="javascript">
     let monthlyExpenseMap = [[${monthlyExpenseMap}]];
     let monthlyExpenseWithCategoryMap = [[${monthlyExpenseWithCategoryMap}]];
-    let monthlyBudgetMap = [[${monthlyBudgetMap}]];
 </script>
 
 <script th:src="@{/js/analytics.js}" defer></script>

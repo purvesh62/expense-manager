@@ -14,6 +14,4 @@ public interface IBudgetFactory {
     IBudget createBudget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses, String month);
 
     BudgetValidator createBudgetValidator();
-
-    IAnalytics createBudgetAnalytics();
 }

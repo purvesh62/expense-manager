@@ -172,8 +172,6 @@ function generateChart() {
             y = expenseLineChartOptions;
             chart = new google.visualization.ColumnChart(document.getElementById('chartDiv'));
 
-        } else if (selectedOption === "budgetBarChart") {
-            console.log("Implementation Left.");
         } else if (selectedOption === "expensePieChart") {
             x = expensePieChartData;
             y = expensePieChartOptions;
