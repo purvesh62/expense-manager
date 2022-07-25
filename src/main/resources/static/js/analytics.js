@@ -1,5 +1,4 @@
 google.charts.load('current', {'packages': ['corechart']});
-google.charts.setOnLoadCallback(drawChart);
 
 let nav_btn = document.getElementById("nav-btn");
 let sidebar = document.getElementById("sidebar");
@@ -10,8 +9,9 @@ nav_btn.onclick = function () {
 };
 
 function displayGraph() {
-    selectedElement = document.getElementById("selectChart").value;
-    switch (selectedElement) {
+    let selectedElement = document.getElementById("selectChart");
+
+    switch (selectedElement.selectedIndex) {
         case "expenseLineChart": {
             drawExpenseLineChart();
             break;
@@ -64,44 +64,12 @@ function plusMonth() {
     // selectedDate.innerHTML = year + "-" + month + "-" + day;
 }
 
-function drawChart() {
-
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Topping');
-    data.addColumn('number', 'Slices');
-    // data.addRows([
-    //     ['Mushrooms', 3],
-    //     ['Onions', 1],
-    //     ['Olives', 1],
-    //     ['Zucchini', 1],
-    //     ['Pepperoni', 2]
-    // ]);
-    let arr = []
-
-    // for (const key in expenseDataMap) {
-    //     let inner = [];
-    //     inner.push(key);
-    //     inner.push(expenseDataMap[key]);
-    //     arr.push(inner);
-    // }
-    data.addRows(arr);
-    // Set chart options
-    var options = {
-        'title': 'How Much Pizza I Ate Last Night', 'width': 400, 'height': 300
-    };
-
-    // Instantiate and draw our chart, passing in some options.
-    // var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-    // analytics.draw(data, options);
-}
-
 function drawExpenseLineChart() {
 
     // Define the chart to be drawn.
     // month, expense
     months = ['1', '2', '3', '4', '5', '6', '7', '7', '9', '10', '11', '12'];
-    figureArray = [];
+    let figureArray = [];
     figureArray.push(["Month", "Expense"])
     for (let i = 0; i < months.length; i++) {
         rowArray = [];
@@ -116,9 +84,7 @@ function drawExpenseLineChart() {
     }
     console.log(figureArray);
 
-    var data = google.visualization.arrayToDataTable(
-        figureArray
-    );
+    var data = google.visualization.arrayToDataTable(figureArray);
 
     var options = {
         title: 'Total Expenses Made In Year'
@@ -136,10 +102,8 @@ function drawBudgetBarChart() {
 
 }
 
-function expensePieChartChart() {
-    // document.getElementById(expenseLineChartDiv).hide();
-    // document.getElementById(budgetBarChartDiv).hide();
-    figureArray = [];
+function createPieChartData() {
+    let figureArray = [];
     figureArray.push(["Categories", "Expense"])
 
     for (const property in monthlyExpenseWithCategoryMap) {
@@ -148,14 +112,73 @@ function expensePieChartChart() {
         rowArray.push(monthlyExpenseWithCategoryMap[property]);
         figureArray.push(rowArray);
     }
+    return figureArray;
+}
 
-    var data = google.visualization.arrayToDataTable(figureArray);
+function createLineChartData() {
+    let months = ['1', '2', '3', '4', '5', '6', '7', '7', '9', '10', '11', '12'];
+    let figureArray = [];
+    figureArray.push(["Month", "Expense"])
+    for (let i = 0; i < months.length; i++) {
+        rowArray = [];
+        if (months[i] in monthlyExpenseMap) {
+            rowArray.push(months[i]);
+            rowArray.push(monthlyExpenseMap[months[i]]);
+        } else {
+            rowArray.push(months[i]);
+            rowArray.push(0);
+        }
+        figureArray.push(rowArray);
+    }
+    return figureArray;
+}
 
-    var options = {
-        title: 'Expense made category wise.'
-    };
+function generateChart() {
+    let selectElement = document.getElementById("selectChart");
+    let selectedOption = selectElement.options[selectElement.selectedIndex].value;
 
-    var chart = new google.visualization.PieChart(document.getElementById('expensePieChartDiv'));
+    google.charts.setOnLoadCallback(drawChart);
 
-    chart.draw(data, options);
+    function drawChart(x, y) {
+
+        // Create LineChart data
+        let expenseLineChartData = google.visualization.arrayToDataTable(createLineChartData());
+
+        let expenseLineChartOptions = {
+            width: 700, height: 500, legend: "Expense made per month", hAxis: {
+                title: "Month(s)", minValue: 30, maxValue: 38
+            }, vAxis: {
+                title: "Monthly Expense"
+            }, pointSize: 0, title: "Title", pointShape: "circle"
+        };
+
+        let expensePieChartData = google.visualization.arrayToDataTable(createPieChartData());
+
+        let expensePieChartOptions = {
+            width: 700,
+            height: 500,
+            legend: '',
+            pointSize: 0,
+            title: 'Expense based on the categories',
+            pointShape: 'circle',
+            pieHole: 0.4,
+            pieSliceText: 'label',
+            is3D: true
+        }
+        let chart;
+
+        if (selectedOption === "expenseLineChart") {
+            x = expenseLineChartData;
+            y = expenseLineChartOptions;
+            chart = new google.visualization.ColumnChart(document.getElementById('chartDiv'));
+
+        } else if (selectedOption === "budgetBarChart") {
+            console.log("Implementation Left.");
+        } else if (selectedOption === "expensePieChart") {
+            x = expensePieChartData;
+            y = expensePieChartOptions;
+            chart = new google.visualization.PieChart(document.getElementById('chartDiv'));
+        }
+        chart.draw(x, y);
+    }
 }
