@@ -6,6 +6,7 @@ import com.expensify.model.IExpense;
 import com.expensify.factories.ExpenseFactory;
 import com.expensify.factories.ExportDataFactory;
 import com.expensify.model.IWallet;
+import com.expensify.model.SessionManager;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +26,7 @@ public class ExportDataController {
 
     @GetMapping(path = "/export", produces = "text/html")
     public String export(Model model, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             LocalDate currentdate = LocalDate.now();
             String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
@@ -42,7 +43,7 @@ public class ExportDataController {
 
     @PostMapping(value = "/export-csv")
     public String exportCSV(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, HttpSession session, HttpServletResponse response) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             response.setContentType("text/csv");
 
@@ -66,7 +67,7 @@ public class ExportDataController {
 
     @PostMapping(value = "/export-pdf")
     public void exportPDF(@RequestParam("dateFrom") String dateFrom, @RequestParam("dateTo") String dateTo, HttpSession session, HttpServletResponse response) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             response.setContentType("application/pdf");
 

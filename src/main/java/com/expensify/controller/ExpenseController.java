@@ -35,9 +35,9 @@ public class ExpenseController {
             // TODO: Remove later
             JSONObject userCache = new JSONObject();
             userCache.put("userId", 5);
-            IWallet.SessionManager.setSession(session, userCache);
+            SessionManager.setSession(session, userCache);
 
-            userCache = IWallet.SessionManager.getSession(session);
+            userCache = SessionManager.getSession(session);
             if (userCache.containsKey("userId")) {
                 LocalDate currentdate = LocalDate.now();
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
@@ -66,7 +66,7 @@ public class ExpenseController {
     @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
     List<IExpense> getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             return expenseObj.getAllUserExpenses(userId, startDate, endDate);
@@ -76,7 +76,7 @@ public class ExpenseController {
 
     @PostMapping(value = "/add-expense")
     public String addExpense(@ModelAttribute("expense") Expense expense, HttpSession session) throws SQLException, ParseException {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
 
@@ -98,7 +98,7 @@ public class ExpenseController {
     @RequestMapping(value = "expense", method = DELETE, produces = "application/json")
     public HashMap<String, Boolean> deleteExpense(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
         HashMap<String, Boolean> response = new HashMap<String, Boolean>();
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             boolean status = expenseObj.deleteUserExpense(expenseId);

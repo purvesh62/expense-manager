@@ -5,6 +5,7 @@ import com.expensify.model.IAnalytics;
 import com.expensify.factories.BudgetFactory;
 import com.expensify.factories.ExpenseFactory;
 import com.expensify.model.IWallet;
+import com.expensify.model.SessionManager;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +21,7 @@ public class AnalyticsController {
 
     @GetMapping(value = "/analytics", produces = "text/html")
     public String index(@RequestParam(value = "date", required = false) String inputDate, Model model, HttpSession session) {
-        JSONObject userCache = IWallet.SessionManager.getSession(session);
+        JSONObject userCache = SessionManager.getSession(session);
         LocalDate localDate;
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");

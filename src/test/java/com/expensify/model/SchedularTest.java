@@ -1,4 +1,4 @@
-package com.expensify;
+package com.expensify.model;
 
 import com.expensify.model.INotification;
 import com.expensify.persistenceLayerMock.NotificationDAOServiceMock;
