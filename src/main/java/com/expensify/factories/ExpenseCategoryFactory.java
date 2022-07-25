@@ -11,7 +11,7 @@ public class ExpenseCategoryFactory implements IExpenseCategoryFactory {
 
     private static ExpenseCategoryFactory expenseCategoryFactory;
 
-    public ExpenseCategoryFactory(){
+    private ExpenseCategoryFactory(){
 
     }
     public static ExpenseCategoryFactory instance() {

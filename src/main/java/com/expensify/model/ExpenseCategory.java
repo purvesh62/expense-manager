@@ -50,7 +50,11 @@ public class ExpenseCategory implements IExpenseCategory {
 
     }
     @Override
-    public List<IExpenseCategory> getAllExpenseCategoriesList() throws SQLException {
-        return expenseCategoriesDAOService.getAllExpenseCategories();
+    public List<IExpenseCategory> getAllExpenseCategoriesList() {
+        try {
+            return expenseCategoriesDAOService.getAllExpenseCategories();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

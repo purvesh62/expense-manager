@@ -5,5 +5,5 @@ import java.util.List;
 
 public interface IPaymentCategory {
 
-    List<IPaymentCategory> getAllPaymentCategories() throws SQLException;
+    List<IPaymentCategory> getAllPaymentCategories();
 }

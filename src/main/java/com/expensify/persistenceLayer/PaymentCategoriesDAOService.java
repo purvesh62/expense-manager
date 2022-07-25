@@ -1,8 +1,8 @@
 package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
-import com.expensify.model.*;
-import com.expensify.factories.IPaymentCategoryFactory;
+import com.expensify.model.IPaymentCategory;
+import com.expensify.model.PaymentCategoryFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
     public PaymentCategoriesDAOService(IDatabase database) {
         this.database = database;
     }
-    public List<IPaymentCategory> getAllPaymentCategories() {
+    public List<IPaymentCategory> getAllPaymentCategories() throws SQLException {
         List<IPaymentCategory> paymentCategoryList = new ArrayList<>();
 
         try {
@@ -23,8 +23,7 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
             ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    IPaymentCategoryFactory paymentCategoryFactory = new PaymentCategoryFactory();
-                    IPaymentCategory paymentCategory = paymentCategoryFactory.createPaymentCategory(
+                    IPaymentCategory paymentCategory = PaymentCategoryFactory.instance().createPaymentCategory(
                             resultSet.getInt("p_id"),
                             resultSet.getString("payment_category")
                     );
@@ -36,13 +35,9 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
+            database.closeConnection();
         }
+
         return paymentCategoryList;
     }
 
