@@ -1,7 +1,7 @@
 package com.expensify.persistenceLayerMock;
 
 import com.expensify.model.INotification;
-import com.expensify.model.factories.NotificationFactory;
+import com.expensify.factories.NotificationFactory;
 import com.expensify.persistenceLayer.INotficationDAOService;
 
 import java.util.ArrayList;

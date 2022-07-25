@@ -2,7 +2,7 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.IExpense;
-import com.expensify.model.factories.ExpenseFactory;
+import com.expensify.factories.ExpenseFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

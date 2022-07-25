@@ -1,9 +1,10 @@
 package com.expensify.controller;
 
-import com.expensify.SessionManager;
 import com.expensify.model.DateUtil;
 import com.expensify.model.IAnalytics;
-import com.expensify.model.factories.ExpenseFactory;
+import com.expensify.factories.BudgetFactory;
+import com.expensify.factories.ExpenseFactory;
+import com.expensify.model.IWallet;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,7 @@ public class AnalyticsController {
 
     @GetMapping(value = "/analytics", produces = "text/html")
     public String index(@RequestParam(value = "date", required = false) String inputDate, Model model, HttpSession session) {
-        JSONObject userCache = SessionManager.getSession(session);
+        JSONObject userCache = IWallet.SessionManager.getSession(session);
         LocalDate localDate;
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
@@ -35,9 +36,14 @@ public class AnalyticsController {
 
             HashMap<String, Float> userMonthlyExpenseWithCategoryMap = expenseAnalytics.getMonthlyAnalyticsByCategories(userId, DateUtil.getFirstDayOfMonth(localDate), DateUtil.getLastDayOfMonth(localDate));
 
+            IAnalytics budgetAnalytics = BudgetFactory.instance().createBudgetAnalytics();
+
+            HashMap<Integer, Float> userMonthlyBudgetMap = budgetAnalytics.getMonthlyAnalytics(userId, localDate);
+
             model.addAttribute("selectedDate", localDate);
             model.addAttribute("monthlyExpenseMap", userMonthlyExpenseMap);
             model.addAttribute("monthlyExpenseWithCategoryMap", userMonthlyExpenseWithCategoryMap);
+            model.addAttribute("monthlyBudgetMap", userMonthlyBudgetMap);
             return "analytics";
         }
         return "error";

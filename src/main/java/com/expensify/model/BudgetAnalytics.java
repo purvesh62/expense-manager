@@ -1,16 +1,16 @@
 package com.expensify.model;
 
-import com.expensify.persistenceLayer.IExpenseDOAService;
+import com.expensify.persistenceLayer.IBudgetDAOService;
 
 import java.time.LocalDate;
 import java.util.HashMap;
 
-public class ExpenseAnalytics implements IAnalytics {
+public class BudgetAnalytics implements IAnalytics{
 
-    private IExpenseDOAService doaService;
+    private IBudgetDAOService budgetDAOService;
 
-    public ExpenseAnalytics(IExpenseDOAService doaService) {
-        this.doaService = doaService;
+    public BudgetAnalytics(IBudgetDAOService budgetDAOService) {
+        this.budgetDAOService = budgetDAOService;
     }
 
 
@@ -18,11 +18,11 @@ public class ExpenseAnalytics implements IAnalytics {
     public HashMap<Integer, Float> getMonthlyAnalytics(int userId, LocalDate date) {
         String startDate = DateUtil.getFirstDayOfYear(date);
         String endDate = DateUtil.getLastDayOfYear(date);
-        return this.doaService.getMonthlyExpense(userId, startDate, endDate);
+        return this.budgetDAOService.getMonthlyBudget(userId, startDate, endDate);
     }
 
     @Override
     public HashMap<String, Float> getMonthlyAnalyticsByCategories(int userId, String startDate, String endDate) {
-        return this.doaService.getMonthlyAnalyticsByCategories(userId, startDate, endDate);
+        return null;
     }
 }

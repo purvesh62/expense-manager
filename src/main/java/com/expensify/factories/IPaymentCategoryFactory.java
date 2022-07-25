@@ -1,4 +1,4 @@
-package com.expensify.model.factories;
+package com.expensify.factories;
 import com.expensify.database.IDatabase;
 import com.expensify.model.IPaymentCategory;
 import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;

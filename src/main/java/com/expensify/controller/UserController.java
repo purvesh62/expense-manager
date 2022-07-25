@@ -1,7 +1,7 @@
 package com.expensify.controller;
 
 
-import com.expensify.SessionManager;
+import com.expensify.model.IWallet;
 import com.expensify.model.User;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ public class UserController {
         JSONObject userCache = new JSONObject();
         userCache.put("email", user.getEmail());
         userCache.put("userId", userId);
-        SessionManager.setSession(session, userCache);
+        IWallet.SessionManager.setSession(session, userCache);
     }
 
     @PostMapping("/login")
@@ -34,7 +34,7 @@ public class UserController {
             JSONObject userCache = new JSONObject();
             userCache.put("email", user.getEmail());
             userCache.put("userId", userId);
-            SessionManager.setSession(session, userCache);
+            IWallet.SessionManager.setSession(session, userCache);
         } else {
             // User already exists
         }

@@ -4,6 +4,7 @@ import com.expensify.model.IBudget;
 
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
 
 public interface IBudgetDAOService {
@@ -20,4 +21,6 @@ public interface IBudgetDAOService {
     int checkIfBudgetLimitExceeds(int userId,int walletId, String expenseDate) throws ParseException, SQLException;
 
     boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month);
+
+    HashMap<Integer, Float> getMonthlyBudget(int userId, String startDate, String endDate);
 }

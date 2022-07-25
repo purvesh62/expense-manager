@@ -2,8 +2,8 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.*;
-import com.expensify.model.factories.IWalletFactory;
-import com.expensify.model.factories.WalletFactory;
+import com.expensify.factories.IWalletFactory;
+import com.expensify.factories.WalletFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
