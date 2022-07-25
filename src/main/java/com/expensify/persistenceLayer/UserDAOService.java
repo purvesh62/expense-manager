@@ -2,9 +2,7 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.mail.javamail.JavaMailSender;
+
 import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,8 +14,6 @@ import java.util.List;
 @Component
 public class UserDAOService implements IUserDAOService {
     private final IDatabase database;
-    @Autowired
-    private JavaMailSender mailSender;
 
     public UserDAOService() {
       //  this.database = database;

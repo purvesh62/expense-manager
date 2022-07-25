@@ -1,40 +1,23 @@
 package com.expensify.controller;
 
-
-import com.expensify.SessionManager;
-import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabase;
-import com.expensify.model.BudgetFactory;
-import com.expensify.model.Expense;
-import com.expensify.model.IBudgetFactory;
+import com.expensify.model.SessionManager;
 import com.expensify.model.User;
-//import jdk.internal.icu.impl.Utility;
-import net.bytebuddy.utility.RandomString;
 import org.json.simple.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
-import java.text.ParseException;
 
 @Controller
 public class UserController {
-    @Autowired
-    private JavaMailSender mailSender;
+
     private final User user = new User();
     private HttpSession session;
 
 
-    @GetMapping(value="/register", produces = "text/html")
+    @GetMapping(value = "/register", produces = "text/html")
     public String register(@ModelAttribute("user") User user, Model model, HttpSession session) {
         try {
             model.addAttribute("user", new User());
@@ -46,7 +29,7 @@ public class UserController {
     }
 
 
-    @PostMapping(value="/register", consumes = "application/x-www-form-urlencoded")
+    @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
     public String registerUser(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
         int userId = user.registerUser();
         if (userId > 0) {
@@ -57,7 +40,7 @@ public class UserController {
             String firstName = user.getFirstName();
             String lastName = user.getLastName();
             String email = user.getEmail();
-            String contact =user.getContact();
+            String contact = user.getContact();
             return "redirect:/login";
         }
         return "register";
@@ -85,8 +68,8 @@ public class UserController {
     }
 
 
-    @PostMapping(value="/login", consumes = "application/x-www-form-urlencoded")
-    public String authenticateUser( User user, HttpSession session) throws SQLException {
+    @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
+    public String authenticateUser(User user, HttpSession session) throws SQLException {
         int userId = user.authenticateUser();
         if (userId > 0) {
             JSONObject userCache = new JSONObject();
@@ -98,7 +81,7 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping(value="/process_register", produces="text/html")
+    @PostMapping(value = "/process_register", produces = "text/html")
     public String processRegister(User user) {
         String encodedPassword = user.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -113,6 +96,12 @@ public class UserController {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+        return "redirect:/";
+    }
+
+    @GetMapping(path = "/logout", produces = "text/html")
+    public String userLogout(HttpSession session) {
+        SessionManager.removeSession(session);
         return "redirect:/";
     }
 }
