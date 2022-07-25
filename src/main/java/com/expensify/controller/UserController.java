@@ -85,15 +85,14 @@ public class UserController {
     }
 
 
-    @PostMapping(value="/login")
-    public String authenticateUser(@RequestBody User user, HttpSession session) throws SQLException {
+    @PostMapping(value="/login", consumes = "application/x-www-form-urlencoded")
+    public String authenticateUser( User user, HttpSession session) throws SQLException {
         int userId = user.authenticateUser();
         if (userId > 0) {
             JSONObject userCache = new JSONObject();
             userCache.put("email", user.getEmail());
             userCache.put("userId", userId);
             SessionManager.setSession(session, userCache);
-
             return "redirect:/";
         }
         return "login";
