@@ -52,7 +52,7 @@ public class SMTPEmailService implements IEmailService {
             //sending message
             Transport.send(message);
 
-        } catch(Exception e){
+        } catch(MessagingException e){
             e.printStackTrace();
             System.out.println("Error while sending mail");
         }

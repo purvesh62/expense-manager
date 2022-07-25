@@ -18,13 +18,14 @@ public class Budget implements IBudget {
     private float totalExpenses;
     private String month;
 
-    public Budget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses) {
+    public Budget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses, String month) {
         this.budgetId = budgetId;
         this.walletId = walletId;
         this.walletName = walletName;
         this.userId = userId;
         this.budgetLimit = budgetLimit;
         this.totalExpenses = totalExpenses;
+        this.month = month;
 
     }
 
@@ -147,12 +148,17 @@ public class Budget implements IBudget {
     }
 
     @Override
-    public void checkIfBudgetLimitExceeds(int user,int walletId, String expenseDate) throws SQLException, ParseException {
+    public void checkIfBudgetLimitExceeds(int user, int walletId, String expenseDate) throws SQLException, ParseException {
 
-        int userId = budgetDAOService.checkIfBudgetLimitExceeds(user,walletId,expenseDate);
+        int userId = budgetDAOService.checkIfBudgetLimitExceeds(user, walletId, expenseDate);
         if (userId > 0) {
             INotification notification = NotificationFactory.instance().createNotification();
             notification.notifyBudgetLimitExceeds(userId);
         }
+    }
+
+    @Override
+    public boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month) {
+        return budgetDAOService.checkIfBudgetExists(budgetId, userId, walletId, month);
     }
 }

@@ -19,6 +19,10 @@ public class NotificationDAOServiceMock implements INotficationDAOService {
         notificationMockList.add(notificationMock2);
     }
 
+    public void getNullNotificationMock(){
+        notificationMockList = null;
+    }
+
     @Override
     public List<INotification> dailyDailyExpenseSubscribedUsers() {
         return notificationMockList;

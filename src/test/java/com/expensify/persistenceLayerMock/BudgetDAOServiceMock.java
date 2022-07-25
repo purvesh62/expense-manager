@@ -19,6 +19,10 @@ public class BudgetDAOServiceMock implements IBudgetDAOService {
         budgetMockList.add(budgetMock2);
     }
 
+    public void getNullBudgetMock() {
+        budgetMockList = null;
+    }
+
 
     @Override
     public List<IBudget> getAllBudgetDetails(int userId, String startDate, String endDate) throws SQLException {
@@ -52,17 +56,25 @@ public class BudgetDAOServiceMock implements IBudgetDAOService {
     @Override
     public IBudget getBudgetById(int budgetId) throws SQLException {
         if (budgetId == 1) {
-            IBudget budget = BudgetFactory.instance().createBudget(1, 1, "CIBC", 1, 1000, 500);
+            IBudget budget = BudgetFactory.instance().createBudget(1, 1, "CIBC", 1, 1000, 500, "8");
             return budget;
         }
         return null;
     }
 
     @Override
-    public int checkIfBudgetLimitExceeds(int userId,int walletId, String expenseDate) throws ParseException, SQLException {
-        if(userId == 0 || walletId == 0 || expenseDate.length() == 0){
+    public int checkIfBudgetLimitExceeds(int userId, int walletId, String expenseDate) throws ParseException, SQLException {
+        if (userId == 0 || walletId == 0 || expenseDate.length() == 0) {
             return 0;
         }
         return 1;
+    }
+
+    @Override
+    public boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month) {
+        if (userId == 1 && walletId == 1 && month == "8") {
+            return true;
+        }
+        return false;
     }
 }
