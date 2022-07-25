@@ -78,9 +78,4 @@ public class BudgetDAOServiceMock implements IBudgetDAOService {
         }
         return false;
     }
-
-    @Override
-    public HashMap<Integer, Float> getMonthlyBudget(int userId, String startDate, String endDate) {
-        return null;
-    }
 }
