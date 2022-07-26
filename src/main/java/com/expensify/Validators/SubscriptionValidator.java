@@ -15,6 +15,12 @@ public class SubscriptionValidator implements IValidator{
         if(!date.after(today)){
             return "Date can't be smaller than today";
         }
+        if(subscription.getExpiryDate().equals("")){
+            return "Date cannot be null";
+        }
+        if(subscription.getSubscriptionName().equals("")){
+            return "Subscription Name cannot be null";
+        }
         return null;
     }
 }
