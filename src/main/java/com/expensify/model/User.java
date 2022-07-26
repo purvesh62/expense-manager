@@ -18,7 +18,6 @@ public class User implements IUser {
     private String contact;
 
 
-
     public User() {
 //        authenticationDAO = new UserDAOService();
     }
@@ -26,6 +25,7 @@ public class User implements IUser {
     public User(IUserDAOService database) {
         userDAOService = database;
     }
+
     public IUserDAOService getBudgetDAOService() {
         return userDAOService;
     }
@@ -102,11 +102,12 @@ public class User implements IUser {
 
     @Override
     public int registerUser() throws SQLException {
-        return userDAOService.saveUser(firstName,  lastName,  email,  password,  contact);
+        return userDAOService.saveUser(firstName, lastName, email, password, contact);
     }
+
     @Override
     public int authenticateUser() throws SQLException {
-        return userDAOService.verifyUser( firstName,  lastName,  email,  password,  contact);
+        return userDAOService.verifyUser(firstName, lastName, email, password, contact);
     }
 
     @Override
@@ -115,11 +116,11 @@ public class User implements IUser {
     }
 
     @Override
-   public boolean checkIfEmailExists(String email) {
+    public boolean checkIfEmailExists(String email) {
         boolean userExist = userDAOService.checkIfEmailExists(this.email);
-        if(userExist) {
-            String generatedPassword = UUID.randomUUID().toString().substring(0,20);
-            if (userDAOService.updatePassword(this.email,generatedPassword)){
+        if (userExist) {
+            String generatedPassword = UUID.randomUUID().toString().substring(0, 20);
+            if (userDAOService.updatePassword(this.email, generatedPassword)) {
                 SMTPEmailService.instance(this.email, "Your new password is " + generatedPassword, "Expensify reset password").sendEmail();
                 return true;
             }
@@ -129,9 +130,12 @@ public class User implements IUser {
     }
 
     @Override
-        public String encode(String password) {
+    public String encode(String password) {
         return this.password;
     }
 
+    public String getUserFirstName(int userId) {
+        return this.userDAOService.getUserFirstName(userId);
+    }
 }
 

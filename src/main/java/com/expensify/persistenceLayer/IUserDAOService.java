@@ -16,4 +16,8 @@ public interface IUserDAOService {
 
 
     boolean checkIfEmailExists(String email);
+
+    boolean updatePassword(String email, String password);
+
+    String getUserFirstName(int userId);
 }

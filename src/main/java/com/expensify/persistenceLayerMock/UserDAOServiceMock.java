@@ -12,6 +12,16 @@ public class UserDAOServiceMock implements IUserDAOService {
     }
 
     @Override
+    public boolean updatePassword(String email, String password) {
+        return false;
+    }
+
+    @Override
+    public String getUserFirstName(int userId) {
+        return null;
+    }
+
+    @Override
     public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         return 1;
     }
