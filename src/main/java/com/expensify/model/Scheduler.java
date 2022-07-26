@@ -28,7 +28,7 @@ class Scheduler {
             * * * * * *
     cron(               );
      */
-    @Scheduled(cron = "* * 22 * * *")
+    @Scheduled(cron = "1 * 1 * * *")
     public void sendDailyReminderToFillExpense() {
         List<INotification> notificationList = NotificationFactory.instance().createNotification().getDailyExpenseSubscribedUser();
         ListIterator<INotification> iter = notificationList.listIterator();
