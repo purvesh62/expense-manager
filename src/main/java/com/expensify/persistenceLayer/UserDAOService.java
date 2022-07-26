@@ -1,6 +1,7 @@
 package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
+import com.expensify.database.MySqlDatabase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ public class UserDAOService implements IUserDAOService {
 
     public UserDAOService(IDatabase database) {
         //  this.database = database;
-        this.database = database;
+        this.database = MySqlDatabase.instance();
     }
 
     @Override
@@ -44,10 +45,10 @@ public class UserDAOService implements IUserDAOService {
     }
 
     @Override
-    public String encode(String password) {
-
+    public String encryptPassword(String password) {
         return password;
     }
+
 
     public int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
@@ -117,7 +118,6 @@ public class UserDAOService implements IUserDAOService {
         }
         return userExist;
     }
-
     @Override
     public String getUserFirstName(int userId) {
         List<Object> parameterList = new ArrayList<>();
@@ -142,3 +142,6 @@ public class UserDAOService implements IUserDAOService {
         return name;
     }
 }
+
+
+

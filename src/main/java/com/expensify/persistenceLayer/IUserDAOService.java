@@ -9,8 +9,7 @@ public interface IUserDAOService {
 
     int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException;
 
-
-    String encode(String password);
+    String encryptPassword(String password);
 
     int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException;
 

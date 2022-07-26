@@ -68,9 +68,20 @@ public class UserController {
         if (userExist) {
             return "redirect:/login";
         }
-        return "redirect:/error";
-    }
+        user.setUserDAOService(userObj);
+        int userId = user.authenticateUser();
+        if (userId > 0) {
+            String name = user.getUserFirstName(userId);
+            JSONObject userCache = new JSONObject();
+            userCache.put("email", user.getEmail());
+            userCache.put("userId", userId);
+            userCache.put("name", name);
+            SessionManager.setSession(session, userCache);
+            return "redirect:/";
 
+        }
+        return null;
+    }
 
     @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
     public String authenticateUser(User user, HttpSession session) throws SQLException {

@@ -11,9 +11,11 @@ public class UserDAOServiceMock implements IUserDAOService {
         return true;
     }
 
+
+
     @Override
-    public boolean updatePassword(String email, String password) {
-        return false;
+    public boolean updatePassword(String email, String generatedPassword) {
+        return true;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class UserDAOServiceMock implements IUserDAOService {
     }
 
     @Override
-    public String encode(String password) {
+    public String encryptPassword(String password) {
         return String.valueOf(true);
     }
 

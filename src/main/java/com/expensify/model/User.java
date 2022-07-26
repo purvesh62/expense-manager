@@ -18,6 +18,7 @@ public class User implements IUser {
     private String contact;
 
 
+
     public User() {
 //        authenticationDAO = new UserDAOService();
     }
@@ -102,7 +103,7 @@ public class User implements IUser {
 
     @Override
     public int registerUser() throws SQLException {
-        return userDAOService.saveUser(firstName, lastName, email, password, contact);
+        return userDAOService.saveUser(firstName,  lastName,  email,  password,  contact);
     }
 
     @Override
@@ -110,13 +111,14 @@ public class User implements IUser {
         return userDAOService.verifyUser(firstName, lastName, email, password, contact);
     }
 
+
     @Override
     public IUserDAOService getUserDAOService() {
         return this.userDAOService;
     }
 
     @Override
-    public boolean checkIfEmailExists(String email) {
+   public boolean checkIfEmailExists(String email) {
         boolean userExist = userDAOService.checkIfEmailExists(this.email);
         if (userExist) {
             String generatedPassword = UUID.randomUUID().toString().substring(0, 20);
@@ -130,7 +132,7 @@ public class User implements IUser {
     }
 
     @Override
-    public String encode(String password) {
+        public String encode(String password) {
         return this.password;
     }
 
