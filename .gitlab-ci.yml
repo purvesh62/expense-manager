@@ -38,9 +38,12 @@ deploy-dev:
     - dalfcs_docker_kvm
   image: ruby:2.6
   script:
+    - echo "$HEROKU_DEV_API_KEY"
+    - echo "$HEROKU_DEV_APP_NAME"
     - apt-get update -qy
     - apt-get install -y ruby-dev
     - gem install dpl
+    - gem install faraday -v 1.8.0
     - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=HEROKU_DEV_API_KEY
   only:
     - develop

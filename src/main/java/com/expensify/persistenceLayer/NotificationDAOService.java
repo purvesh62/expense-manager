@@ -34,7 +34,7 @@ public class NotificationDAOService implements INotficationDAOService {
                                 resultSet.getInt("id"),
                                 resultSet.getInt("user_id"),
                                 resultSet.getString("email"),
-                                resultSet.getInt("s_id"),
+                                resultSet.getInt("notification_id"),
                                 resultSet.getInt("status")
                         );
                         userSubscribedList.add(notification);
@@ -67,7 +67,7 @@ public class NotificationDAOService implements INotficationDAOService {
                             resultSet.getInt("id"),
                             resultSet.getInt("user_id"),
                             resultSet.getString("email"),
-                            resultSet.getInt("s_id"),
+                            resultSet.getInt("notification_id"),
                             resultSet.getInt("status")
                     );
                 }
