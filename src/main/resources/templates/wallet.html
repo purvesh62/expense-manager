@@ -79,7 +79,7 @@
             <div class="col-4" th:each="wallet : ${wallet_list}">
                 <div class="card" >
                     <div class="card-body">
-                        <p>Wallet Label: <span th:text="${wallet.walletLabel}">Dummy Expenses</span></p>
+                        <p>Wallet <span th:text="${wallet.walletLabel}">Dummy Expenses</span></p>
                         <p>Payment Type: <span th:text="${wallet.paymentType}">Dummy Expenses</span></p>
                         <p>Amount: $<span th:text="${wallet.amount}">Dummy Expenses</span></p>
                         <a th:href="@{/wallet/walletId/{walletId}(walletId = ${wallet.walletId})}" class="btn">Delete</a>
