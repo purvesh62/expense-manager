@@ -1,17 +1,31 @@
 package com.expensify.model;
 
-import com.expensify.persistenceLayer.PaymentCategoriesDAOService;
+import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
 
+import java.sql.SQLException;
 import java.util.List;
 
-public class PaymentCategory {
+public class PaymentCategory implements IPaymentCategory {
+    private IPaymentCategoriesDAOService paymentCategoriesDAOService;
     private int paymentId;
     private String paymentCategory;
+    public PaymentCategory(){
 
-    private PaymentCategoriesDAOService paymentCategoriesDAOService;
+    }
+    public PaymentCategory(int paymentId, String paymentCategory) {
+        this.paymentId = paymentId;
+        this.paymentCategory = paymentCategory;
+    }
 
-    public PaymentCategory() {
-        paymentCategoriesDAOService = new PaymentCategoriesDAOService();
+    public PaymentCategory(IPaymentCategoriesDAOService database) {
+        paymentCategoriesDAOService = database;
+    }
+    public IPaymentCategoriesDAOService getPaymentCategoriesDAOService(){
+        return paymentCategoriesDAOService;
+    }
+
+    public void setPaymentCategoriesDAOService(IPaymentCategoriesDAOService paymentCategoriesDAOService){
+        this.paymentCategoriesDAOService = paymentCategoriesDAOService;
     }
 
     public int getPaymentId() {
@@ -30,7 +44,11 @@ public class PaymentCategory {
         this.paymentCategory = paymentCategory;
     }
 
-    public List<PaymentCategory> getAllPaymentCategoriesList(){
-        return paymentCategoriesDAOService.getAllPaymentCategoriesList();
+    public List<IPaymentCategory> getAllPaymentCategories()  {
+        try {
+            return paymentCategoriesDAOService.getAllPaymentCategories();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

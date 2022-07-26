@@ -1,5 +1,4 @@
-package com.expensify;
-
+package com.expensify.model;
 import org.json.simple.JSONObject;
 
 import javax.servlet.http.HttpSession;

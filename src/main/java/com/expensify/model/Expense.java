@@ -129,7 +129,7 @@ public class Expense implements IExpense {
 
     @Override
     public boolean addUserExpense() {
-        return expenseDOAService.addUserExpenses(expenseID, userID, expenseTitle, description, amount, expenseCategory, walletId, expenseDate);
+        return expenseDOAService.addUserExpenses(userID, expenseTitle, description, amount, expenseCategory, walletId, expenseDate);
     }
 
     @Override

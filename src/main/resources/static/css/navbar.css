@@ -78,6 +78,7 @@ body {
     height: 50px;
     position: relative;
     height: 50px;
+    padding-left: 0rem!important;
     width: 100%;
     margin: 0;
     list-style: none;
@@ -123,6 +124,11 @@ body {
 }
 
 .sidebar ul li a:hover {
+    color: #6f95aa;
+    background: #fff;
+}
+
+.sidebar ul li a:active {
     color: #6f95aa;
     background: #fff;
 }
@@ -223,7 +229,7 @@ body {
 }
 
 .home_content {
-    position: absolute;
+    position: relative;
     height: 100%;
     width: calc(100% - 78px);
     left: 78px;

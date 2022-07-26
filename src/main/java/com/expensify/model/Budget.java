@@ -1,5 +1,6 @@
 package com.expensify.model;
 
+import com.expensify.factories.NotificationFactory;
 import com.expensify.persistenceLayer.IBudgetDAOService;
 
 import java.sql.SQLException;
@@ -17,27 +18,32 @@ public class Budget implements IBudget {
     private float totalExpenses;
     private String month;
 
-    public Budget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses) {
+    public Budget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses, String month) {
         this.budgetId = budgetId;
         this.walletId = walletId;
         this.walletName = walletName;
         this.userId = userId;
         this.budgetLimit = budgetLimit;
         this.totalExpenses = totalExpenses;
+        this.month = month;
 
     }
-    public Budget(){
+
+    public Budget() {
 
     }
+
     public Budget(IBudgetDAOService database) {
-    budgetDAOService = database;
+        budgetDAOService = database;
     }
+
+    @Override
     public IBudgetDAOService getBudgetDAOService() {
         return budgetDAOService;
     }
 
-    public void setBudgetDAOService(IBudgetDAOService budgetDAOService) {
-        this.budgetDAOService = budgetDAOService;
+    public void setBudgetDAOService(IBudget budget) {
+        this.budgetDAOService = budget.getBudgetDAOService();
     }
 
     public int getBudgetId() {
@@ -97,39 +103,62 @@ public class Budget implements IBudget {
     }
 
     @Override
-    public List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) throws SQLException {
-        return budgetDAOService.getAllBudgetDetails(user_id, startDate, endDate);
-    }
-
-    @Override
-    public IBudget saveBudget() throws SQLException {
-        budgetDAOService.addNewBudget(walletId,userId,budgetLimit,month);
-        return this;
-    }
-
-    @Override
-    public IBudget updateBudget() throws SQLException {
-        budgetDAOService.updateBudget(budgetId,walletId,budgetLimit);
-        return this;
-    }
-
-    @Override
-    public void deleteBudget(int budgetId) throws SQLException {
-        budgetDAOService.deleteBudget(budgetId);
-    }
-
-    @Override
-    public IBudget getBudgetById(int budgetId) throws SQLException {
-        return budgetDAOService.getBudgetById(budgetId);
-    }
-
-    @Override
-    public void checkIfBudgetLimitExceeds(Expense expense) throws SQLException, ParseException {
-
-        int userId = budgetDAOService.checkIfBudgetLimitExceeds(expense);
-        if (userId > 0) {
-            ISubscription subscription = new SubscriptionFactory().createSubscription();
-            subscription.notifyBudgetLimitExceeds(userId);
+    public List<IBudget> getAllBudgetDetailsService(int user_id, String startDate, String endDate) {
+        try {
+            return budgetDAOService.getAllBudgetDetails(user_id, startDate, endDate);
+        } catch (SQLException e) {
+            return null;
         }
+    }
+
+    @Override
+    public boolean saveBudget() {
+        try {
+            return budgetDAOService.addNewBudget(walletId, userId, budgetLimit, month);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateBudget() {
+        try {
+            return budgetDAOService.updateBudget(budgetId, walletId, budgetLimit);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean deleteBudget(int budgetId) {
+        try {
+            return budgetDAOService.deleteBudget(budgetId);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+
+    @Override
+    public IBudget getBudgetById(int budgetId) {
+        try {
+            return budgetDAOService.getBudgetById(budgetId);
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public void checkIfBudgetLimitExceeds(int user, int walletId, String expenseDate) throws SQLException, ParseException {
+
+        int userId = budgetDAOService.checkIfBudgetLimitExceeds(user, walletId, expenseDate);
+        if (userId > 0) {
+            INotification notification = NotificationFactory.instance().createNotification();
+            notification.notifyBudgetLimitExceeds(userId);
+        }
+    }
+
+    @Override
+    public boolean checkIfBudgetExists(int budgetId, int userId, int walletId, String month) {
+        return budgetDAOService.checkIfBudgetExists(budgetId, userId, walletId, month);
     }
 }

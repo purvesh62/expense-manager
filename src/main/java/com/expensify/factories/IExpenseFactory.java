@@ -1,4 +1,4 @@
-package com.expensify.model.factories;
+package com.expensify.factories;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.IExpense;
@@ -6,7 +6,7 @@ import com.expensify.persistenceLayer.IExpenseDOAService;
 
 public interface IExpenseFactory {
 
-    IExpense createExpense(IDatabase database);
+    IExpense createExpense();
 
     IExpenseDOAService createExpenseDAOService(IDatabase database);
 

@@ -1,11 +1,6 @@
 package com.expensify.persistenceLayer;
-import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
-import com.expensify.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Component;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,26 +8,23 @@ import java.util.List;
 
 
 
-@Component
 public class UserDAOService implements IUserDAOService {
     private final IDatabase database;
-    @Autowired
-    private JavaMailSender mailSender;
 
-    public UserDAOService() {
+    public UserDAOService(IDatabase database) {
       //  this.database = database;
-        this.database = MySqlDatabase.instance();
+        this.database = database;
     }
-
-    public int saveUser(User user) throws SQLException {
+    @Override
+    public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
         try {
-            parameterList.add(user.getFirstName());
-            parameterList.add(user.getLastName());
-            parameterList.add(user.getEmail());
-            parameterList.add(user.getPassword());
-            parameterList.add(user.getContact());
+            parameterList.add(firstName);
+            parameterList.add(lastName);
+            parameterList.add(email);
+            parameterList.add(password);
+            parameterList.add(contact);
 
             ResultSet resultSet = database.executeProcedure("CALL register_user(?, ?, ?, ?, ?)", parameterList);
             if (resultSet != null) {
@@ -50,20 +42,21 @@ public class UserDAOService implements IUserDAOService {
         return userId;
     }
 
+    @Override
     public String encode(String password) {
 
         return password;
     }
-    public int verifyUser(User user) throws SQLException {
+    public int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
         try {
-            parameterList.add(user.getEmail());
+            parameterList.add(email);
 
             ResultSet resultSet = database.executeProcedure("CALL get_user_credential(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    if (resultSet.getString("password").equals(user.getPassword())) {
+                    if (resultSet.getString("password").equals(password)) {
                         userId = resultSet.getInt("user_id");
                     }
                 }
@@ -105,7 +98,7 @@ public class UserDAOService implements IUserDAOService {
     }
 
 
-
+    @Override
     public boolean findByEmail(String email) {
         List<Object> parameterList = new ArrayList<>();
         parameterList.add(email);

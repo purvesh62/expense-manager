@@ -1,14 +1,13 @@
 package com.expensify.controller;
 
-import com.expensify.SessionManager;
-import com.expensify.database.IDatabase;
-import com.expensify.database.MySqlDatabase;
+import com.expensify.factories.BudgetFactory;
+import com.expensify.factories.ExpenseCategoryFactory;
+import com.expensify.factories.ExpenseFactory;
+import com.expensify.factories.WalletFactory;
 import com.expensify.model.*;
-import com.expensify.model.factories.ExpenseFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -26,20 +25,16 @@ public class ExpenseController {
     private final IExpense expenseObj;
 
     public ExpenseController() {
-        IDatabase dbInstance = MySqlDatabase.instance();
-        expenseObj = new ExpenseFactory().createExpense(dbInstance);
+        expenseObj = ExpenseFactory.instance().createExpense();
     }
 
 
     @GetMapping(path = "/", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
-            // TODO: Remove later
-            JSONObject userCache = new JSONObject();
-            userCache.put("userId", 1);
-            SessionManager.setSession(session, userCache);
 
-            userCache = SessionManager.getSession(session);
+            JSONObject userCache = SessionManager.getSession(session);
+
             if (userCache.containsKey("userId")) {
                 LocalDate currentdate = LocalDate.now();
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
@@ -48,10 +43,10 @@ public class ExpenseController {
                 List<IExpense> expenses = expenseObj.getAllUserExpenses((Integer) userCache.get("userId"), startDate, endDate);
                 model.addAttribute("expenseData", expenses);
 
-                List<ExpenseCategory> expenseCategoriesList = new ExpenseCategory().getAllExpenseCategories();
+                List<IExpenseCategory> expenseCategoriesList = ExpenseCategoryFactory.instance().createExpenseCategory().getAllExpenseCategoriesList();
                 model.addAttribute("expenseCategoriesList", expenseCategoriesList);
 
-                List<Wallet> walletList = new Wallet().getAllWalletDetails((Integer) userCache.get("userId"));
+                List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
                 model.addAttribute("expense", expenseObj);
 
@@ -89,11 +84,8 @@ public class ExpenseController {
             } else {
                 boolean status = expense.addUserExpense();
             }
-            IBudgetFactory budgetFactory = new BudgetFactory();
 
-            IDatabase database = MySqlDatabase.instance();
-
-            budgetFactory.createBudget(database).checkIfBudgetLimitExceeds(expense);
+            BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(userId,expense.getWalletId(),expense.getExpenseDate());
 
             return "redirect:/";
         }

@@ -1,88 +1,110 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
+import com.expensify.factories.SubscriptionFactory;
 import com.expensify.model.ISubscription;
-import com.expensify.model.ISubscriptionFactory;
-import com.expensify.model.Subscription;
-import com.expensify.model.SubscriptionFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SubscriptionDAOService implements ISubscriptionDAOService{
+public class SubscriptionDAOService implements ISubscriptionDAOService {
     private final IDatabase database;
 
-    public SubscriptionDAOService() {
-        this.database = MySqlDatabase.instance();
+
+    public SubscriptionDAOService(IDatabase database) {
+        this.database = database;
     }
 
-    @Override
-    public List<ISubscription> dailyDailyExpenseSubscribedUsers() {
-        List<ISubscription> userSubscribedList = new ArrayList<>();
-        try {
-            List<Object> parameterList = new ArrayList<>();
+    public List<ISubscription> getAllSubscriptionDetails(int userId) throws SQLException {
+        List<ISubscription> subscriptionList = new ArrayList<>();
 
-            try (ResultSet resultSet = database.executeProcedure("CALL get_daily_expense_notification_subscribed_users()", parameterList)) {
-                if (resultSet != null) {
-                    while (resultSet.next()) {
-                        ISubscription subscription = new SubscriptionFactory().createSubscription(
-                                resultSet.getInt("id"),
-                                resultSet.getInt("user_id"),
-                                resultSet.getString("email"),
-                                resultSet.getInt("s_id"),
-                                resultSet.getInt("status")
-                        );
-                        userSubscribedList.add(subscription);
-                    }
-                }
-            }
-            return userSubscribedList;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return userSubscribedList;
-    }
-
-    @Override
-    public ISubscription getBudgetLimitExceedSubscribedUsers(int userId) {
-        ISubscriptionFactory subscriptionFactory = new SubscriptionFactory();
-        ISubscription subscription = subscriptionFactory.createSubscription();
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
 
-            try (ResultSet resultSet = database.executeProcedure("CALL get_budget_limit_exceed_notification(?)", parameterList)) {
-                if (resultSet != null) {
-                    while (resultSet.next()) {
-                        subscription = subscriptionFactory.createSubscription(
-                                resultSet.getInt("id"),
-                                resultSet.getInt("user_id"),
-                                resultSet.getString("email"),
-                                resultSet.getInt("s_id"),
-                                resultSet.getInt("status")
-                        );
-                    }
+            ResultSet resultSet = database.
+                    executeProcedure("CALL get_user_subscription(?)", parameterList);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    ISubscription subscription = SubscriptionFactory.instance().createSubscription(
+                            resultSet.getInt("subscription_id"),
+                            resultSet.getString("subscription_name"),
+                            resultSet.getInt("user_id"),
+                            String.valueOf(resultSet.getDate("expiry_date"))
+                    );
+                    subscriptionList.add(subscription);
                 }
+
             }
-            return subscription;
-        } catch (Exception e) {
-            e.printStackTrace();
+            return subscriptionList;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            database.closeConnection();
         }
-        return subscription;
+        return subscriptionList;
     }
+
+    @Override
+    public boolean addNewSubscription(int userId, String subscriptionName, String expiryDate) throws SQLException {
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(userId);
+            parameterList.add(subscriptionName);
+            parameterList.add(expiryDate);
+            try (ResultSet resultSet = database.executeProcedure("CALL add_user_subscription(?,?,?)", parameterList)) {
+                return true;
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return false;
+    }
+
+
+    @Override
+    public boolean updateSubscription(int subscriptionId, String subscriptionName, String expiryDate) throws SQLException {
+        try {
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(subscriptionId);
+            parameterList.add(subscriptionName);
+            parameterList.add(expiryDate);
+            try (ResultSet resultSet = database.executeProcedure("CALL update_user_subscription(?,?,?)", parameterList)) {
+                return true;
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return false;
+    }
+
+
+    @Override
+    public boolean deleteSubscription(int subscriptionId) throws SQLException {
+        try {
+
+            List<Object> parameterList = new ArrayList<>();
+            parameterList.add(subscriptionId);
+            try (ResultSet resultSet = database.executeProcedure("CALL delete_user_subscription(?)", parameterList)) {
+                return true;
+            }
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return false;
+    }
+
+
 }
+

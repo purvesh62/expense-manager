@@ -1,33 +1,33 @@
 package com.expensify.persistenceLayer;
 
-import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
-import com.expensify.model.PaymentCategory;
-import org.springframework.stereotype.Component;
+import com.expensify.model.IPaymentCategory;
+import com.expensify.model.PaymentCategoryFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
-public class PaymentCategoriesDAOService {
+public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService {
     private final IDatabase database;
 
-    public PaymentCategoriesDAOService() {
-        this.database = MySqlDatabase.instance();
+    public PaymentCategoriesDAOService(IDatabase database) {
+        this.database = database;
     }
-    public List<PaymentCategory> getAllPaymentCategoriesList() {
-        List<PaymentCategory> paymentCategoryList = new ArrayList<>();
+    public List<IPaymentCategory> getAllPaymentCategories() throws SQLException {
+        List<IPaymentCategory> paymentCategoryList = new ArrayList<>();
 
         try {
             List<Object> parameterList = new ArrayList<>();
             ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()",parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    PaymentCategory paymentCategory= new PaymentCategory();
-                    paymentCategory.setPaymentId(resultSet.getInt("p_id"));
-                    paymentCategory.setPaymentCategory(resultSet.getString("payment_category"));
+                    IPaymentCategory paymentCategory = PaymentCategoryFactory.instance().createPaymentCategory(
+                            resultSet.getInt("p_id"),
+                            resultSet.getString("payment_category")
+                    );
+
                     paymentCategoryList.add(paymentCategory);
                 }
             }
@@ -35,13 +35,9 @@ public class PaymentCategoriesDAOService {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
-                database.closeConnection();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
+            database.closeConnection();
         }
+
         return paymentCategoryList;
     }
 

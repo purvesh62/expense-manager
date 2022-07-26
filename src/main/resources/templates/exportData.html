@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Expensify</title>
+    <link th:rel="stylesheet" th:href="@{webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{webjars/font-awesome/5.11.2/css/all.css} "/>
+
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link th:rel="stylesheet" th:href="@{/css/daterangepicker.css}"/>
+    <!--  END  -->
+</head>
+<body>
+
+<header th:insert="fragments/sidebar"></header>
+
+<div class="container">
+    <form th:object="${csvDateRange}" th:action="@{/export-csv}" method="POST">
+        <div class="form-group row">
+            <div class="col-md-4 mt-5">
+                <label for="csvDateRange">Export Expense Data to CSV</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="csvDateRange" autocomplete="off"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="dateFrom" th:field="*{dateFrom}" th:value="*{dateFrom}"/>
+            <input type="hidden" name="dateTo" th:field="*{dateTo}" th:value="*{dateTo}"/>
+        </div>
+
+        <button type="submit" id="submitCSVbtn" name="action" value="csv" style="color: white">Export CSV</button>
+    </form>
+
+    <form th:object="${pdfDateRange}" th:action="@{/export-pdf}" method="POST">
+        <div class="form-group row">
+            <div class="col-md-4 mt-5">
+                <label for="pdfDateRange">Export Expense Data to PDF</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="pdfDateRange" autocomplete="off"/>
+                    <div class="input-group-append">
+                        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="dateFrom" th:field="*{dateFrom}"/>
+            <input type="hidden" name="dateTo" th:field="*{dateTo}"/>
+        </div>
+
+        <button type="submit" id="submitPDFbtn" name="action" value="pdf" style="color: white">Export PDF</button>
+    </form>
+
+</div>
+</div>
+
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/moment.min.js}"></script>
+<script th:src="@{/js/daterangepicker.js}"></script>
+
+<script>
+    var $csvDateRange = $('#csvDateRange');
+    var $pdfDateRange = $('#pdfDateRange');
+
+    $csvDateRange.daterangepicker();
+    $csvDateRange.on('apply.daterangepicker', function (ev, picker) {
+        $('input[name="dateFrom"]').val(picker.startDate.format('DD/MM/YYYY'));
+        $('input[name="dateTo"]').val(picker.endDate.format('DD/MM/YYYY'));
+    });
+
+    $pdfDateRange.daterangepicker();
+    $pdfDateRange.on('apply.daterangepicker', function (ev, picker) {
+        $('input[name="dateFrom"]').val(picker.startDate.format('DD/MM/YYYY'));
+        $('input[name="dateTo"]').val(picker.endDate.format('DD/MM/YYYY'));
+    });
+</script>
+
+</body>
+</html>

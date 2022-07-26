@@ -1,14 +1,14 @@
 package com.expensify.model;
-import com.expensify.persistenceLayer.WalletDAOService;
 
+import com.expensify.persistenceLayer.IWalletDAOService;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Wallet implements Comparable<Wallet> {
-    private final WalletDAOService walletDAOService;
+public class Wallet implements IWallet {
+    private IWalletDAOService walletDAOService;
     private int walletId;
     @NotEmpty
     @NotNull
@@ -16,11 +16,30 @@ public class Wallet implements Comparable<Wallet> {
     private int userId;
     @Min(value = 1)
     private int paymentType;
-    @Min(value = 1)
     private float amount;
 
+    public Wallet(int walletId, String walletLabel, int userId, int paymentType, float amount) {
+        this.walletId = walletId;
+        this.walletLabel = walletLabel;
+        this.userId = userId;
+        this.paymentType = paymentType;
+        this.amount = amount;
+    }
+
     public Wallet() {
-        walletDAOService = new WalletDAOService();
+
+    }
+
+    public Wallet(IWalletDAOService database) {
+        walletDAOService = database;
+    }
+
+    public IWalletDAOService getWalletDAOService() {
+        return walletDAOService;
+    }
+
+    public void setWalletDAOService(IWallet wallet) {
+        this.walletDAOService = wallet.getWalletDAOService();
     }
 
     public int getWalletId() {
@@ -63,32 +82,42 @@ public class Wallet implements Comparable<Wallet> {
         this.amount = amount;
     }
 
-    public List<Wallet> getAllWalletDetails(int userId) throws SQLException {
-        return walletDAOService.getAllWalletDetails(userId);
+    @Override
+    public List<IWallet> getAllWalletDetails(int userId) {
+        try {
+            return walletDAOService.getAllWalletDetails(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
-
-    public Wallet getWalletById(int walletId) throws SQLException {
-        return walletDAOService.getWalletById(walletId);
-    }
-
-    public void saveWallet(Wallet newWallet) throws SQLException {
-        walletDAOService.addNewWallet(newWallet);
-    }
-
-    public void deleteWallet(int walletId) throws SQLException {
-        walletDAOService.deleteWallet(walletId);
-    }
-
-    public void updateWallet(Wallet wallet) throws SQLException {
-        walletDAOService.updateWallet(wallet);
+    @Override
+    public IWallet saveWallet() {
+        try {
+            walletDAOService.addNewWallet(userId, walletLabel, paymentType, amount);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return this;
     }
 
     @Override
-    public int compareTo(Wallet wallet) {
-        if (this.walletId > wallet.walletId) {
-            return 1;
-        } else {
-            return -1;
+    public void deleteWallet(int walletId) {
+        try {
+            walletDAOService.deleteWallet(walletId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public IWallet updateWallet(){
+        try {
+            walletDAOService.updateWallet(walletId, amount, walletLabel);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return this;
+    }
+
+
 }

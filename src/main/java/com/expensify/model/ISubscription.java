@@ -1,11 +1,19 @@
 package com.expensify.model;
 
+import com.expensify.persistenceLayer.ISubscriptionDAOService;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ISubscription {
-    void notifyUsers(String emailBody, String subject);
 
-    void notifyBudgetLimitExceeds(int userId);
+    List<ISubscription> getAllSubscriptionDetails(int userId);
 
-    List<ISubscription> getDailyExpenseSubscribedUser();
+    ISubscription saveSubscription();
+
+    ISubscription updateSubscription();
+
+    void deleteSubscription(int subscriptionId);
+
+    ISubscriptionDAOService getSubscriptionDAOService();
 }

@@ -1,74 +1,93 @@
 package com.expensify.controller;
 
-import com.expensify.model.PaymentCategory;
-import com.expensify.model.Wallet;
+import com.expensify.factories.WalletFactory;
+import com.expensify.model.*;
+import com.expensify.model.PaymentCategoryFactory;
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
-import javax.validation.Valid;
-import java.sql.SQLException;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
 public class WalletController {
-    private final Wallet wallet;
-    private final PaymentCategory paymentCategory;
+    private IWallet walletObj;
+    private IPaymentCategory paymentCategoryObj;
+
 
     public WalletController() {
-        this.wallet = new Wallet();
-        this.paymentCategory = new PaymentCategory();
+        walletObj = WalletFactory.instance().createWallet();
+        paymentCategoryObj = PaymentCategoryFactory.instance().createPaymentCategory();
 
     }
 
-    @GetMapping(value = "/api/v1/wallet", produces = "text/html")
-    private String getAllWalletDetails(@RequestParam("user_id") int userId, Model model) throws SQLException {
-        List<Wallet> walletList = wallet.getAllWalletDetails(userId);
-        List<PaymentCategory> paymentCategoryList = paymentCategory.getAllPaymentCategoriesList();
-        model.addAttribute("wallet_list", walletList);
-        model.addAttribute("payment_categories", paymentCategoryList);
-        wallet.setUserId(userId);
-        wallet.setWalletId(wallet.getWalletId());
-        model.addAttribute("wallet",wallet);
-        return "wallet";
-    }
-
-    @PostMapping(value = "/api/v1/wallet")
-    private String addWallet(@Valid Wallet newWallet, BindingResult result, RedirectAttributes redirAttrs) throws SQLException {
-        System.out.println("Add called");
-        if (result.hasErrors()) {
-            return "redirect:/api/v1/wallet?user_id=" + newWallet.getUserId();
-
+    @GetMapping(value = "/wallet", produces = "text/html")
+    private String getAllWalletDetails(Model model, HttpSession session) {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            List<IWallet> walletList = walletObj.getAllWalletDetails(userId);
+            List<IPaymentCategory> paymentCategoryList = paymentCategoryObj.getAllPaymentCategories();
+            model.addAttribute("wallet_list", walletList);
+            model.addAttribute("payment_categories", paymentCategoryList);
+            model.addAttribute("wallet", walletObj);
+            return "wallet";
+        } else {
+            return "redirect:/";
         }
-        newWallet.saveWallet(newWallet);
-        redirAttrs.addFlashAttribute("SUCCESS", "Wallet Added");
-        return "redirect:/api/v1/wallet?user_id=" + newWallet.getUserId();
+    }
+
+    @PostMapping(value = "/wallet")
+    private String addWallet(Wallet newWallet, BindingResult result, RedirectAttributes redirAttrs, HttpSession session) {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            int userId = (Integer) userCache.get("userId");
+            if (result.hasErrors()) {
+                return "redirect:/wallet";
+
+            }
+            newWallet.setWalletDAOService(walletObj);
+            newWallet.setUserId(userId);
+            newWallet.saveWallet();
+            redirAttrs.addFlashAttribute("SUCCESS", "Wallet Added");
+            return "redirect:/wallet";
+        } else {
+            return "redirect:/";
+        }
     }
 
 
-    @GetMapping(value = "/api/v1/wallet/walletId/{walletId}")
-    private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs) throws SQLException {
-        System.out.println(walletId);
-        int userId = wallet.getWalletById(walletId).getUserId();
-        this.wallet.deleteWallet(walletId);
-        redirAttrs.addFlashAttribute("SUCCESS", "Wallet Deleted");
-        return "redirect:/api/v1/wallet?user_id=" + userId;
+    @GetMapping(value = "/wallet/walletId/{walletId}")
+    private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs, HttpSession session) {
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            walletObj.deleteWallet(walletId);
+            redirAttrs.addFlashAttribute("SUCCESS", "Wallet Deleted");
+            return "redirect:/wallet";
+        } else {
+            return "redirect:/";
+        }
+
     }
 
-    @PostMapping(value =  "/api/v1/updatewallet")
-    private String updateWallet(@ModelAttribute("wallet") Wallet wallet) throws SQLException {
-//        wallet = this.wallet;
-//        System.out.println("Put Mapping called");
-//        System.out.println(wallet.getWalletId());
-//        System.out.println(wallet.getUserId());
-//        System.out.println("-------------------------------------------------");
-//        System.out.println(wallet.getWalletId()+" " +wallet.getAmount()+" " +wallet.getWalletLabel());
-//        System.out.println(wallet.getUserId());
-        wallet.updateWallet(wallet);
-        return "redirect:/api/v1/wallet?user_id=" + wallet.getUserId();
+    @PostMapping(value = "/updatewallet")
+    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session){
+        JSONObject userCache = SessionManager.getSession(session);
+        if (userCache.containsKey("userId")) {
+            wallet.setWalletDAOService(walletObj);
+            wallet.updateWallet();
+            redirAttrs.addFlashAttribute("SUCCESS", "Wallet Updated");
+            return "redirect:/wallet";
+        } else {
+            return "redirect:/";
+        }
     }
 
 }
