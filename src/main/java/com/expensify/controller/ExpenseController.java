@@ -6,9 +6,11 @@ import com.expensify.factories.ExpenseFactory;
 import com.expensify.factories.WalletFactory;
 import com.expensify.model.*;
 import org.json.simple.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.text.ParseException;
@@ -63,7 +65,7 @@ public class ExpenseController {
 
     @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    List<IExpense> getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session) {
+    List<IExpense> getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session, RedirectAttributes rm) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
@@ -74,39 +76,35 @@ public class ExpenseController {
 
     @PostMapping(value = "/add-expense")
     public String addExpense(@ModelAttribute("expense") Expense expense, HttpSession session) throws SQLException, ParseException {
+        String msg = null;
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
-
-            expense.setExpenseDOAService(expenseObj);
-            expense.setUserID(userId);
-            if (expense.getAmount() == null) {
+            msg = ExpenseFactory.instance().createExpenseValidator().validate(expense);
+            if (msg == null) {
+                expense.setExpenseDOAService(expenseObj);
+                expense.setUserID(userId);
                 boolean status = expense.addUserExpense();
+                BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(userId, expense.getWalletId(), expense.getExpenseDate());
+                return "redirect:/";
             } else {
-                boolean status = expense.addUserExpense();
+//                rm.addFlashAttribute("errorMessage", msg);
+//                return "redirect:/budget/budgetId/" + expense.getBudgetId();
             }
-
-            BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(userId,expense.getWalletId(),expense.getExpenseDate());
-
-            return "redirect:/";
         }
-        return null;
+        return "redirect:/login";
     }
 
-    @RequestMapping(value = "expense", method = DELETE, produces = "application/json")
-    public HashMap<String, Boolean> deleteExpense(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
-        HashMap<String, Boolean> response = new HashMap<String, Boolean>();
+    @RequestMapping(value = "expense", method = DELETE)
+    public String deleteExpense(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
+
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
             boolean status = expenseObj.deleteUserExpense(expenseId);
-            if (status) {
-                response.put("status", true);
-                return response;
-            }
+            return "redirect:/";
         }
-        response.put("status", true);
-        return response;
+        return "redirect:/login";
     }
 
 }

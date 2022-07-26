@@ -13,7 +13,6 @@ public class DateUtil {
     private static String dateFormat = "yyyy-MM-dd";
     private static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-
     public static String getFirstDayOfMonth(LocalDate date) {
         String startDay = "01";
         String month;
@@ -56,13 +55,27 @@ public class DateUtil {
         }
     }
 
-    public static java.sql.Date convertDate (String date) {
+    public static Date parseDate(String date) {
         Date start = null;
         try {
-            start = formatter.parse(date);
+            return formatter.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static java.sql.Date convertDate (String date) {
+        Date start = parseDate(date);
         return new java.sql.Date(start.getTime());
+    }
+
+    public static String getStartDateFromMonth(String month) {
+        LocalDate date = LocalDate.now();
+        return getFirstDayOfMonth(date.withMonth(Integer.parseInt(month)));
+    }
+
+    public static String getLastDateFromMonth(String month) {
+        LocalDate date = LocalDate.now();
+        return getLastDayOfMonth(date.withMonth(Integer.parseInt(month)));
     }
 }

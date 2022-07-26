@@ -8,6 +8,7 @@ const newEventModal = document.getElementById('newEventModal');
 const deleteEventModal = document.getElementById('deleteEventModal');
 const backDrop = document.getElementById('modalBackDrop');
 const expenseTitleInput = document.getElementById('expenseTitleInput');
+const expenseAmountInput = document.getElementById('expenseAccountNameInput');
 const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 function openModal(date) {
@@ -251,20 +252,21 @@ function closeModal(selectedEvent) {
 
 
 function saveEvent() {
-    if (expenseTitleInput.value) {
-        expenseTitleInput.classList.remove('error');
+    if (expenseAmountInput.value) {
+        if (expenseTitleInput.value) {
+            expenseTitleInput.classList.remove('error');
 
-        events.push({
-            date: clicked, title: expenseTitleInput.value,
-        });
-
-        // localStorage.setItem('events', JSON.stringify(events));
-        closeModal(null);
+            events.push({
+                date: clicked, title: expenseTitleInput.value,
+            });
+            $.notify("Successfully Added", {position: 'top center', className: "success"});
+            closeModal(null);
+        } else {
+            expenseTitleInput.classList.add('error');
+        }
     } else {
-        expenseTitleInput.classList.add('error');
+        expenseAmountInput.classList.add('error');
     }
-    $.notify("Successfully Added", {position: 'top center', className: "success" });
-
 }
 
 
@@ -274,7 +276,8 @@ function deleteEvent() {
     // localStorage.setItem('events', JSON.stringify(events));
     fetch('/expense?expense_id=' + event.target.id.split('-')[1], {
         method: 'DELETE',
-    }).then(() => {
+    }).then((response) => {
+        console.log(response);
         document.getElementById(event.target.id).parentNode.remove();
         if (document.getElementById("eventModal").childNodes.length > 1) {
             clicked = null;

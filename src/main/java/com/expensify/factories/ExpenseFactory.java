@@ -1,5 +1,6 @@
 package com.expensify.factories;
 
+import com.expensify.Validators.ExpenseValidator;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.database.IDatabase;
 import com.expensify.model.Expense;
@@ -38,6 +39,11 @@ public class ExpenseFactory implements IExpenseFactory {
     @Override
     public IExpense createExpense(int expenseID, int userID, String title, String description, Float amount, int expenseCategory, int walletID, String expenseDate, String expenseCategoryName) {
         return new Expense(expenseID, userID, title, description, amount, expenseCategory, walletID, expenseDate, expenseCategoryName);
+    }
+
+    @Override
+    public ExpenseValidator createExpenseValidator() {
+        return new ExpenseValidator();
     }
 
     @Override

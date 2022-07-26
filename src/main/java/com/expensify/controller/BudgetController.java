@@ -33,7 +33,7 @@ public class BudgetController {
                 if (status) {
                     return "redirect:/budget";
                 }
-            }else {
+            } else {
                 redirectAttributes.addFlashAttribute("errorMessage", msg);
                 return "redirect:/budget/budgetId/" + budget.getBudgetId();
             }
@@ -87,39 +87,13 @@ public class BudgetController {
                 localDate = LocalDate.parse(inputDate);
             }
 
-//            String monthNumber = month.orElse("");
-//            String startDate = null;
-//            String endDate = null;
-//            String dateToDisplay = null;
-//            int currentMonth = 0;
-//
-//            if (monthNumber.length() > 0) {
-//                LocalDate currentDate = LocalDate.now();
-//                LocalDate newDate = LocalDate.of(currentDate.getYear(), Integer.parseInt(monthNumber), 01);
-//
-//                startDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-01";
-//                endDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-" + newDate.lengthOfMonth();
-//
-//                dateToDisplay = newDate.getMonth().toString() + "," + newDate.getYear();
-//                currentMonth = newDate.getMonth().ordinal() + 1;
-//            } else {
-//                LocalDate currentdate = LocalDate.now();
-//                startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
-//                endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
-//                System.out.println(startDate + endDate);
-//                dateToDisplay = currentdate.getMonth().toString() + "," + currentdate.getYear();
-//                currentMonth = currentdate.getMonth().ordinal() + 1;
-//            }
-
             List<IBudget> budgetList = budgetObj.getAllBudgetDetailsService(
                     userId,
                     DateUtil.getFirstDayOfMonth(localDate),
                     DateUtil.getLastDayOfMonth(localDate));
             model.addAttribute("budgetList", budgetList);
             model.addAttribute("selectedDate", localDate);
-            model.addAttribute("currentMonth", localDate.getMonth() + "-" +localDate.getYear());
-            model.addAttribute("name", userCache.get("name"));
-
+            model.addAttribute("currentMonth", localDate.getMonth() + "-" + localDate.getYear());
             return "budget";
         } else {
             return "redirect:/";
