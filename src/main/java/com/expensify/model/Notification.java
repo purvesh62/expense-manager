@@ -16,6 +16,7 @@ public class Notification implements INotification {
 
     private String subscriptionName;
 
+
     public Notification(int notificationId, int userId, String email, int notificationType, int notificationStatus) {
         this.notificationId = notificationId;
         this.userId = userId;
@@ -58,5 +59,12 @@ public class Notification implements INotification {
     public void notifyBudgetLimitExceeds(int userId) {
         INotification notification = notficationDAOService.getBudgetLimitExceedSubscribedUsers(userId);
         notification.notifyUsers("Your budget limit has been exceeded!!", "Budget Limit Exceeds");
+    }
+    public String getSubscriptionName() {
+        return subscriptionName;
+    }
+
+    public void setSubscriptionName(String subscriptionName) {
+        this.subscriptionName = subscriptionName;
     }
 }
