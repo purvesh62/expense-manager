@@ -31,7 +31,13 @@ public class NotificationFactory implements INotificationFactory {
     }
 
     @Override
+    public INotification createNotification(String email, String subscriptionName) {
+        return new Notification(email, subscriptionName);
+    }
+
+    @Override
     public INotification createNotification(int id, int user_id, String email, int s_id, int status) {
         return new Notification(id, user_id, email, s_id, status);
+
     }
 }

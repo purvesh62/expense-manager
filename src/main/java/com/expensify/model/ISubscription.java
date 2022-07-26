@@ -2,7 +2,6 @@ package com.expensify.model;
 
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface ISubscription {
@@ -13,7 +12,7 @@ public interface ISubscription {
 
     ISubscription updateSubscription();
 
-    void deleteSubscription(int subscriptionId);
+    boolean deleteSubscription(int subscriptionId);
 
     ISubscriptionDAOService getSubscriptionDAOService();
 }
