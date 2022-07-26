@@ -75,6 +75,7 @@ public class UserController {
 
     @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
     public String authenticateUser(User user, HttpSession session) throws SQLException {
+        user.setUserDAOService(userObj);
         int userId = user.authenticateUser();
         if (userId > 0) {
             JSONObject userCache = new JSONObject();

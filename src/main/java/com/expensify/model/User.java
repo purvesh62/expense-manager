@@ -1,14 +1,13 @@
 package com.expensify.model;
 
 import com.expensify.persistenceLayer.IUserDAOService;
-import com.expensify.persistenceLayer.UserDAOService;
 
 import java.sql.SQLException;
 import java.util.UUID;
 
 public class User implements IUser {
     private IUserDAOService userDAOService;
-    private UserDAOService authenticationDAO;
+//    private UserDAOService authenticationDAO;
 
     private int userId;
     private String firstName;
@@ -31,8 +30,8 @@ public class User implements IUser {
         return userDAOService;
     }
 
-    public void setUserDAOService(IUserDAOService budgetDAOService) {
-        this.userDAOService = userDAOService;
+    public void setUserDAOService(IUser user) {
+        this.userDAOService = user.getUserDAOService();
     }
 
     public User(int userId, String firstName, String lastName, String email, String password, String contact) {
@@ -45,13 +44,13 @@ public class User implements IUser {
 //        authenticationDAO = new UserDAOService();
     }
 
-    public UserDAOService getAuthenticationDAO() {
-        return authenticationDAO;
-    }
+//    public UserDAOService getAuthenticationDAO() {
+//        return authenticationDAO;
+//    }
 
-    public void setAuthenticationDAO(UserDAOService authenticationDAO) {
-        this.authenticationDAO = authenticationDAO;
-    }
+//    public void setAuthenticationDAO(IUser user) {
+//        this.authenticationDAO = (UserDAOService) user.getUserDAOService();
+//    }
 
     public int getUserId() {
         return userId;
@@ -101,20 +100,26 @@ public class User implements IUser {
         this.contact = contact;
     }
 
+    @Override
     public int registerUser() throws SQLException {
-        return authenticationDAO.saveUser(this);
+        return userDAOService.saveUser(firstName,  lastName,  email,  password,  contact);
     }
-
+    @Override
     public int authenticateUser() throws SQLException {
-        return authenticationDAO.verifyUser(this);
+        return userDAOService.verifyUser( firstName,  lastName,  email,  password,  contact);
     }
 
-   @Override
+    @Override
+    public IUserDAOService getUserDAOService() {
+        return this.userDAOService;
+    }
+
+    @Override
    public boolean findByEmail(String email) {
-        boolean userExist = authenticationDAO.findByEmail(this.email);
+        boolean userExist = userDAOService.findByEmail(this.email);
         if(userExist) {
             String generatedPassword = UUID.randomUUID().toString().substring(0,20);
-            if (authenticationDAO.updatePassword(this.email,generatedPassword)){
+            if (userDAOService.updatePassword(this.email,generatedPassword)){
                 SMTPEmailService.instance(this.email, "Your new password is " + generatedPassword, "Expensify reset password").sendEmail();
                 return true;
             }
@@ -128,5 +133,9 @@ public class User implements IUser {
         return this.password;
     }
 
+    @Override
+    public boolean checkIfEmailExists(String email) {
+        return userDAOService.checkIfEmailExists(email);
+    }
 }
 

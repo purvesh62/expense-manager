@@ -34,7 +34,7 @@ public class UserFactory implements IUserFactory {
 
     @Override
     public IUserDAOService createUserDAOService(IDatabase database) {
-        return (IUserDAOService) new UserDAOService(database);
+        return new UserDAOService(database);
     }
 
     @Override
