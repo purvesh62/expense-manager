@@ -19,7 +19,7 @@ public class NotificationDAOServiceMock implements INotficationDAOService {
         notificationMockList.add(notificationMock2);
     }
 
-    public void getNullNotificationMock(){
+    public void getNullNotificationMock() {
         notificationMockList = null;
     }
 
@@ -30,10 +30,16 @@ public class NotificationDAOServiceMock implements INotficationDAOService {
 
     @Override
     public INotification getBudgetLimitExceedSubscribedUsers(int userId) {
-        if(userId == 0){
+        if (userId == 0) {
             return null;
-        }else {
-            return NotificationFactory.instance().createNotification(1,1,"test@gmail.com",1,1);
+        } else {
+            return NotificationFactory.instance().createNotification(1, 1, "test@gmail.com", 1, 1);
         }
+    }
+
+    @Override
+    public List<INotification> getUsersWhoseSubscriptionIsExpiring(String expiryDate) {
+        return null;
+
     }
 }
