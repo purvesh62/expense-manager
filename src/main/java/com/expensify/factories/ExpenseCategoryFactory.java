@@ -26,7 +26,6 @@ public class ExpenseCategoryFactory implements IExpenseCategoryFactory {
     public IExpenseCategory createExpenseCategory() {
         IDatabase database = MySqlDatabase.instance();
         return new ExpenseCategory(createExpenseCategoriesDAOService(database));
-
     }
 
     @Override

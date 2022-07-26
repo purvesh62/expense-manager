@@ -30,13 +30,10 @@ public class ExpenseController {
         expenseObj = ExpenseFactory.instance().createExpense();
     }
 
-
     @GetMapping(path = "/", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
-
             JSONObject userCache = SessionManager.getSession(session);
-
             if (userCache.containsKey("userId")) {
                 LocalDate currentdate = LocalDate.now();
                 String startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
@@ -87,9 +84,6 @@ public class ExpenseController {
                 boolean status = expense.addUserExpense();
                 BudgetFactory.instance().createBudget().checkIfBudgetLimitExceeds(userId, expense.getWalletId(), expense.getExpenseDate());
                 return "redirect:/";
-            } else {
-//                rm.addFlashAttribute("errorMessage", msg);
-//                return "redirect:/budget/budgetId/" + expense.getBudgetId();
             }
         }
         return "redirect:/login";
@@ -97,7 +91,6 @@ public class ExpenseController {
 
     @RequestMapping(value = "expense", method = DELETE)
     public String deleteExpense(@RequestParam(value = "expense_id") Integer expenseId, HttpSession session) {
-
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
@@ -106,5 +99,4 @@ public class ExpenseController {
         }
         return "redirect:/login";
     }
-
 }

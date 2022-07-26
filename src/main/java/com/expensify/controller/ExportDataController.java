@@ -14,12 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,7 +29,6 @@ public class ExportDataController {
             model.addAttribute("pdfDateRange", dateRangeForPDF);
             model.addAttribute("name", userCache.get("name"));
             model.addAttribute("email", userCache.get("email"));
-
             return "exportData";
         } else {
             return "error";
@@ -56,8 +49,6 @@ public class ExportDataController {
                     DateUtil.formatDate(dateFrom),
                     DateUtil.formatDate(dateTo)
             );
-
-
             boolean status = ExportDataFactory.instance().createExportDataToCSV().exportExpenseData(expenseList, response);
         }
         return "error";
@@ -71,15 +62,12 @@ public class ExportDataController {
 
             String headerKey = "Content-Disposition";
             String headerValue = "attachment; filename=expenses_" + dateFrom + "-" + dateTo + ".pdf";
-
             response.setHeader(headerKey, headerValue);
-
             List<IExpense> expenseList = ExpenseFactory.instance().createExpense().getAllUserExpenses(
                     (Integer) userCache.get("userId"),
                     DateUtil.formatDate(dateFrom),
                     DateUtil.formatDate(dateTo)
             );
-
             boolean status = ExportDataFactory.instance().createExportDataToPDF().exportExpenseData(expenseList, response);
         }
     }

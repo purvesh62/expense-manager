@@ -26,7 +26,6 @@ public class Budget implements IBudget {
         this.budgetLimit = budgetLimit;
         this.totalExpenses = totalExpenses;
         this.month = month;
-
     }
 
     public Budget() {
