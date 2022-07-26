@@ -38,6 +38,7 @@ class Scheduler {
             notification.notifyUsers("Reminder to add expense", "Reminder");
         }
     }
+
     @Scheduled(cron = "0 0 21 * * *")
     public void sendSubscriptionExpiryNotification() {
         LocalDate today = LocalDate.now();

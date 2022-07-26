@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 
 public class DateUtilTest {
 
@@ -62,5 +65,65 @@ public class DateUtilTest {
         LocalDate testDate = LocalDate.parse("2022-07-25");
         String outputDate = DateUtil.getLastDayOfYear(testDate);
         assertNotEquals(outputDate, "2022-07-02");
+    }
+
+    @Test
+    public void formatDateSuccessTest() {
+        String formattedDate = DateUtil.formatDate("25/07/2022");
+        assertEquals(formattedDate, "2022-07-25");
+    }
+
+    @Test
+    public void formatDateFailureTest() {
+        String formattedDate = DateUtil.formatDate("25/07/2022");
+        assertNotEquals(formattedDate, "2022/07/25");
+    }
+
+    @Test
+    public void parseDateSuccessTest() {
+        Date parsedDate = DateUtil.parseDate("2022-07-25");
+        Date expectedDate = null;
+        try {
+            expectedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-07-25");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(parsedDate, expectedDate);
+    }
+
+    @Test
+    public void parseDateFailureTest() {
+        Date parsedDate = DateUtil.parseDate("2022-07-27");
+        Date expectedDate = null;
+        try {
+            expectedDate = new SimpleDateFormat("yyyy-MM-dd").parse("2022-07-25");
+        } catch (ParseException e) {
+        }
+        assertNotEquals(parsedDate, expectedDate);
+    }
+
+    @Test
+    public void getStartDateFromMonthSuccessTest() {
+        String outputDate = DateUtil.getStartDateFromMonth("07");
+        assertEquals(outputDate, "2022-07-01");
+    }
+
+    @Test
+    public void getStartDateFromMonthFailureTest() {
+        String outputDate = DateUtil.getStartDateFromMonth("07");
+        assertNotEquals(outputDate, "2022-08-01");
+    }
+
+    @Test
+    public void getLastDateFromMonthSuccessTest() {
+        String outputDate = DateUtil.getLastDateFromMonth("07");
+        assertEquals(outputDate, "2022-07-31");
+    }
+
+    @Test
+    public void getLastDateFromMonthFailureTest() {
+        String outputDate = DateUtil.getLastDateFromMonth("07");
+        assertNotEquals(outputDate, "2022-08-01");
     }
 }
