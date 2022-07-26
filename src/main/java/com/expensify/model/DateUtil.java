@@ -13,7 +13,6 @@ public class DateUtil {
     private static String dateFormat = "yyyy-MM-dd";
     private static DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
-
     public static String getFirstDayOfMonth(LocalDate date) {
         String startDay = "01";
         String month;
@@ -63,6 +62,7 @@ public class DateUtil {
             throw new RuntimeException(e);
         }
     }
+
     public static java.sql.Date convertDate (String date) {
         Date start = parseDate(date);
         return new java.sql.Date(start.getTime());
