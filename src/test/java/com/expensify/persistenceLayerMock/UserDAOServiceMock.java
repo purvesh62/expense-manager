@@ -34,7 +34,6 @@ public class UserDAOServiceMock implements IUserDAOService {
         }
         return String.valueOf(true);
     }
-
     @Override
     public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         if(firstName == "" || lastName == "" || email == "" || password == "" || contact == ""){
@@ -42,7 +41,6 @@ public class UserDAOServiceMock implements IUserDAOService {
         }
         return 1;
     }
-
     @Override
     public int verifyUser(String email) throws SQLException {
         if (email == "") {

@@ -41,7 +41,6 @@ public class MySqlDatabase implements  IDatabase{
         }
         return null;
     }
-
     @Override
     public ResultSet executeProcedure(String procQuery, List<Object> parameterList) {
         ResultSet resultSet = null;
@@ -60,7 +59,6 @@ public class MySqlDatabase implements  IDatabase{
         }
         return resultSet;
     }
-
     @Override
     public void closeConnection() throws SQLException {
         if(!conn.isClosed()){

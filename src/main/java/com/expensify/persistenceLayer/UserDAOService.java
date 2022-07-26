@@ -14,7 +14,6 @@ public class UserDAOService implements IUserDAOService {
     private IDatabase database;
 
     public UserDAOService(IDatabase database) {
-        //  this.database = database;
         this.database = MySqlDatabase.instance();
     }
     @Override
@@ -69,7 +68,6 @@ public class UserDAOService implements IUserDAOService {
         String password = null;
         try {
             parameterList.add(email);
-
             ResultSet resultSet = database.executeProcedure("CALL get_user_credential(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
