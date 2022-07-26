@@ -56,7 +56,7 @@
                 <img th:src="@{/images/profile.jpg}" alt="Profile Logo">
                 <div class="name_job">
                     <div class="name" th:text="${name}"></div>
-                    <div class="job">User</div>
+                    <div class="job" th:text="${email}"></div>
                 </div>
             </div>
             <a th:href="@{'/logout'}">

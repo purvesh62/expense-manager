@@ -35,7 +35,7 @@ public class SubscriptionController {
             model.addAttribute("subscription_list", subscriptionList);
             model.addAttribute("subscription", subscriptionObj);
             model.addAttribute("name", userCache.get("name"));
-
+            model.addAttribute("email", userCache.get("email"));
             return "subscription";
         } else {
             return "redirect:/";

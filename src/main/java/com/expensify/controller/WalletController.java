@@ -39,7 +39,7 @@ public class WalletController {
             model.addAttribute("payment_categories", paymentCategoryList);
             model.addAttribute("wallet", walletObj);
             model.addAttribute("name", userCache.get("name"));
-
+            model.addAttribute("email", userCache.get("email"));
             return "wallet";
         } else {
             return "redirect:/";
