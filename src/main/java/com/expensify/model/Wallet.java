@@ -7,9 +7,11 @@ import java.util.List;
 
 public class Wallet implements IWallet {
     private IWalletDAOService walletDAOService;
+
     private int walletId;
 
     private String walletLabel;
+
     private int userId;
 
     private int paymentType;
@@ -95,7 +97,6 @@ public class Wallet implements IWallet {
         } catch (SQLException e) {
             return false;
         }
-
     }
 
     @Override
@@ -106,7 +107,6 @@ public class Wallet implements IWallet {
             return false;
         }
     }
-
 
     @Override
     public boolean updateWallet() {

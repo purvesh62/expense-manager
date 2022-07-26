@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Expensify</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="../static/css/budget.css" th:href="@{/css/budget.css}" rel="stylesheet"/>
+    <!--  START - links import required for the sidebar  -->
+    <link rel="stylesheet" href="../static/css/navbar.css" th:href="@{/css/navbar.css}"/>
+    <link href='https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css' rel='stylesheet'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<header th:insert="fragments/sidebar"></header>
+<div class="container">
+    <h3>User Configurations</h3>
+    <form action="#" th:action="@{/configurations}" th:object="${userConfiguration}" method="POST">
+        <div class="p-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{expenseReminder}" id="expenseReminder">
+                <label class="form-check-label" for="expenseReminder">
+                    Daily Expense Reminder
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{budgetExceedNotification}"
+                       id="budgetExceedNotification">
+                <label class="form-check-label" for="budgetExceedNotification">
+                    Budget Exceed Reminder
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" th:field="*{subscriptionNotification}"
+                       id="subscriptionNotification">
+                <label class="form-check-label" for="subscriptionNotification">
+                    Subscription Notification
+                </label>
+            </div>
+
+            <div>
+                <small class="my-1 text-danger" th:if="${errorMessage}" th:text="${errorMessage}"></small>
+            </div>
+
+            <button type="submit" class="btn">Update</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

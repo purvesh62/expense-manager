@@ -7,19 +7,28 @@ import java.util.UUID;
 
 public class User implements IUser {
     private IUserDAOService userDAOService;
+//    private UserDAOService authenticationDAO;
+
     private int userId;
     private String firstName;
     private String lastName;
     private String email;
+
     private String password;
     private String contact;
 
 
+
     public User() {
+//        authenticationDAO = new UserDAOService();
     }
 
     public User(IUserDAOService database) {
         userDAOService = database;
+    }
+
+    public IUserDAOService getBudgetDAOService() {
+        return userDAOService;
     }
 
     public void setUserDAOService(IUser user) {
@@ -48,18 +57,23 @@ public class User implements IUser {
     public String getLastName() {
         return lastName;
     }
+
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
+
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -74,11 +88,7 @@ public class User implements IUser {
 
     @Override
     public int registerUser() throws SQLException {
-        if (userDAOService.verifyUser(email) <= 0) {
-//            password = encryptPassword(password);
-            return userDAOService.saveUser(firstName, lastName, email, password, contact);
-        }
-        return 0;
+        return userDAOService.saveUser(firstName, lastName, email, password, contact);
     }
 
     @Override
@@ -90,6 +100,7 @@ public class User implements IUser {
         }
         return 0;
     }
+
 
     @Override
     public IUserDAOService getUserDAOService() {

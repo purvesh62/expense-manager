@@ -7,7 +7,6 @@ import com.expensify.factories.BudgetFactory;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -16,6 +15,7 @@ import java.util.*;
 
 public class BudgetDAOService implements IBudgetDAOService {
     private IDatabase database;
+
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public BudgetDAOService(IDatabase database) {

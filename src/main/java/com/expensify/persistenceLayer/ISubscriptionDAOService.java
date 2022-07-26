@@ -14,5 +14,4 @@ public interface ISubscriptionDAOService {
     boolean updateSubscription(int subscriptionId, String subscriptionName, String expiryDate) throws SQLException;
 
     boolean deleteSubscription(int subscriptionId) throws SQLException;
-
 }

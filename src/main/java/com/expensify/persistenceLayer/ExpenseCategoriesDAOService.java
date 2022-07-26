@@ -9,12 +9,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ExpenseCategoriesDAOService implements IExpenseCategoriesDAOService {
     private final IDatabase database;
+
     public ExpenseCategoriesDAOService(IDatabase database) {
         this.database = database;
     }
+
     public List<IExpenseCategory> getAllExpenseCategories() throws SQLException {
         List<IExpenseCategory> categoryList = new ArrayList<>();
 
@@ -38,5 +39,4 @@ public class ExpenseCategoriesDAOService implements IExpenseCategoriesDAOService
         }
         return categoryList;
     }
-
 }

@@ -22,7 +22,6 @@ public class SubscriptionController {
 
     public SubscriptionController() {
         subscriptionObj = SubscriptionFactory.instance().createSubscription();
-
     }
 
     @GetMapping(value = "/subscription", produces = "text/html")

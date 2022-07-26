@@ -4,6 +4,7 @@ import com.expensify.persistenceLayerMock.WalletDAOServiceMock;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -52,7 +53,6 @@ public class WalletTest {
         WalletDAOServiceMock walletDAOServiceMock = new WalletDAOServiceMock();
         boolean result = walletDAOServiceMock.updateWallet(0, 1200, "CIBC");
         Assertions.assertEquals(false, result);
-
     }
 
     @Test

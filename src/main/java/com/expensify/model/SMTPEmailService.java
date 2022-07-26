@@ -7,13 +7,17 @@ import java.util.Properties;
 
 public class SMTPEmailService implements IEmailService {
     private static IEmailService instance;
+
     private String receipentAddress;
+
     private String emailBody;
+
     private String subject;
 
     private SMTPEmailService() {
 
     }
+
     private SMTPEmailService(String receipentAddress, String emailBody, String subject) {
         this.receipentAddress = receipentAddress;
         this.emailBody = emailBody;

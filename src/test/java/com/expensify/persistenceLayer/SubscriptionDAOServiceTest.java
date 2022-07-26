@@ -52,7 +52,6 @@ public class SubscriptionDAOServiceTest {
                 .thenReturn(mockResult);
         List<ISubscription> subscriptionList = service.getAllSubscriptionDetails(1);
         Assertions.assertEquals(1, subscriptionList.size());
-
     }
 
     @Test
@@ -125,7 +124,4 @@ public class SubscriptionDAOServiceTest {
         boolean status = service.deleteSubscription(0);
         Assertions.assertEquals(false, status);
     }
-
-
-
 }

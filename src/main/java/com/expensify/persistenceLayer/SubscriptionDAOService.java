@@ -12,7 +12,6 @@ import java.util.List;
 public class SubscriptionDAOService implements ISubscriptionDAOService {
     private final IDatabase database;
 
-
     public SubscriptionDAOService(IDatabase database) {
         this.database = database;
     }
@@ -66,7 +65,6 @@ public class SubscriptionDAOService implements ISubscriptionDAOService {
         return false;
     }
 
-
     @Override
     public boolean updateSubscription(int subscriptionId, String subscriptionName, String expiryDate) throws SQLException {
         try {
@@ -86,7 +84,6 @@ public class SubscriptionDAOService implements ISubscriptionDAOService {
         return false;
     }
 
-
     @Override
     public boolean deleteSubscription(int subscriptionId) throws SQLException {
         try {
@@ -104,7 +101,5 @@ public class SubscriptionDAOService implements ISubscriptionDAOService {
         }
         return false;
     }
-
-
 }
 

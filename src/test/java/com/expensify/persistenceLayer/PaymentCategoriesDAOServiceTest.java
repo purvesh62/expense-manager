@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 public class PaymentCategoriesDAOServiceTest {
 
     private PaymentCategoriesDAOService service;
+
     @Mock
     IDatabase database;
 
@@ -48,8 +49,6 @@ public class PaymentCategoriesDAOServiceTest {
 
         List<IPaymentCategory> categories = service.getAllPaymentCategories();
         Assertions.assertEquals(1, categories.size());
-
     }
-
 
 }

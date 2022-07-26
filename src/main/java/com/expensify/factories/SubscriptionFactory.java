@@ -25,14 +25,13 @@ public class SubscriptionFactory implements ISubscriptionFactory {
     }
 
     @Override
-    public ISubscription createSubscription(){
+    public ISubscription createSubscription() {
         IDatabase database = MySqlDatabase.instance();
         return new Subscription(createSubscriptionDAOService(database));
-
     }
 
     @Override
-    public ISubscriptionDAOService createSubscriptionDAOService(IDatabase database){
+    public ISubscriptionDAOService createSubscriptionDAOService(IDatabase database) {
         return new SubscriptionDAOService(database);
     }
 
@@ -40,8 +39,4 @@ public class SubscriptionFactory implements ISubscriptionFactory {
     public ISubscription createSubscription(int subscriptionId, String subscriptionName, int userId, String expiryDate) {
         return new Subscription(subscriptionId, subscriptionName, userId, expiryDate);
     }
-
-
-
-
 }

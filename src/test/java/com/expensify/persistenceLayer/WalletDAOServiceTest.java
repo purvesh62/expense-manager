@@ -68,9 +68,8 @@ public class WalletDAOServiceTest {
         when(database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList)).thenReturn(mockResult);
         boolean status = service.addNewWallet(1,"walletLabel",2,4.0f);
         Assertions.assertEquals(true, status);
-
-
     }
+
     @Test
     public void testAddNewWallet_ReturnsFalse() throws SQLException {
         service = new WalletDAOService(database);
@@ -129,7 +128,4 @@ public class WalletDAOServiceTest {
         boolean status = service.deleteWallet(0);
         Assertions.assertEquals(false,status);
     }
-
-
-
 }

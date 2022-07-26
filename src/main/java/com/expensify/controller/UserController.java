@@ -1,6 +1,5 @@
 package com.expensify.controller;
 
-import com.expensify.factories.BudgetFactory;
 import com.expensify.factories.ExpenseFactory;
 import com.expensify.factories.UserFactory;
 import com.expensify.model.IUser;
@@ -77,7 +76,19 @@ public class UserController {
         if (userExist) {
             return "redirect:/login";
         }
-        return "error";
+        user.setUserDAOService(userObj);
+        int userId = user.authenticateUser();
+        if (userId > 0) {
+            String name = user.getUserFirstName(userId);
+            JSONObject userCache = new JSONObject();
+            userCache.put("email", user.getEmail());
+            userCache.put("userId", userId);
+            userCache.put("name", name);
+            SessionManager.setSession(session, userCache);
+            return "redirect:/";
+
+        }
+        return null;
     }
 
     @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
