@@ -1,5 +1,8 @@
 package com.expensify.controller;
 
+import com.expensify.factories.ExpenseFactory;
+import com.expensify.factories.UserFactory;
+import com.expensify.model.IUser;
 import com.expensify.model.SessionManager;
 import com.expensify.model.User;
 import org.json.simple.JSONObject;
@@ -13,14 +16,16 @@ import java.sql.SQLException;
 @Controller
 public class UserController {
 
-    private final User user = new User();
-    private HttpSession session;
+    private final IUser userObj;
 
+    public UserController() {
+        this.userObj = UserFactory.instance().createUser();
+    }
 
     @GetMapping(value = "/register", produces = "text/html")
     public String register(@ModelAttribute("user") User user, Model model, HttpSession session) {
         try {
-            model.addAttribute("user", new User());
+            model.addAttribute("user", UserFactory.instance().createUser());
             return "register";
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -50,7 +55,7 @@ public class UserController {
     @GetMapping(path = "/reset", produces = "text/html")
     public String reset(@ModelAttribute("user") User user, Model model, HttpSession session) {
         try {
-            model.addAttribute("user", new User());
+            model.addAttribute("user", UserFactory.instance().createUser());
             return "reset";
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -91,7 +96,7 @@ public class UserController {
     @GetMapping(path = "/login", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
-            model.addAttribute("user", new User());
+            model.addAttribute("user", UserFactory.instance().createUser());
             return "login";
         } catch (Exception exception) {
             exception.printStackTrace();

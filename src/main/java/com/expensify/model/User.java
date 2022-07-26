@@ -21,7 +21,7 @@ public class User implements IUser {
 
 
     public User() {
-        authenticationDAO = new UserDAOService();
+//        authenticationDAO = new UserDAOService();
     }
 
     public User(IUserDAOService database) {
@@ -42,7 +42,7 @@ public class User implements IUser {
         this.email = email;
         this.password = password;
         this.contact = contact;
-        authenticationDAO = new UserDAOService();
+//        authenticationDAO = new UserDAOService();
     }
 
     public UserDAOService getAuthenticationDAO() {

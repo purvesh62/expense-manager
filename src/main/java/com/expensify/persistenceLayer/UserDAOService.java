@@ -15,9 +15,9 @@ import java.util.List;
 public class UserDAOService implements IUserDAOService {
     private final IDatabase database;
 
-    public UserDAOService() {
+    public UserDAOService(IDatabase database) {
       //  this.database = database;
-        this.database = MySqlDatabase.instance();
+        this.database = database;
     }
 
     public int saveUser(User user) throws SQLException {
