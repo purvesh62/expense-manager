@@ -3,7 +3,6 @@ package com.expensify.persistenceLayerMock;
 import com.expensify.factories.WalletFactory;
 import com.expensify.model.IWallet;
 import com.expensify.persistenceLayer.IWalletDAOService;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

@@ -4,11 +4,11 @@ import com.expensify.persistenceLayerMock.WalletDAOServiceMock;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.sql.SQLException;
 import java.util.List;
 
 @SpringBootTest
+
 public class WalletTest {
     @Test
     public void getAllWalletDetailsServiceSuccessTest() {

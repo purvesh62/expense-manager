@@ -2,7 +2,10 @@ package com.expensify.controller;
 
 import com.expensify.factories.PaymentCategoryFactory;
 import com.expensify.factories.WalletFactory;
-import com.expensify.model.*;
+import com.expensify.model.IPaymentCategory;
+import com.expensify.model.IWallet;
+import com.expensify.model.SessionManager;
+import com.expensify.model.Wallet;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +55,6 @@ public class WalletController {
             int userId = (Integer) userCache.get("userId");
             if (result.hasErrors()) {
                 return "redirect:/wallet";
-
             }
             newWallet.setWalletDAOService(walletObj);
             newWallet.setUserId(userId);
