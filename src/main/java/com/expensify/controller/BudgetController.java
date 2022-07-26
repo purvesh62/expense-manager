@@ -94,6 +94,8 @@ public class BudgetController {
             model.addAttribute("budgetList", budgetList);
             model.addAttribute("selectedDate", localDate);
             model.addAttribute("currentMonth", localDate.getMonth() + "-" + localDate.getYear());
+            model.addAttribute("name", userCache.get("name"));
+            model.addAttribute("email", userCache.get("email"));
             return "budget";
         } else {
             return "redirect:/";

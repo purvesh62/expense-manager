@@ -1,10 +1,15 @@
-package com.expensify.model;
+package com.expensify.factories;
 
 import com.expensify.database.IDatabase;
+import com.expensify.database.MySqlDatabase;
+import com.expensify.model.IUser;
+import com.expensify.model.User;
 import com.expensify.persistenceLayer.UserDAOService;
 import com.expensify.persistenceLayer.IUserDAOService;
 
 public class UserFactory implements IUserFactory {
+
+    private static UserFactory userFactory;
     public UserFactory() {
     }
     
@@ -13,14 +18,23 @@ public class UserFactory implements IUserFactory {
         return new User(createUserDAOService(database));
     }
 
+
+    public static UserFactory instance() {
+        if (userFactory == null) {
+            userFactory = new UserFactory();
+        }
+        return userFactory;
+    }
+
     @Override
     public IUser createUser() {
-        return new User();
+        IDatabase database = MySqlDatabase.instance();
+        return new User(createUserDAOService(database));
     }
 
     @Override
     public IUserDAOService createUserDAOService(IDatabase database) {
-        return (IUserDAOService) new UserDAOService();
+        return new UserDAOService(database);
     }
 
     @Override
