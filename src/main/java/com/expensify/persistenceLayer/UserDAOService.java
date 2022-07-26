@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class UserDAOService implements IUserDAOService {
-    private final IDatabase database;
+    private IDatabase database;
 
     public UserDAOService(IDatabase database) {
       //  this.database = database;
