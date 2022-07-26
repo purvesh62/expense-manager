@@ -41,7 +41,9 @@ public class UserConfigurationController {
     public String userConfigurations(@ModelAttribute("userConfiguration") UserConfiguration userConfiguration, Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
-
+            int userId = (Integer) userCache.get("userId");
+            userConfiguration.setUserConfigurationDAOService(userConfigurationObj);
+            userConfiguration.setUserConfiguration(userId);
             return "redirect:/configuration";
         }
         return "redirect:/login";
