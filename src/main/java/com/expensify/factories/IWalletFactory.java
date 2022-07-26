@@ -1,5 +1,6 @@
 package com.expensify.factories;
 
+import com.expensify.Validators.WalletValidator;
 import com.expensify.database.IDatabase;
 import com.expensify.model.IWallet;
 import com.expensify.persistenceLayer.IWalletDAOService;

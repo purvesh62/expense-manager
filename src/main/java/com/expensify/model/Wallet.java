@@ -1,20 +1,17 @@
 package com.expensify.model;
 
 import com.expensify.persistenceLayer.IWalletDAOService;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public class Wallet implements IWallet {
     private IWalletDAOService walletDAOService;
     private int walletId;
-    @NotEmpty
-    @NotNull
+
     private String walletLabel;
     private int userId;
-    @Min(value = 1)
+
     private int paymentType;
     private float amount;
 
@@ -90,6 +87,7 @@ public class Wallet implements IWallet {
             throw new RuntimeException(e);
         }
     }
+
     @Override
     public IWallet saveWallet() {
         try {
@@ -110,7 +108,7 @@ public class Wallet implements IWallet {
     }
 
     @Override
-    public IWallet updateWallet(){
+    public IWallet updateWallet() {
         try {
             walletDAOService.updateWallet(walletId, amount, walletLabel);
         } catch (SQLException e) {

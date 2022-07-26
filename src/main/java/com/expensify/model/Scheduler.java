@@ -1,11 +1,15 @@
 package com.expensify.model;
 
+import com.expensify.database.IDatabase;
 import com.expensify.factories.NotificationFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -37,4 +41,16 @@ class Scheduler {
             notification.notifyUsers("Reminder to add expense", "Reminder");
         }
     }
+    @Scheduled(cron = "0 0 21 * * *")
+    public void sendSubscriptionExpiryNotification() {
+        LocalDate today = LocalDate.now();
+        LocalDate tomorrow = today.plusDays(1);
+        List<INotification> notificationList = NotificationFactory.instance().createNotification().getUsersWhoseSubscriptionisExpiring(String.valueOf(tomorrow));
+        ListIterator<INotification> iter = notificationList.listIterator();
+        while (iter.hasNext()) {
+            Notification notification = (Notification) iter.next();
+            notification.notifyUsers("Your "+ notification.getSubscriptionName()+ " Subscription expires Tommorrow", "Subscription Expiry");
+        }
+    }
+
 }

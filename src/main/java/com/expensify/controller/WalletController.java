@@ -1,8 +1,8 @@
 package com.expensify.controller;
 
+import com.expensify.factories.PaymentCategoryFactory;
 import com.expensify.factories.WalletFactory;
 import com.expensify.model.*;
-import com.expensify.model.PaymentCategoryFactory;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +20,6 @@ import java.util.List;
 public class WalletController {
     private IWallet walletObj;
     private IPaymentCategory paymentCategoryObj;
-
 
     public WalletController() {
         walletObj = WalletFactory.instance().createWallet();
@@ -65,7 +64,6 @@ public class WalletController {
         }
     }
 
-
     @GetMapping(value = "/wallet/walletId/{walletId}")
     private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
@@ -80,7 +78,7 @@ public class WalletController {
     }
 
     @PostMapping(value = "/updatewallet")
-    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session){
+    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             wallet.setWalletDAOService(walletObj);
