@@ -52,7 +52,6 @@ deploy-test:
   image: ruby:2.6
   script:
     - apt-get update -qy
-    - apt install redis
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_TEST_APP_NAME --api-key=$HEROKU_TEST_API_KEY
@@ -66,7 +65,6 @@ deploy-prod:
   image: ruby:2.6
   script:
     - apt-get update -qy
-    - apt-get install redis
     - apt-get install -y ruby-dev
     - gem install dpl
     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
