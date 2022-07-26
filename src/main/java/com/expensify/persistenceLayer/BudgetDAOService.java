@@ -27,11 +27,10 @@ public class BudgetDAOService implements IBudgetDAOService {
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
-            Date start = formatter.parse(startDate);
-            java.sql.Date budgetStartDate = new java.sql.Date(start.getTime());
 
-            Date end = formatter.parse(endDate);
-            java.sql.Date budgetEndDate = new java.sql.Date(end.getTime());
+            java.sql.Date budgetStartDate = DateUtil.convertDate(startDate);
+
+            java.sql.Date budgetEndDate = DateUtil.convertDate(startDate);
 
             parameterList.add(budgetStartDate);
             parameterList.add(budgetEndDate);
@@ -66,13 +65,11 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(userId);
             parameterList.add(budgetLimit);
 
-            LocalDate currentDate = LocalDate.now();
-            LocalDate date = LocalDate.of(currentDate.getYear(), Integer.parseInt(month), 01);
-            Date start = formatter.parse(String.valueOf(date));
-            java.sql.Date startDate = new java.sql.Date(start.getTime());
+            String sDate = DateUtil.getStartDateFromMonth(month);
+            java.sql.Date startDate = DateUtil.convertDate(sDate);
 
-            Date end = formatter.parse(date.getYear() + "-" + (date.getMonth().ordinal() + 1) + "-" + date.lengthOfMonth());
-            java.sql.Date endDate = new java.sql.Date(end.getTime());
+            String eDate = DateUtil.getLastDateFromMonth(month);
+            java.sql.Date endDate = DateUtil.convertDate(eDate);
 
             parameterList.add(startDate);
             parameterList.add(endDate);
@@ -80,7 +77,7 @@ public class BudgetDAOService implements IBudgetDAOService {
             try (ResultSet resultSet = database.executeProcedure("CALL add_budget(?,?,?,?,?)", parameterList)) {
                 return true;
             }
-        } catch (SQLException | ParseException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
             database.closeConnection();
@@ -162,18 +159,13 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(userId);
             parameterList.add(walletId);
 
-            Date date = formatter.parse(expenseDate);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(date);
+            LocalDate date = LocalDate.parse(expenseDate);
 
-            LocalDate startDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 01);
-            LocalDate endDate = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, startDate.lengthOfMonth());
+            String sDate = DateUtil.getFirstDayOfMonth(date);
+            String eDate = DateUtil.getLastDayOfMonth(date);
 
-            Date start = formatter.parse(String.valueOf(startDate));
-            java.sql.Date budgetStartDate = new java.sql.Date(start.getTime());
-
-            Date end = formatter.parse(String.valueOf(endDate));
-            java.sql.Date budgetEndDate = new java.sql.Date(end.getTime());
+            java.sql.Date budgetStartDate = DateUtil.convertDate(sDate);
+            java.sql.Date budgetEndDate = DateUtil.convertDate(eDate);
 
             parameterList.add(budgetStartDate);
             parameterList.add(budgetEndDate);
@@ -200,10 +192,8 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(userId);
             parameterList.add(walletId);
 
-            LocalDate currentDate = LocalDate.now();
-            LocalDate date = LocalDate.of(currentDate.getYear(), Integer.parseInt(month), 01);
-            Date start = formatter.parse(String.valueOf(date));
-            java.sql.Date startDate = new java.sql.Date(start.getTime());
+            String start = DateUtil.getStartDateFromMonth(month);
+            java.sql.Date startDate = DateUtil.convertDate(start);
             parameterList.add(startDate);
 
             try (ResultSet resultSet = database.executeProcedure("CALL check_if_budget_exists(?,?,?)", parameterList)) {
