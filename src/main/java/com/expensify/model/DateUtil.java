@@ -56,13 +56,15 @@ public class DateUtil {
         }
     }
 
-    public static java.sql.Date convertDate (String date) {
-        Date start = null;
+    public static Date parseDate(String date) {
         try {
-            start = formatter.parse(date);
+            return formatter.parse(date);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
+    }
+    public static java.sql.Date convertDate (String date) {
+        Date start = parseDate(date);
         return new java.sql.Date(start.getTime());
     }
 }
