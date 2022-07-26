@@ -3,7 +3,6 @@ package com.expensify.persistenceLayer;
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.IUser;
-import com.expensify.model.IWallet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ public class UserDAOService implements IUserDAOService {
         this.database = MySqlDatabase.instance();
     }
     @Override
-    public List<IUser> saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
+    public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         List<IUser> userList = new ArrayList<>();
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
@@ -41,7 +40,7 @@ public class UserDAOService implements IUserDAOService {
         } finally {
             database.closeConnection();
         }
-        return userList;
+        return userId;
     }
 
     public int verifyUser(String email) throws SQLException {

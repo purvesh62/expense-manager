@@ -1,6 +1,5 @@
 package com.expensify.model;
 
-import com.expensify.persistenceLayer.IExpenseDOAService;
 import com.expensify.persistenceLayer.IUserDAOService;
 
 import java.sql.SQLException;
