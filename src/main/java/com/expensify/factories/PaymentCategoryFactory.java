@@ -11,20 +11,23 @@ public class PaymentCategoryFactory implements IPaymentCategoryFactory {
 
     private static PaymentCategoryFactory paymentCategoryFactory;
 
-    private PaymentCategoryFactory(){
+    private PaymentCategoryFactory() {
 
     }
+
     public static PaymentCategoryFactory instance() {
         if (paymentCategoryFactory == null) {
             paymentCategoryFactory = new PaymentCategoryFactory();
         }
         return paymentCategoryFactory;
     }
+
     @Override
     public IPaymentCategory createPaymentCategory() {
         IDatabase database = MySqlDatabase.instance();
         return new PaymentCategory(createPaymentCategoriesDAOService(database));
     }
+
     @Override
     public IPaymentCategoriesDAOService createPaymentCategoriesDAOService(IDatabase database) {
         return new PaymentCategoriesDAOService(database);

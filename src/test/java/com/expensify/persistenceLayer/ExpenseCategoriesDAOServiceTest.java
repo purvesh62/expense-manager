@@ -29,10 +29,11 @@ public class ExpenseCategoriesDAOServiceTest {
     public void testGetAllExpenseCategoriesDetails_ThrowsException() throws SQLException {
         service = new ExpenseCategoriesDAOService(database);
         List<Object> parameterList = new ArrayList<>();
-        Mockito.when(database.executeProcedure("CALL get_all_expense_categories()",parameterList)).thenThrow(new SQLException());
+        Mockito.when(database.executeProcedure("CALL get_all_expense_categories()", parameterList)).thenThrow(new SQLException());
         List<IExpenseCategory> categories = service.getAllExpenseCategories();
         Assertions.assertEquals(0, categories.size());
     }
+
     @Test
     public void testGetAllExpenseCategoriesDetails_ReturnsResultSet() throws SQLException {
         service = new ExpenseCategoriesDAOService(database);
@@ -41,7 +42,7 @@ public class ExpenseCategoriesDAOServiceTest {
         when(mockResult.getInt("c_id")).thenReturn(123);
         when(mockResult.getString("expense_category")).thenReturn("123");
         when(mockResult.next()).thenReturn(true).thenReturn(false);
-        Mockito.when(database.executeProcedure("CALL get_all_expense_categories()",parameterList))
+        Mockito.when(database.executeProcedure("CALL get_all_expense_categories()", parameterList))
                 .thenReturn(mockResult);
 
         List<IExpenseCategory> categories = service.getAllExpenseCategories();

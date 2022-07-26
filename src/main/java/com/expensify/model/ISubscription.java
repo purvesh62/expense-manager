@@ -8,9 +8,9 @@ public interface ISubscription {
 
     List<ISubscription> getAllSubscriptionDetails(int userId);
 
-    ISubscription saveSubscription();
+    boolean saveSubscription();
 
-    ISubscription updateSubscription();
+    boolean updateSubscription();
 
     boolean deleteSubscription(int subscriptionId);
 

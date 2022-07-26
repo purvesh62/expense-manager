@@ -3,6 +3,7 @@ package com.expensify.persistenceLayerMock;
 import com.expensify.factories.ExpenseCategoryFactory;
 import com.expensify.model.IExpenseCategory;
 import com.expensify.persistenceLayer.IExpenseCategoriesDAOService;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ public class ExpenseCategoriesDAOServiceMock implements IExpenseCategoriesDAOSer
         expenseCategoryMockList.add(expenseCategoryMock1);
     }
 
-    public void getNullExpenseCategoryMock(){
-          expenseCategoryMockList = null;
+    public void getNullExpenseCategoryMock() {
+        expenseCategoryMockList = null;
     }
 
     @Override

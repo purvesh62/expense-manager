@@ -3,6 +3,7 @@ package com.expensify.persistenceLayerMock;
 import com.expensify.factories.PaymentCategoryFactory;
 import com.expensify.model.IPaymentCategory;
 import com.expensify.persistenceLayer.IPaymentCategoriesDAOService;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,8 @@ public class PaymentCategoriesDAOServiceMock implements IPaymentCategoriesDAOSer
         IPaymentCategory paymentCategoryMock1 = PaymentCategoryFactory.instance().createPaymentCategory();
         paymentMockList.add(paymentCategoryMock1);
     }
-    public void getNullPaymentCategoryMock(){
+
+    public void getNullPaymentCategoryMock() {
         paymentMockList = null;
     }
 

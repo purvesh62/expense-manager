@@ -85,33 +85,31 @@ public class Subscription implements ISubscription {
     }
 
     @Override
-    public ISubscription saveSubscription() {
+    public boolean saveSubscription() {
         try {
-            subscriptionDAOService.addNewSubscription(userId, subscriptionName, expiryDate);
+            return subscriptionDAOService.addNewSubscription(userId, subscriptionName, expiryDate);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
-        return this;
     }
 
     @Override
-    public ISubscription updateSubscription() {
+    public boolean updateSubscription() {
         try {
-            subscriptionDAOService.updateSubscription(subscriptionId, subscriptionName, expiryDate);
+            return subscriptionDAOService.updateSubscription(subscriptionId, subscriptionName, expiryDate);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+           return false;
         }
-        return this;
+
     }
 
     @Override
     public boolean deleteSubscription(int subscriptionId) {
         try {
-            subscriptionDAOService.deleteSubscription(subscriptionId);
+            return subscriptionDAOService.deleteSubscription(subscriptionId);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
-
-        return false;
     }
+
 }

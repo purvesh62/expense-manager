@@ -116,7 +116,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Amount">Amount</label>
-                            <input class="form-control" type="number" th:min="0" th:field="*{amount}" id="Amount" placeholder="Amount" th:required="required" >
+                            <input class="form-control" type="number" th:min="0" th:field="*{amount}" id="Amount" placeholder="Amount" >
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('Amount')}" th:errors="*{amount}"></div>
                         </div>
 
@@ -137,8 +137,6 @@
                 </div>
                 <div class="modal-body">
                     <form  method="POST" th:action="@{/updatewallet}" th:object="${wallet}" >
-
-
                         <input hidden type="number" th:value="${wallet.walletId}" name="walletId"/>
                         <input hidden type="number" th:value="${wallet.userId}" name="userId"/>
                         <div class="form-group">
@@ -148,7 +146,7 @@
                         </div>
                         <div class="form-group">
                             <label for="walletAmount">Wallet Amount</label>
-                            <input id="walletAmount" type="number"  th:min="0" th:value="${wallet.amount}" name="amount" class="form-control" th:required="required" />
+                            <input id="walletAmount" type="number"  th:min="0" th:value="${wallet.amount}" name="amount" class="form-control" />
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
                         </div>
                         <button type="submit" class="btn" >Update</button>

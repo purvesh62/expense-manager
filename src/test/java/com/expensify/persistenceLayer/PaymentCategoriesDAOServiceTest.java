@@ -30,7 +30,7 @@ public class PaymentCategoriesDAOServiceTest {
     public void testGetAllPaymentCategoriesDetails_ThrowsException() throws SQLException {
         service = new PaymentCategoriesDAOService(database);
         List<Object> parameterList = new ArrayList<>();
-        Mockito.when(database.executeProcedure("CALL get_all_payment_categories()",parameterList)).thenThrow(new SQLException());
+        Mockito.when(database.executeProcedure("CALL get_all_payment_categories()", parameterList)).thenThrow(new SQLException());
         List<IPaymentCategory> categories = service.getAllPaymentCategories();
         Assertions.assertEquals(0, categories.size());
     }
@@ -43,7 +43,7 @@ public class PaymentCategoriesDAOServiceTest {
         when(mockResult.getInt("p_id")).thenReturn(123);
         when(mockResult.getString("payment_category")).thenReturn("123");
         when(mockResult.next()).thenReturn(true).thenReturn(false);
-        Mockito.when(database.executeProcedure("CALL get_all_payment_categories()",parameterList))
+        Mockito.when(database.executeProcedure("CALL get_all_payment_categories()", parameterList))
                 .thenReturn(mockResult);
 
         List<IPaymentCategory> categories = service.getAllPaymentCategories();

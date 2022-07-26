@@ -39,7 +39,7 @@ public class NotificationDAOServiceMock implements INotficationDAOService {
 
     @Override
     public List<INotification> getUsersWhoseSubscriptionIsExpiring(String expiryDate) {
-        if(expiryDate.equals("") || expiryDate.equals("2020-04-05")){
+        if (expiryDate.equals("") || expiryDate.equals("2020-04-05")) {
             return null;
         }
         return notificationMockList;

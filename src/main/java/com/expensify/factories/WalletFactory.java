@@ -12,20 +12,23 @@ public class WalletFactory implements IWalletFactory {
 
     private static WalletFactory walletFactory;
 
-    private WalletFactory(){
+    private WalletFactory() {
 
     }
+
     public static WalletFactory instance() {
         if (walletFactory == null) {
             walletFactory = new WalletFactory();
         }
         return walletFactory;
     }
+
     @Override
     public IWallet createWallet() {
         IDatabase database = MySqlDatabase.instance();
         return new Wallet(createWalletDAOService(database));
     }
+
     @Override
     public IWalletDAOService createWalletDAOService(IDatabase database) {
         return new WalletDAOService(database);

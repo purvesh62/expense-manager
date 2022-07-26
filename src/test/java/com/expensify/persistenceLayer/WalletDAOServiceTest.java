@@ -66,11 +66,12 @@ public class WalletDAOServiceTest {
         parameterList.add(4.0f);
         ResultSet mockResult = Mockito.mock(ResultSet.class);
         when(database.executeProcedure("CALL add_wallet(?,?,?,?)", parameterList)).thenReturn(mockResult);
-        boolean status = service.addNewWallet(1,"walletLabel",2,4.0f);
+        boolean status = service.addNewWallet(1, "walletLabel", 2, 4.0f);
         Assertions.assertEquals(true, status);
 
 
     }
+
     @Test
     public void testAddNewWallet_ReturnsFalse() throws SQLException {
         service = new WalletDAOService(database);
@@ -93,8 +94,8 @@ public class WalletDAOServiceTest {
         parameterList.add("walletLabel");
         ResultSet mockResult = Mockito.mock(ResultSet.class);
         when(database.executeProcedure("CALL update_wallet(?,?,?)", parameterList)).thenReturn(mockResult);
-        boolean status = service.updateWallet(1,4.0f,"walletLabel");
-        Assertions.assertEquals(true,status);
+        boolean status = service.updateWallet(1, 4.0f, "walletLabel");
+        Assertions.assertEquals(true, status);
     }
 
     @Test
@@ -105,8 +106,8 @@ public class WalletDAOServiceTest {
         parameterList.add(4.0f);
         parameterList.add("walletLabel");
         when(database.executeProcedure("CALL update_wallet(?,?,?)", parameterList)).thenThrow(new SQLException());
-        boolean status = service.updateWallet(0,4.0f,"walletLabel");
-        Assertions.assertEquals(false,status);
+        boolean status = service.updateWallet(0, 4.0f, "walletLabel");
+        Assertions.assertEquals(false, status);
     }
 
     @Test
@@ -117,7 +118,7 @@ public class WalletDAOServiceTest {
         ResultSet mockResult = Mockito.mock(ResultSet.class);
         when(database.executeProcedure("CALL delete_wallet(?)", parameterList)).thenReturn(mockResult);
         boolean status = service.deleteWallet(1);
-        Assertions.assertEquals(true,status);
+        Assertions.assertEquals(true, status);
     }
 
     @Test
@@ -127,9 +128,8 @@ public class WalletDAOServiceTest {
         parameterList.add(0);
         when(database.executeProcedure("CALL delete_wallet(?)", parameterList)).thenThrow(new SQLException());
         boolean status = service.deleteWallet(0);
-        Assertions.assertEquals(false,status);
+        Assertions.assertEquals(false, status);
     }
-
 
 
 }

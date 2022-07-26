@@ -3,6 +3,7 @@ package com.expensify.persistenceLayerMock;
 import com.expensify.factories.SubscriptionFactory;
 import com.expensify.model.ISubscription;
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +12,14 @@ public class SubscriptionDAOServiceMock implements ISubscriptionDAOService {
 
     List<ISubscription> subscriptionMockList = new ArrayList<>();
 
-    public void getAllSubscriptionMock(){
+    public void getAllSubscriptionMock() {
         ISubscription subscriptionMock1 = SubscriptionFactory.instance().createSubscription();
         ISubscription subscriptionMock2 = SubscriptionFactory.instance().createSubscription();
         subscriptionMockList.add(subscriptionMock1);
         subscriptionMockList.add(subscriptionMock2);
     }
 
-    public void getNullSubscriptionMock(){
+    public void getNullSubscriptionMock() {
         subscriptionMockList = null;
     }
 
