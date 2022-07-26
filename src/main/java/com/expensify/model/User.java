@@ -133,6 +133,11 @@ public class User implements IUser {
         return userPassword.equals(password);
     }
 
+    @Override
+    public boolean checkIfEmailExists(String email) {
+        return false;
+    }
+
 
     public String getUserFirstName(int userId) {
         return this.userDAOService.getUserFirstName(userId);

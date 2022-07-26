@@ -21,9 +21,7 @@ public class UserValidator implements IValidator {
         if (user.getContact() == null) {
             return "Contact cannot be null";
         }
-        if (user.checkIfEmailExists(user.getEmail())) {
-            return "Email already exists";
-        }
+
         return null;
     }
 }
