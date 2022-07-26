@@ -1,8 +1,11 @@
 package com.expensify.controller;
 
+import com.expensify.factories.PaymentCategoryFactory;
 import com.expensify.factories.WalletFactory;
-import com.expensify.model.*;
-import com.expensify.model.PaymentCategoryFactory;
+import com.expensify.model.IPaymentCategory;
+import com.expensify.model.IWallet;
+import com.expensify.model.SessionManager;
+import com.expensify.model.Wallet;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +23,6 @@ import java.util.List;
 public class WalletController {
     private IWallet walletObj;
     private IPaymentCategory paymentCategoryObj;
-
 
     public WalletController() {
         walletObj = WalletFactory.instance().createWallet();
@@ -53,7 +55,6 @@ public class WalletController {
             int userId = (Integer) userCache.get("userId");
             if (result.hasErrors()) {
                 return "redirect:/wallet";
-
             }
             newWallet.setWalletDAOService(walletObj);
             newWallet.setUserId(userId);
@@ -64,7 +65,6 @@ public class WalletController {
             return "redirect:/";
         }
     }
-
 
     @GetMapping(value = "/wallet/walletId/{walletId}")
     private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs, HttpSession session) {
@@ -80,7 +80,7 @@ public class WalletController {
     }
 
     @PostMapping(value = "/updatewallet")
-    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session){
+    private String updateWallet(@ModelAttribute("wallet") Wallet wallet, RedirectAttributes redirAttrs, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             wallet.setWalletDAOService(walletObj);
