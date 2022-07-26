@@ -2,10 +2,7 @@ package com.expensify.persistenceLayerMock;
 
 import com.expensify.factories.SubscriptionFactory;
 import com.expensify.model.ISubscription;
-
 import com.expensify.persistenceLayer.ISubscriptionDAOService;
-
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;

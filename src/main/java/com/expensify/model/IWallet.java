@@ -8,11 +8,11 @@ public interface IWallet {
 
     List<IWallet> getAllWalletDetails(int userId);
 
-    IWallet saveWallet();
+    boolean saveWallet();
 
-    IWallet updateWallet();
+    boolean updateWallet();
 
-    void deleteWallet(int walletId);
+    boolean deleteWallet(int walletId);
 
     IWalletDAOService getWalletDAOService();
 }

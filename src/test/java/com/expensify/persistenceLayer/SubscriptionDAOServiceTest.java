@@ -19,6 +19,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+
 @SpringBootTest
 public class SubscriptionDAOServiceTest {
 

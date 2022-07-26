@@ -137,6 +137,8 @@
                 </div>
                 <div class="modal-body">
                     <form  method="POST" th:action="@{/updatewallet}" th:object="${wallet}" >
+
+
                         <input hidden type="number" th:value="${wallet.walletId}" name="walletId"/>
                         <input hidden type="number" th:value="${wallet.userId}" name="userId"/>
                         <div class="form-group">

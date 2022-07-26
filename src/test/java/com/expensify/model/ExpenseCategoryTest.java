@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @SpringBootTest
+
 public class ExpenseCategoryTest {
     @Test
     public void getAllExpenseCategoryDetailsServiceSuccessTest() throws SQLException {

@@ -3,7 +3,6 @@ package com.expensify.persistenceLayerMock;
 import com.expensify.factories.ExpenseCategoryFactory;
 import com.expensify.model.IExpenseCategory;
 import com.expensify.persistenceLayer.IExpenseCategoriesDAOService;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
