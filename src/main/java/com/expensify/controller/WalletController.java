@@ -21,7 +21,6 @@ public class WalletController {
     private IWallet walletObj;
     private IPaymentCategory paymentCategoryObj;
 
-
     public WalletController() {
         walletObj = WalletFactory.instance().createWallet();
         paymentCategoryObj = PaymentCategoryFactory.instance().createPaymentCategory();
@@ -62,7 +61,6 @@ public class WalletController {
             return "redirect:/";
         }
     }
-
 
     @GetMapping(value = "/wallet/walletId/{walletId}")
     private String deleteWallet(@PathVariable(value = "walletId") int walletId, RedirectAttributes redirAttrs, HttpSession session) {

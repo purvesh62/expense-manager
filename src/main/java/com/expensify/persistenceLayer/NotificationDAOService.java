@@ -86,16 +86,13 @@ public class NotificationDAOService implements INotficationDAOService {
     }
 
     @Override
-    public List<INotification> getUsersWhoseSubscriptionIsExpiring(String expiryDate) throws ParseException {
+    public List<INotification> getUsersWhoseSubscriptionIsExpiring(String expiryDate){
         List<INotification> userSubscribedList = new ArrayList<>();
-        Date subscriptionExpiryDate = formatter.parse(expiryDate);
-
         try {
             List<Object> parameterList = new ArrayList<>();
-
+            Date subscriptionExpiryDate = formatter.parse(expiryDate);
             java.sql.Date subscriptionExpiry = new java.sql.Date(subscriptionExpiryDate.getTime());
             parameterList.add(subscriptionExpiry);
-
             try (ResultSet resultSet = database.executeProcedure("CALL get_users_whose_subscription_expires(?)", parameterList)) {
                 if (resultSet != null) {
                     while (resultSet.next()) {

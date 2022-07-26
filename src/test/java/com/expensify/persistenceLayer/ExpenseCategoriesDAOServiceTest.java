@@ -2,7 +2,6 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.model.IExpenseCategory;
-import com.expensify.model.IPaymentCategory;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;

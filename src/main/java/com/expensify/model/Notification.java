@@ -2,6 +2,7 @@ package com.expensify.model;
 
 import com.expensify.persistenceLayer.INotficationDAOService;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 

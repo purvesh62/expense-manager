@@ -12,7 +12,7 @@ public interface ISubscription {
 
     ISubscription updateSubscription();
 
-    void deleteSubscription(int subscriptionId);
+    boolean deleteSubscription(int subscriptionId);
 
     ISubscriptionDAOService getSubscriptionDAOService();
 }

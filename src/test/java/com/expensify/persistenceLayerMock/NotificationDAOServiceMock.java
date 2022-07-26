@@ -1,7 +1,7 @@
 package com.expensify.persistenceLayerMock;
 
-import com.expensify.model.INotification;
 import com.expensify.factories.NotificationFactory;
+import com.expensify.model.INotification;
 import com.expensify.persistenceLayer.INotficationDAOService;
 
 import java.util.ArrayList;
@@ -39,7 +39,10 @@ public class NotificationDAOServiceMock implements INotficationDAOService {
 
     @Override
     public List<INotification> getUsersWhoseSubscriptionIsExpiring(String expiryDate) {
-        return null;
+        if(expiryDate.equals("") || expiryDate.equals("2020-04-05")){
+            return null;
+        }
+        return notificationMockList;
 
     }
 }

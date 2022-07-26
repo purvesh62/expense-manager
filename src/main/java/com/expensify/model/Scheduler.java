@@ -29,7 +29,7 @@ class Scheduler {
             * * * * * *
     cron(               );
      */
-    @Scheduled(cron = "* * 22 * * *")
+    @Scheduled(cron = "1 * 22 * * *")
     public void sendDailyReminderToFillExpense() {
         List<INotification> notificationList = NotificationFactory.instance().createNotification().getDailyExpenseSubscribedUser();
         ListIterator<INotification> iter = notificationList.listIterator();
@@ -38,7 +38,7 @@ class Scheduler {
             notification.notifyUsers("Reminder to add expense", "Reminder");
         }
     }
-    @Scheduled(cron = "* * 21 * * *")
+    @Scheduled(cron = "0 39 10 * * *")
     public void sendSubscriptionExpiryNotification() {
         LocalDate today = LocalDate.now();
         LocalDate tomorrow = today.plusDays(1);
@@ -46,7 +46,7 @@ class Scheduler {
         ListIterator<INotification> iter = notificationList.listIterator();
         while (iter.hasNext()) {
             INotification notification = (INotification) iter.next();
-            notification.notifyUsers("Your Subscription Expires Tomorrow", "Subscription Expiry");
+            notification.notifyUsers("Your .Expires Tomorrow", "Subscription Expiry");
         }
     }
 

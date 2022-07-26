@@ -105,12 +105,13 @@ public class Subscription implements ISubscription {
     }
 
     @Override
-    public void deleteSubscription(int subscriptionId) {
+    public boolean deleteSubscription(int subscriptionId) {
         try {
             subscriptionDAOService.deleteSubscription(subscriptionId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+        return false;
     }
 }

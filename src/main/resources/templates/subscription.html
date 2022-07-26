@@ -86,6 +86,7 @@
     }
 
 </style>
+
 <body>
 <header th:insert="fragments/sidebar"></header>
 <div class="container">
@@ -133,11 +134,12 @@
                         <div class="form-group">
                             <label for="SubscriptionName">Subscription Name</label>
                             <input type="text" class="form-control" id="SubscriptionName"
-                                   th:field="*{subscriptionName}">
+                                   th:field="*{subscriptionName}" th:required="required">
                         </div>
                         <div class="form-group">
                             <label for="ExpiryDate">Expiry Date</label>
-                            <input type="date" class="form-control" th:field="*{expiryDate}" id="ExpiryDate">
+                            <input type="date" th:with="util=${T(org.apache.commons.lang3.time.DateUtils)},date=${util.addDays(#dates.createToday(), 1)}" id="ExpiryDate"  class="form-control" th:field="*{expiryDate}"
+                      th:required="required" th:min="${#dates.format(date, 'yyyy-MM-dd')}">
                         </div>
                         <button class="btn" type="submit">ADD</button>
                     </form>
@@ -164,12 +166,12 @@
                         <div class="form-group">
                             <label for="EditSubscriptionName">Subscription Name</label>
                             <input type="text" th:value="${subscription.subscriptionName}" class="form-control"
-                                   id="EditSubscriptionName" name="subscriptionName">
+                                   id="EditSubscriptionName" name="subscriptionName" th:required="required">
                         </div>
                         <div class="form-group">
                             <label for="EditExpiryDate">Expiry Date</label>
-                            <input type="date" th:value="${subscription.expiryDate}" class="form-control"
-                                   name="expiryDate" id="EditExpiryDate">
+                            <input type="date" th:with="util=${T(org.apache.commons.lang3.time.DateUtils)},date=${util.addDays(#dates.createToday(), 1)}" th:value="${subscription.expiryDate}" class="form-control"
+                                   name="expiryDate" id="EditExpiryDate" th:required="required" th:min="${#dates.format(date, 'yyyy-MM-dd')}">
                         </div>
                         <button type="submit" class="btn">Update</button>
 
@@ -180,4 +182,5 @@
     </div>
 </div>
 </body>
+
 </html>

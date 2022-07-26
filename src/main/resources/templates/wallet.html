@@ -105,18 +105,18 @@
                         <div class="form-group">
                             <label for="PaymentCategories">Payment Categories:</label>
                             <select class="form-control" id ="PaymentCategories" th:field="*{paymentType}">
-                                <option value="0">Select Option</option>
+                                <option value="0" selected="true" disabled="disabled">Select Option</option>
                                 <option th:each="category:${payment_categories}" th:value="${category.paymentId}" th:text="${category.paymentCategory}"></option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="walletLabel">Wallet Label</label>
-                            <input class="form-control" type="text" th:field="*{walletLabel}" id="walletLabel" placeholder="walletLabel">
+                            <input class="form-control" type="text" th:field="*{walletLabel}" id="walletLabel" placeholder="walletLabel" th:required="required">
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('walletLabel')}" th:errors="*{walletLabel}"></div>
                         </div>
                         <div class="form-group">
                             <label for="Amount">Amount</label>
-                            <input class="form-control" type="text" th:field="*{amount}" id="Amount" placeholder="Amount">
+                            <input class="form-control" type="number" th:min="0" th:field="*{amount}" id="Amount" placeholder="Amount" >
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('Amount')}" th:errors="*{amount}"></div>
                         </div>
 
@@ -141,12 +141,12 @@
                         <input hidden type="number" th:value="${wallet.userId}" name="userId"/>
                         <div class="form-group">
                             <label for="walletLabelEdit">Wallet Label</label>
-                            <input id="walletLabelEdit" type="text" th:value="${wallet.walletLabel}" name="walletLabel" class="form-control"/>
+                            <input id="walletLabelEdit" type="text" th:value="${wallet.walletLabel}" name="walletLabel" class="form-control" th:required="required"/>
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('walletLabel')}" th:errors="*{walletLabel}"></div>
                         </div>
                         <div class="form-group">
                             <label for="walletAmount">Wallet Amount</label>
-                            <input id="walletAmount" type="text" th:value="${wallet.amount}" name="amount" class="form-control"/>
+                            <input id="walletAmount" type="number"  th:min="0" th:value="${wallet.amount}" name="amount" class="form-control" />
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
                         </div>
                         <button type="submit" class="btn" >Update</button>
