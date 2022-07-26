@@ -21,11 +21,13 @@ public class WalletFactory implements IWalletFactory {
         }
         return walletFactory;
     }
+
     @Override
     public IWallet createWallet() {
         IDatabase database = MySqlDatabase.instance();
         return new Wallet(createWalletDAOService(database));
     }
+
     @Override
     public IWalletDAOService createWalletDAOService(IDatabase database) {
         return new WalletDAOService(database);
@@ -40,5 +42,4 @@ public class WalletFactory implements IWalletFactory {
     public WalletValidator createWalletValidator() {
         return new WalletValidator();
     }
-
 }

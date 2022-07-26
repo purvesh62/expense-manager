@@ -10,15 +10,18 @@ import com.expensify.persistenceLayer.NotificationDAOService;
 public class NotificationFactory implements INotificationFactory {
 
     private static INotificationFactory notificationFactory = null;
+
     private NotificationFactory() {
 
     }
+
     public static INotificationFactory instance(){
         if(notificationFactory == null){
             notificationFactory = new NotificationFactory();
         }
         return notificationFactory;
     }
+
     @Override
     public INotification createNotification() {
         IDatabase database = MySqlDatabase.instance();
@@ -38,6 +41,5 @@ public class NotificationFactory implements INotificationFactory {
     @Override
     public INotification createNotification(int id, int user_id, String email, int s_id, int status) {
         return new Notification(id, user_id, email, s_id, status);
-
     }
 }

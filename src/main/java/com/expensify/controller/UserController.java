@@ -1,6 +1,5 @@
 package com.expensify.controller;
 
-import com.expensify.factories.ExpenseFactory;
 import com.expensify.factories.UserFactory;
 import com.expensify.model.IUser;
 import com.expensify.model.SessionManager;
@@ -33,7 +32,6 @@ public class UserController {
         return "login";
     }
 
-
     @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
     public String registerUser(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
         user.setUserDAOService(userObj);
@@ -48,7 +46,6 @@ public class UserController {
         }
         return "register";
     }
-
 
     @GetMapping(path = "/reset", produces = "text/html")
     public String reset(@ModelAttribute("user") User user, Model model, HttpSession session) {
@@ -78,7 +75,6 @@ public class UserController {
             userCache.put("name", name);
             SessionManager.setSession(session, userCache);
             return "redirect:/";
-
         }
         return null;
     }

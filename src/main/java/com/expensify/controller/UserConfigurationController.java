@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
 
@@ -40,7 +39,6 @@ public class UserConfigurationController {
     public String userConfigurations(@ModelAttribute("userConfiguration") UserConfiguration userConfiguration, Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
-
             return "redirect:/configuration";
         }
         return "redirect:/login";

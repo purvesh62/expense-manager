@@ -12,7 +12,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class BudgetController {
@@ -37,7 +36,6 @@ public class BudgetController {
                 redirectAttributes.addFlashAttribute("errorMessage", msg);
                 return "redirect:/budget/budgetId/" + budget.getBudgetId();
             }
-
         }
         return "error";
     }
@@ -86,7 +84,6 @@ public class BudgetController {
             } else {
                 localDate = LocalDate.parse(inputDate);
             }
-
             List<IBudget> budgetList = budgetObj.getAllBudgetDetailsService(
                     userId,
                     DateUtil.getFirstDayOfMonth(localDate),
@@ -100,7 +97,6 @@ public class BudgetController {
         } else {
             return "redirect:/";
         }
-
     }
 
     @GetMapping(value = "/budget/budgetId/{budget_id}", produces = "text/html")
@@ -129,6 +125,5 @@ public class BudgetController {
             return "addBudget";
         }
         return "error";
-
     }
 }

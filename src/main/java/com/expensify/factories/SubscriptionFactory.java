@@ -40,8 +40,4 @@ public class SubscriptionFactory implements ISubscriptionFactory {
     public ISubscription createSubscription(int subscriptionId, String subscriptionName, int userId, String expiryDate) {
         return new Subscription(subscriptionId, subscriptionName, userId, expiryDate);
     }
-
-
-
-
 }
