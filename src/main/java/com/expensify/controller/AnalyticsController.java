@@ -38,7 +38,8 @@ public class AnalyticsController {
             model.addAttribute("selectedDate", localDate);
             model.addAttribute("monthlyExpenseMap", userMonthlyExpenseMap);
             model.addAttribute("monthlyExpenseWithCategoryMap", userMonthlyExpenseWithCategoryMap);
-
+            model.addAttribute("name", userCache.get("name"));
+            model.addAttribute("email", userCache.get("email"));
             return "analytics";
         }
         return "error";
