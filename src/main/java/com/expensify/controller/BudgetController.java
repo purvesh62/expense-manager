@@ -76,39 +76,48 @@ public class BudgetController {
     }
 
     @GetMapping(value = "/budget", produces = "text/html")
-    public String getAllBudgetDetails(@RequestParam("month") Optional<String> month, Model model, HttpSession session) {
+    public String getAllBudgetDetails(@RequestParam(value = "date", required = false) String inputDate, Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
+        LocalDate localDate;
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");
-
-            String monthNumber = month.orElse("");
-            String startDate = null;
-            String endDate = null;
-            String dateToDisplay = null;
-            int currentMonth = 0;
-
-            if (monthNumber.length() > 0) {
-                LocalDate currentDate = LocalDate.now();
-                LocalDate newDate = LocalDate.of(currentDate.getYear(), Integer.parseInt(monthNumber), 01);
-
-                startDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-01";
-                endDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-" + newDate.lengthOfMonth();
-
-                dateToDisplay = newDate.getMonth().toString() + "," + newDate.getYear();
-                currentMonth = newDate.getMonth().ordinal() + 1;
+            if (inputDate == null) {
+                localDate = LocalDate.now();
             } else {
-                LocalDate currentdate = LocalDate.now();
-                startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
-                endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
-                System.out.println(startDate + endDate);
-                dateToDisplay = currentdate.getMonth().toString() + "," + currentdate.getYear();
-                currentMonth = currentdate.getMonth().ordinal() + 1;
+                localDate = LocalDate.parse(inputDate);
             }
 
-            List<IBudget> budgetList = budgetObj.getAllBudgetDetailsService(userId, startDate, endDate);
+//            String monthNumber = month.orElse("");
+//            String startDate = null;
+//            String endDate = null;
+//            String dateToDisplay = null;
+//            int currentMonth = 0;
+//
+//            if (monthNumber.length() > 0) {
+//                LocalDate currentDate = LocalDate.now();
+//                LocalDate newDate = LocalDate.of(currentDate.getYear(), Integer.parseInt(monthNumber), 01);
+//
+//                startDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-01";
+//                endDate = newDate.getYear() + "-" + (newDate.getMonth().ordinal() + 1) + "-" + newDate.lengthOfMonth();
+//
+//                dateToDisplay = newDate.getMonth().toString() + "," + newDate.getYear();
+//                currentMonth = newDate.getMonth().ordinal() + 1;
+//            } else {
+//                LocalDate currentdate = LocalDate.now();
+//                startDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-01";
+//                endDate = currentdate.getYear() + "-" + (currentdate.getMonth().ordinal() + 1) + "-" + currentdate.lengthOfMonth();
+//                System.out.println(startDate + endDate);
+//                dateToDisplay = currentdate.getMonth().toString() + "," + currentdate.getYear();
+//                currentMonth = currentdate.getMonth().ordinal() + 1;
+//            }
+
+            List<IBudget> budgetList = budgetObj.getAllBudgetDetailsService(
+                    userId,
+                    DateUtil.getFirstDayOfMonth(localDate),
+                    DateUtil.getLastDayOfMonth(localDate));
             model.addAttribute("budgetList", budgetList);
-            model.addAttribute("dateToDisplay", dateToDisplay);
-            model.addAttribute("currentMonth", currentMonth);
+            model.addAttribute("selectedDate", localDate);
+            model.addAttribute("currentMonth", localDate.getMonth() + "-" +localDate.getYear());
             return "budget";
         } else {
             return "redirect:/";

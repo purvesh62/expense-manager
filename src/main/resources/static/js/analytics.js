@@ -116,7 +116,7 @@ function createPieChartData() {
 }
 
 function createLineChartData() {
-    let months = ['1', '2', '3', '4', '5', '6', '7', '7', '9', '10', '11', '12'];
+    let months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
     let figureArray = [];
     figureArray.push(["Month", "Expense"])
     for (let i = 0; i < months.length; i++) {
