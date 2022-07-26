@@ -11,20 +11,21 @@ public class ExpenseCategoryFactory implements IExpenseCategoryFactory {
 
     private static ExpenseCategoryFactory expenseCategoryFactory;
 
-    private ExpenseCategoryFactory(){
+    private ExpenseCategoryFactory() {
 
     }
+
     public static ExpenseCategoryFactory instance() {
         if (expenseCategoryFactory == null) {
             expenseCategoryFactory = new ExpenseCategoryFactory();
         }
         return expenseCategoryFactory;
     }
+
     @Override
     public IExpenseCategory createExpenseCategory() {
         IDatabase database = MySqlDatabase.instance();
         return new ExpenseCategory(createExpenseCategoriesDAOService(database));
-
     }
 
     @Override

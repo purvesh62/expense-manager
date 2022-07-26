@@ -16,15 +16,15 @@ public class ExpenseCategory implements IExpenseCategory {
     public ExpenseCategory(){
 
     }
+
     public ExpenseCategory(int categoryID, String categoryName) {
         this.categoryID = categoryID;
         this.categoryName = categoryName;
     }
+
     public ExpenseCategory(IExpenseCategoriesDAOService database){
         expenseCategoriesDAOService = database;
     }
-
-
 
     public IExpenseCategoriesDAOService getExpenseCategoriesDAOService(){
         return expenseCategoriesDAOService;
@@ -33,6 +33,7 @@ public class ExpenseCategory implements IExpenseCategory {
     public void setExpenseCategoriesDAOService(IExpenseCategoriesDAOService expenseCategoriesDAOService){
         this.expenseCategoriesDAOService = expenseCategoriesDAOService;
     }
+
     public int getCategoryID() {
         return categoryID;
     }
@@ -47,8 +48,8 @@ public class ExpenseCategory implements IExpenseCategory {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
-
     }
+
     @Override
     public List<IExpenseCategory> getAllExpenseCategoriesList() {
         try {

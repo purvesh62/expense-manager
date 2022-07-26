@@ -1,20 +1,19 @@
 package com.expensify.model;
 
 import com.expensify.persistenceLayer.IWalletDAOService;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public class Wallet implements IWallet {
     private IWalletDAOService walletDAOService;
+
     private int walletId;
-    @NotEmpty
-    @NotNull
+
     private String walletLabel;
+
     private int userId;
-    @Min(value = 1)
+
     private int paymentType;
     private float amount;
 
@@ -90,34 +89,31 @@ public class Wallet implements IWallet {
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public IWallet saveWallet() {
-        try {
-            walletDAOService.addNewWallet(userId, walletLabel, paymentType, amount);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return this;
-    }
 
     @Override
-    public void deleteWallet(int walletId) {
+    public boolean saveWallet() {
         try {
-            walletDAOService.deleteWallet(walletId);
+            return walletDAOService.addNewWallet(userId, walletLabel, paymentType, amount);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
     }
 
     @Override
-    public IWallet updateWallet(){
+    public boolean deleteWallet(int walletId) {
         try {
-            walletDAOService.updateWallet(walletId, amount, walletLabel);
+            return walletDAOService.deleteWallet(walletId);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            return false;
         }
-        return this;
     }
 
-
+    @Override
+    public boolean updateWallet() {
+        try {
+            return walletDAOService.updateWallet(walletId, amount, walletLabel);
+        } catch (SQLException e) {
+            return false;
+        }
+    }
 }

@@ -21,6 +21,7 @@ public class MySqlDatabase implements  IDatabase{
         dbPassword = System.getenv("DB_PASSWORD");
         dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
     }
+
     public static MySqlDatabase instance() {
         if(MySqlDatabase.instance == null){
             MySqlDatabase.instance = new MySqlDatabase();
@@ -40,7 +41,6 @@ public class MySqlDatabase implements  IDatabase{
         }
         return null;
     }
-
     @Override
     public ResultSet executeProcedure(String procQuery, List<Object> parameterList) {
         ResultSet resultSet = null;
@@ -59,7 +59,6 @@ public class MySqlDatabase implements  IDatabase{
         }
         return resultSet;
     }
-
     @Override
     public void closeConnection() throws SQLException {
         if(!conn.isClosed()){

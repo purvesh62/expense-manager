@@ -7,13 +7,17 @@ import java.util.Properties;
 
 public class SMTPEmailService implements IEmailService {
     private static IEmailService instance;
+
     private String receipentAddress;
+
     private String emailBody;
+
     private String subject;
 
     private SMTPEmailService() {
 
     }
+
     private SMTPEmailService(String receipentAddress, String emailBody, String subject) {
         this.receipentAddress = receipentAddress;
         this.emailBody = emailBody;
@@ -30,6 +34,8 @@ public class SMTPEmailService implements IEmailService {
     @Override
     public void sendEmail() {
         try{
+            String userName = System.getenv("SMTP_USERNAME");
+            String password = System.getenv("SMTP_PASSWORD");
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");

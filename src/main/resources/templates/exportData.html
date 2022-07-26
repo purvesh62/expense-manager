@@ -42,7 +42,7 @@
             <input type="hidden" name="dateTo" th:field="*{dateTo}" th:value="*{dateTo}"/>
         </div>
 
-        <button type="submit" id="submitCSVbtn" name="action" value="csv">Export CSV</button>
+        <button type="submit" id="submitCSVbtn" name="action" value="csv" style="color: white">Export CSV</button>
     </form>
 
     <form th:object="${pdfDateRange}" th:action="@{/export-pdf}" method="POST">
@@ -61,7 +61,7 @@
             <input type="hidden" name="dateTo" th:field="*{dateTo}"/>
         </div>
 
-        <button type="submit" id="submitPDFbtn" name="action" value="pdf">Export PDF</button>
+        <button type="submit" id="submitPDFbtn" name="action" value="pdf" style="color: white">Export PDF</button>
     </form>
 
 </div>

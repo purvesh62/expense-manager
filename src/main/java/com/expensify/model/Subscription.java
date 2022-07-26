@@ -7,17 +7,15 @@ import java.util.List;
 
 public class Subscription implements ISubscription {
 
-
     private ISubscriptionDAOService subscriptionDAOService;
+
     private int userId;
 
     private int subscriptionId;
 
-
     private String subscriptionName;
 
     private String expiryDate;
-
 
     public Subscription(int subscriptionId, String subscriptionName, int userId, String expiryDate) {
         this.userId = userId;
@@ -33,7 +31,6 @@ public class Subscription implements ISubscription {
     public Subscription(ISubscriptionDAOService database) {
         subscriptionDAOService = database;
     }
-
 
     public ISubscriptionDAOService getSubscriptionDAOService() {
         return subscriptionDAOService;
@@ -76,7 +73,7 @@ public class Subscription implements ISubscription {
     }
 
     @Override
-    public List<ISubscription> getAllSubscriptionDetails(int userId){
+    public List<ISubscription> getAllSubscriptionDetails(int userId) {
         try {
             return subscriptionDAOService.getAllSubscriptionDetails(userId);
         } catch (SQLException e) {
@@ -105,12 +102,13 @@ public class Subscription implements ISubscription {
     }
 
     @Override
-    public void deleteSubscription(int subscriptionId) {
+    public boolean deleteSubscription(int subscriptionId) {
         try {
             subscriptionDAOService.deleteSubscription(subscriptionId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
+        return false;
     }
 }

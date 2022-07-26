@@ -14,13 +14,11 @@ public class WalletDAOService implements IWalletDAOService {
     private IDatabase database;
 
     public WalletDAOService(IDatabase database) {
-
         this.database = database;
     }
 
     public List<IWallet> getAllWalletDetails(int userId) throws SQLException {
         List<IWallet> walletList = new ArrayList<>();
-
         try {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
@@ -38,7 +36,6 @@ public class WalletDAOService implements IWalletDAOService {
                     );
                     walletList.add(wallet);
                 }
-
             }
             return walletList;
         } catch (SQLException exception) {
@@ -65,7 +62,6 @@ public class WalletDAOService implements IWalletDAOService {
             database.closeConnection();
         }
         return false;
-
     }
 
     public boolean deleteWallet(int walletId) throws SQLException {
@@ -83,7 +79,6 @@ public class WalletDAOService implements IWalletDAOService {
         return false;
     }
 
-
     public boolean updateWallet(int walletId, float amount, String walletLabel) throws SQLException {
         try {
             List<Object> parameterList = new ArrayList<>();
@@ -93,7 +88,6 @@ public class WalletDAOService implements IWalletDAOService {
             try (ResultSet resultSet = database.executeProcedure("CALL update_wallet(?,?,?)", parameterList)) {
                 return true;
             }
-
         } catch (SQLException exception) {
             exception.printStackTrace();
         } finally {
@@ -101,6 +95,4 @@ public class WalletDAOService implements IWalletDAOService {
         }
         return false;
     }
-
-
 }

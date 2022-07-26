@@ -8,7 +8,7 @@
     </div>
     <ul class="nav_list">
         <li>
-            <a href="/expense">
+            <a href="/">
                 <i class='bx bxs-dashboard'></i>
                 <span class="links_name">Home</span>
             </a>
@@ -49,14 +49,21 @@
             </a>
             <span class="tooltip">Subscription</span>
         </li>
+        <li>
+            <a href="/configurations">
+                <i class='bx bxs-dashboard'></i>
+                <span class="links_name">Configurations</span>
+            </a>
+            <span class="tooltip">Configurations</span>
+        </li>
     </ul>
     <div class="profile_content">
         <div class="profile">
             <div class="profile_details">
                 <img th:src="@{/images/profile.jpg}" alt="Profile Logo">
                 <div class="name_job">
-                    <div class="name">User</div>
-                    <div class="job">User</div>
+                    <div class="name" th:text="${name}"></div>
+                    <div class="job" th:text="${email}"></div>
                 </div>
             </div>
             <a th:href="@{'/logout'}">

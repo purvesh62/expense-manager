@@ -1,6 +1,7 @@
 package com.expensify.model;
 
 import com.expensify.persistenceLayerMock.NotificationDAOServiceMock;
+import com.expensify.persistenceLayerMock.SMTPEmailServiceMock;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,7 +12,7 @@ import java.util.List;
 public class NotificationTest {
     @Test
     public void notifyUsersTest() {
-        SMTPEmailService.instance("test@gmail.com", "Test Email", "Test Email Subject").sendEmail();
+        SMTPEmailServiceMock.instance("test@gmail.com", "Test Email", "Test Email Subject").sendEmail();
         assert (true);
     }
 
@@ -44,8 +45,22 @@ public class NotificationTest {
     public void notifyBudgetLimitExceedsFailureTest() {
         NotificationDAOServiceMock notificationDAOServiceMock = new NotificationDAOServiceMock();
         INotification notification = notificationDAOServiceMock.getBudgetLimitExceedSubscribedUsers(0);
-
         Assertions.assertEquals(null, notification);
+    }
+
+    @Test
+    public void getUsersWhoseSubscriptionIsExpiringSuccessTest(){
+        NotificationDAOServiceMock notificationDAOServiceMock = new NotificationDAOServiceMock();
+        notificationDAOServiceMock.getAllNotificationMock();
+        List<INotification> notificationList =  notificationDAOServiceMock.getUsersWhoseSubscriptionIsExpiring("2023-04-05");
+        Assertions.assertEquals(2, notificationList.size());
+    }
+    @Test
+    public void getUsersWhoseSubscriptionIsExpiringFailureTest(){
+        NotificationDAOServiceMock notificationDAOServiceMock = new NotificationDAOServiceMock();
+        notificationDAOServiceMock.getNullNotificationMock();
+        List<INotification> notificationList =  notificationDAOServiceMock.getUsersWhoseSubscriptionIsExpiring("2020-04-05");
+        Assertions.assertEquals(null , notificationList);
     }
 
 }

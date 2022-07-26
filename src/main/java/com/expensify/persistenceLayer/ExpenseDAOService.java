@@ -1,23 +1,20 @@
 package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
+import com.expensify.model.DateUtil;
 import com.expensify.model.IExpense;
 import com.expensify.factories.ExpenseFactory;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 
 public class ExpenseDAOService implements IExpenseDOAService {
+
     private final IDatabase database;
-    DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public ExpenseDAOService(IDatabase database) {
         this.database = database;
@@ -28,15 +25,11 @@ public class ExpenseDAOService implements IExpenseDOAService {
         List<IExpense> userExpenseList = new ArrayList<>();
         try {
             List<Object> parameterList = new ArrayList<>();
+
+            java.sql.Date expenseStartDate = DateUtil.convertDate(startDate);
+            java.sql.Date expenseEndDate = DateUtil.convertDate(endDate);
+
             parameterList.add(userID);
-
-            Date start = formatter.parse(startDate);
-            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
-
-            Date end = formatter.parse(endDate);
-            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
-
-
             parameterList.add(expenseStartDate);
             parameterList.add(expenseEndDate);
 
@@ -80,12 +73,14 @@ public class ExpenseDAOService implements IExpenseDOAService {
             parameterList.add(amount);
             parameterList.add(expenseCategory);
             parameterList.add(walletId);
-            Date date = formatter.parse(expenseDate);
-            parameterList.add(date);
+
+            java.sql.Date expenseStartDate = DateUtil.convertDate(expenseDate);
+            parameterList.add(expenseStartDate);
+
             try (ResultSet resultSet = this.database.executeProcedure("CALL add_expense(?, ?, ?, ?, ?, ?, ?)", parameterList)) {
                 return true;
             }
-        } catch (SQLException | ParseException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
         return false;
@@ -110,12 +105,10 @@ public class ExpenseDAOService implements IExpenseDOAService {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
 
-            Date start = formatter.parse(startDate);
-            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
+            java.sql.Date expenseStartDate = DateUtil.convertDate(startDate);
             parameterList.add(expenseStartDate);
 
-            Date end = formatter.parse(endDate);
-            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
+            java.sql.Date expenseEndDate = DateUtil.convertDate(endDate);
             parameterList.add(expenseEndDate);
 
             try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_monthly_expense(?, ?, ?)", parameterList)) {
@@ -144,12 +137,10 @@ public class ExpenseDAOService implements IExpenseDOAService {
             List<Object> parameterList = new ArrayList<>();
             parameterList.add(userId);
 
-            Date start = formatter.parse(startDate);
-            java.sql.Date expenseStartDate = new java.sql.Date(start.getTime());
+            java.sql.Date expenseStartDate = DateUtil.convertDate(startDate);
             parameterList.add(expenseStartDate);
 
-            Date end = formatter.parse(endDate);
-            java.sql.Date expenseEndDate = new java.sql.Date(end.getTime());
+            java.sql.Date expenseEndDate = DateUtil.convertDate(endDate);
             parameterList.add(expenseEndDate);
 
             try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_expense_with_categories(?, ?, ?)", parameterList)) {
@@ -170,5 +161,4 @@ public class ExpenseDAOService implements IExpenseDOAService {
         }
         return userMonthlyExpense;
     }
-
 }

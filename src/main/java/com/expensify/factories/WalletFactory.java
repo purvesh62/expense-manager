@@ -1,5 +1,6 @@
 package com.expensify.factories;
 
+import com.expensify.Validators.WalletValidator;
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.IWallet;
@@ -14,22 +15,19 @@ public class WalletFactory implements IWalletFactory {
     private WalletFactory(){
 
     }
+
     public static WalletFactory instance() {
         if (walletFactory == null) {
             walletFactory = new WalletFactory();
         }
         return walletFactory;
     }
+
     @Override
     public IWallet createWallet() {
         IDatabase database = MySqlDatabase.instance();
         return new Wallet(createWalletDAOService(database));
     }
-
-//    @Override
-//    public IWallet createWallet() {
-//        return new Wallet();
-//    }
 
     @Override
     public IWalletDAOService createWalletDAOService(IDatabase database) {
@@ -39,5 +37,10 @@ public class WalletFactory implements IWalletFactory {
     @Override
     public IWallet createWallet(int walletId, String walletLabel, int userId, int paymentType, float amount) {
         return new Wallet(walletId, walletLabel, userId, paymentType, amount);
+    }
+
+    @Override
+    public WalletValidator createWalletValidator() {
+        return new WalletValidator();
     }
 }

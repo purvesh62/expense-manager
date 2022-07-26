@@ -13,5 +13,4 @@ public interface IWalletDAOService {
     boolean updateWallet(int walletId, float amount, String walletLabel) throws SQLException;
 
     boolean deleteWallet(int walletId) throws SQLException;
-
 }

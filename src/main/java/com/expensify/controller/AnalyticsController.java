@@ -2,9 +2,7 @@ package com.expensify.controller;
 
 import com.expensify.model.DateUtil;
 import com.expensify.model.IAnalytics;
-import com.expensify.factories.BudgetFactory;
 import com.expensify.factories.ExpenseFactory;
-import com.expensify.model.IWallet;
 import com.expensify.model.SessionManager;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -40,7 +38,8 @@ public class AnalyticsController {
             model.addAttribute("selectedDate", localDate);
             model.addAttribute("monthlyExpenseMap", userMonthlyExpenseMap);
             model.addAttribute("monthlyExpenseWithCategoryMap", userMonthlyExpenseWithCategoryMap);
-
+            model.addAttribute("name", userCache.get("name"));
+            model.addAttribute("email", userCache.get("email"));
             return "analytics";
         }
         return "error";

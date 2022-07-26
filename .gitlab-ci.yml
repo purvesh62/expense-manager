@@ -32,19 +32,6 @@ test-job:
     - test
     - production
 
-deploy-dev:
-  stage: deploy
-  tags:
-    - dalfcs_docker_kvm
-  image: ruby:2.6
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - dpl --provider=heroku --app=$HEROKU_DEV_APP_NAME --api-key=HEROKU_DEV_API_KEY
-  only:
-    - develop
-
 deploy-test:
   stage: deploy
   tags:

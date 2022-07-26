@@ -70,20 +70,19 @@
                                                                    class="fa fa-close fa-lg"></i></span>
         </div>
 
-        <input type="text" id="expenseTitleInput" name="expenseTitle" th:field="*{expenseTitle}" placeholder="Title"/>
+        <input type="text" id="expenseTitleInput" name="expenseTitle" th:field="*{expenseTitle}" placeholder="Title"
+               required/>
 
         <select name="expenseCategoryInput" id="expenseCategoryInput" th:field="*{expenseCategory}">
             <option th:each="category : ${expenseCategoriesList}" th:value="${category.categoryID}"
                     th:text="${category.categoryName}"></option>
         </select>
 
-        <select name="expenseWalletInput" id="expenseWalletInput" th:field="*{walletId}">
+        <select name="expenseWalletInput" id="expenseWalletInput" th:field="*{walletId}" required>
             <option th:each="wallet : ${walletList}" th:value="${wallet.walletId}"
                     th:text="${wallet.walletLabel}"></option>
         </select>
-
-        <input id="expenseAccountNameInput" type="number" step="0.01" th:field="*{amount}" placeholder="Amount"
-               min="1"/>
+        <input id="expenseAccountNameInput" type="number" step="0.01" th:field="*{amount}" placeholder="Amount" min="1" value="1" required/>
         <textarea id="expenseNoteInput" th:field="*{description}" placeholder="Note"></textarea>
         <input type="hidden" th:field="*{expenseID}"/>
         <input type="hidden" th:field="*{userID}"/>
@@ -95,15 +94,15 @@
 <div id="deleteEventModal">
     <div style="display: flex;">
         <h2>Expense</h2>
-        <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;"
-                                                               class="fa fa-close fa-lg"></i></span>
+        <span class="closeButton" style="margin-left: 65%;"><i style="color: gray;" class="fa fa-close fa-lg"></i></span>
     </div>
     <div id="eventModal">
     </div>
 </div>
 
 <div id="modalBackDrop"></div>
-<script src="../js/expenses.js"></script>
+<script th:src="@{/js/expenses.js}" defer></script>
+
 <script>
     let nav_btn = document.getElementById("nav-btn");
     let sidebar = document.getElementById("sidebar");
