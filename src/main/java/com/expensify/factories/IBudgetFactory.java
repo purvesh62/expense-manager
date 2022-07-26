@@ -12,6 +12,5 @@ public interface IBudgetFactory {
     IBudgetDAOService createBudgetDAOService(IDatabase database);
 
     IBudget createBudget(int budgetId, int walletId, String walletName, int userId, float budgetLimit, float totalExpenses, String month);
-
     BudgetValidator createBudgetValidator();
 }

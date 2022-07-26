@@ -13,15 +13,11 @@ public class User implements IUser {
     private String email;
     private String password;
     private String contact;
-
-
     public User() {
     }
-
     public User(IUserDAOService database) {
         userDAOService = database;
     }
-
     public void setUserDAOService(IUser user) {
         this.userDAOService = user.getUserDAOService();
     }
@@ -63,66 +59,50 @@ public class User implements IUser {
     public void setPassword(String password) {
         this.password = password;
     }
-
     public String getContact() {
         return contact;
     }
-
     public void setContact(String contact) {
         this.contact = contact;
     }
-
     @Override
     public int registerUser() throws SQLException {
         if (userDAOService.verifyUser(email) <= 0) {
-//            password = encryptPassword(password);
             return userDAOService.saveUser(firstName, lastName, email, password, contact);
         }
         return 0;
     }
-
     @Override
     public int authenticateUser() throws SQLException {
-//        userDAOService.resetPassword(email);
         int userId = userDAOService.verifyUser(email);
         if (userId > 0 && isPasswordAuthenticated()) {
             return userId;
         }
         return 0;
     }
-
     @Override
     public IUserDAOService getUserDAOService() {
         return this.userDAOService;
     }
-
     @Override
     public boolean resetPassword(String email) {
         boolean userExist = userDAOService.resetPassword(this.email);
         if (userExist) {
             String generatedPassword = UUID.randomUUID().toString().substring(0, 8);
-            //String  = temporaryPassword.replaceAll("_", "");
-          //  String encrypted_password = encryptPassword(generatedPassword);
             if (userDAOService.updatePassword(this.email, generatedPassword)) {
                 SMTPEmailService.instance(this.email, "Your new password is " + generatedPassword, "Expensify reset password").sendEmail();
                 return true;
             }
         }
         return false;
-
     }
-
-
     public boolean isPasswordAuthenticated() throws SQLException {
         if (password == null) {
             return false;
         }
-//        String encryptedPassword = encryptPassword(password);
         String userPassword = userDAOService.getUserPassword(email);
         return userPassword.equals(password);
     }
-
-
     public String getUserFirstName(int userId) {
         return this.userDAOService.getUserFirstName(userId);
     }

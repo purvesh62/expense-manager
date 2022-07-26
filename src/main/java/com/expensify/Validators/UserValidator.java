@@ -21,9 +21,6 @@ import com.expensify.model.User;
             if (user.getContact() == null) {
                 return "Contact cannot be null";
             }
-//            if (user.resetPassword(user.getEmail())) {
-//                return "Email already exists";
-//            }
             return null;
         }
     }
