@@ -24,14 +24,15 @@ public class UserConfigurationDAOService implements IUserConfigurationDAOService
 
             try (ResultSet resultSet = this.database.executeProcedure("CALL get_user_expenses(?)", parameterList)) {
                 if (resultSet != null) {
-                    IUserConfiguration userConfiguration = UserConfigurationFactory.instance().createUserConfiguration(
-                            resultSet.getInt("expense_notification_status"),
-                            resultSet.getInt("budget_notification_status"),
-                            resultSet.getInt("subscription_notification_status")
-                    );
-                    while (resultSet.next()) {
+                    while (resultSet.next()){
+                        IUserConfiguration userConfiguration = UserConfigurationFactory.instance().createUserConfiguration(
+                                resultSet.getInt("expense_notification_status"),
+                                resultSet.getInt("budget_notification_status"),
+                                resultSet.getInt("subscription_notification_status")
+                        );
+                        return userConfiguration;
                     }
-                    return userConfiguration;
+
                 }
 
             }
