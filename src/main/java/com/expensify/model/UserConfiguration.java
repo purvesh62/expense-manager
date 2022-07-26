@@ -8,6 +8,30 @@ public class UserConfiguration implements IUserConfiguration {
     private int budgetExceedNotification;
     private int subscriptionNotification;
 
+    public int getExpenseReminder() {
+        return expenseReminder;
+    }
+
+    public void setExpenseReminder(int expenseReminder) {
+        this.expenseReminder = expenseReminder;
+    }
+
+    public int getBudgetExceedNotification() {
+        return budgetExceedNotification;
+    }
+
+    public void setBudgetExceedNotification(int budgetExceedNotification) {
+        this.budgetExceedNotification = budgetExceedNotification;
+    }
+
+    public int getSubscriptionNotification() {
+        return subscriptionNotification;
+    }
+
+    public void setSubscriptionNotification(int subscriptionNotification) {
+        this.subscriptionNotification = subscriptionNotification;
+    }
+
     private IUserConfigurationDAOService userConfigurationDAOService;
 
     public UserConfiguration(IUserConfigurationDAOService database) {

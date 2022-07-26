@@ -28,8 +28,7 @@ public class UserConfigurationController {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             UserConfiguration userConfiguration = (UserConfiguration) userConfigurationObj.getUserConfiguration((Integer) userCache.get("userId"));
-            model.addAttribute("userConfigurationValue", userConfiguration);
-            model.addAttribute("userConfiguration", UserConfigurationFactory.instance().createUserConfiguration());
+            model.addAttribute("userConfiguration", userConfiguration);
             model.addAttribute("name", userCache.get("name"));
             model.addAttribute("email", userCache.get("email"));
             return "user_configurations";
