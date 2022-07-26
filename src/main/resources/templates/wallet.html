@@ -116,7 +116,7 @@
                         </div>
                         <div class="form-group">
                             <label for="Amount">Amount</label>
-                            <input class="form-control" type="number" th:min="0" th:field="*{amount}" id="Amount" placeholder="Amount" >
+                            <input class="form-control" type="number" th:min="0" th:field="*{amount}" id="Amount" placeholder="Amount" th:required="required" >
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('Amount')}" th:errors="*{amount}"></div>
                         </div>
 
@@ -146,7 +146,7 @@
                         </div>
                         <div class="form-group">
                             <label for="walletAmount">Wallet Amount</label>
-                            <input id="walletAmount" type="number"  th:min="0" th:value="${wallet.amount}" name="amount" class="form-control" />
+                            <input id="walletAmount" type="number"  th:min="0" th:value="${wallet.amount}" name="amount" class="form-control" th:required="required" />
                             <div class="alert alert-warning" th:if="${#fields.hasErrors('amount')}" th:errors="*{amount}"></div>
                         </div>
                         <button type="submit" class="btn" >Update</button>

@@ -2,7 +2,7 @@ package com.expensify.Validators;
 
 import com.expensify.model.Subscription;
 
-import java.time.LocalDate;
+
 import java.util.Date;
 
 public class SubscriptionValidator implements IValidator{
