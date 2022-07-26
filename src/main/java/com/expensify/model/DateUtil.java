@@ -57,7 +57,6 @@ public class DateUtil {
     }
 
     public static Date parseDate(String date) {
-    public static java.sql.Date convertDate(String date) {
         Date start = null;
         try {
             return formatter.parse(date);

@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 
 
@@ -159,8 +160,7 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(userId);
             parameterList.add(walletId);
 
-            LocalDate date = LocalDate.parse(expenseDate);
-
+            LocalDate date =  DateUtil.parseDate(expenseDate).toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             String sDate = DateUtil.getFirstDayOfMonth(date);
             String eDate = DateUtil.getLastDayOfMonth(date);
 
