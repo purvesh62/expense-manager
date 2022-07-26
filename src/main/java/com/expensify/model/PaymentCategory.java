@@ -9,9 +9,11 @@ public class PaymentCategory implements IPaymentCategory {
     private IPaymentCategoriesDAOService paymentCategoriesDAOService;
     private int paymentId;
     private String paymentCategory;
-    public PaymentCategory(){
+
+    public PaymentCategory() {
 
     }
+
     public PaymentCategory(int paymentId, String paymentCategory) {
         this.paymentId = paymentId;
         this.paymentCategory = paymentCategory;
@@ -20,11 +22,12 @@ public class PaymentCategory implements IPaymentCategory {
     public PaymentCategory(IPaymentCategoriesDAOService database) {
         paymentCategoriesDAOService = database;
     }
-    public IPaymentCategoriesDAOService getPaymentCategoriesDAOService(){
+
+    public IPaymentCategoriesDAOService getPaymentCategoriesDAOService() {
         return paymentCategoriesDAOService;
     }
 
-    public void setPaymentCategoriesDAOService(IPaymentCategoriesDAOService paymentCategoriesDAOService){
+    public void setPaymentCategoriesDAOService(IPaymentCategoriesDAOService paymentCategoriesDAOService) {
         this.paymentCategoriesDAOService = paymentCategoriesDAOService;
     }
 
@@ -44,7 +47,7 @@ public class PaymentCategory implements IPaymentCategory {
         this.paymentCategory = paymentCategory;
     }
 
-    public List<IPaymentCategory> getAllPaymentCategories()  {
+    public List<IPaymentCategory> getAllPaymentCategories() {
         try {
             return paymentCategoriesDAOService.getAllPaymentCategories();
         } catch (SQLException e) {
