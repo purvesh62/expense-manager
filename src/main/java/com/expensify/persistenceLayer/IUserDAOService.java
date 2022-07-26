@@ -6,8 +6,6 @@ import java.sql.SQLException;
 
 public interface IUserDAOService {
 
-    boolean findByEmail(String email);
-
 
     int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException;
 
@@ -16,7 +14,6 @@ public interface IUserDAOService {
 
     int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException;
 
-    boolean updatePassword(String email, String password);
 
     boolean checkIfEmailExists(String email);
 }

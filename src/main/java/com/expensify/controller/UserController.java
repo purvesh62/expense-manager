@@ -65,7 +65,7 @@ public class UserController {
 
     @PostMapping(value = "/reset", consumes = "application/x-www-form-urlencoded")
     public String resetPassword(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
-        boolean userExist = user.findByEmail(user.getEmail());
+        boolean userExist = user.checkIfEmailExists(user.getEmail());
         if (userExist) {
             return "redirect:/login";
         }

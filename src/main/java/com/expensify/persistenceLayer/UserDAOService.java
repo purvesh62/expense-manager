@@ -76,9 +76,6 @@ public class UserDAOService implements IUserDAOService {
         try {
             parameterList.add(email);
             parameterList.add(password);
-            /*User.BCryptPasswordEncoder passwordEncoder = new User.BCryptPasswordEncoder();
-            String encodedPassword = passwordEncoder.encode(password);
-            user.setPassword(encodedPassword);*/
             ResultSet resultSet = database.executeProcedure("CALL update_user_password(?,?)", parameterList);
             if (resultSet != null) {
                 passwordUpdated = true;
@@ -99,7 +96,7 @@ public class UserDAOService implements IUserDAOService {
 
 
     @Override
-    public boolean findByEmail(String email) {
+    public boolean checkIfEmailExists(String email) {
         List<Object> parameterList = new ArrayList<>();
         parameterList.add(email);
         boolean userExist = false;

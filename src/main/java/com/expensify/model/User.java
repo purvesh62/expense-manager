@@ -115,8 +115,8 @@ public class User implements IUser {
     }
 
     @Override
-   public boolean findByEmail(String email) {
-        boolean userExist = userDAOService.findByEmail(this.email);
+   public boolean checkIfEmailExists(String email) {
+        boolean userExist = userDAOService.checkIfEmailExists(this.email);
         if(userExist) {
             String generatedPassword = UUID.randomUUID().toString().substring(0,20);
             if (userDAOService.updatePassword(this.email,generatedPassword)){
@@ -133,9 +133,5 @@ public class User implements IUser {
         return this.password;
     }
 
-    @Override
-    public boolean checkIfEmailExists(String email) {
-        return userDAOService.checkIfEmailExists(email);
-    }
 }
 

@@ -13,10 +13,6 @@ public interface IUser {
 
     IUserDAOService getUserDAOService();
 
-
-
-    boolean findByEmail(String email);
-
     String encode(String password);
 
     boolean checkIfEmailExists(String email);
