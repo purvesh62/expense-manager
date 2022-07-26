@@ -9,14 +9,15 @@ public interface IUserDAOService {
 
     int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException;
 
-    String encryptPassword(String password);
 
-    int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException;
+    int verifyUser( String email) throws SQLException;
 
 
-    boolean checkIfEmailExists(String email);
+    boolean resetPassword(String email);
 
     boolean updatePassword(String email, String password);
 
     String getUserFirstName(int userId);
+
+    String getUserPassword(String email) throws SQLException;
 }

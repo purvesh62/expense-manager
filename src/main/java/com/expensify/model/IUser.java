@@ -13,7 +13,7 @@ public interface IUser {
 
     IUserDAOService getUserDAOService();
 
-    String encode(String password);
+    boolean resetPassword(String email);
 
-    boolean checkIfEmailExists(String email);
+    boolean isPasswordAuthenticated() throws SQLException;
 }

@@ -1,5 +1,6 @@
 package com.expensify.controller;
 
+import com.expensify.factories.BudgetFactory;
 import com.expensify.factories.ExpenseFactory;
 import com.expensify.factories.UserFactory;
 import com.expensify.model.IUser;
@@ -9,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
@@ -35,18 +37,25 @@ public class UserController {
 
 
     @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
-    public String registerUser(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
+    public String registerUser(@ModelAttribute("user") User user, HttpSession session, RedirectAttributes redirectAttributes) throws SQLException {
         user.setUserDAOService(userObj);
-        int userId = user.registerUser();
-        if (userId > 0) {
-            JSONObject userCache = new JSONObject();
-            userCache.put("email", user.getEmail());
-            userCache.put("userId", userId);
-            userCache.put("name", user.getFirstName());
-            SessionManager.setSession(session, userCache);
-            return "redirect:/login";
+        String msg = UserFactory.instance().createUserValidator().validate(user);
+        if(msg == null) {
+            int userId = user.registerUser();
+            if (userId > 0) {
+                JSONObject userCache = new JSONObject();
+                userCache.put("email", user.getEmail());
+                userCache.put("userId", userId);
+                userCache.put("name", user.getFirstName());
+                SessionManager.setSession(session, userCache);
+                return "redirect:/";
+            }
         }
-        return "register";
+        else {
+            redirectAttributes.addFlashAttribute("errorMessage", msg);
+            return "register";
+        }
+        return "error";
     }
 
 
@@ -64,23 +73,11 @@ public class UserController {
     @PostMapping(value = "/reset", consumes = "application/x-www-form-urlencoded")
     public String resetPassword(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
         user.setUserDAOService(userObj);
-        boolean userExist = user.checkIfEmailExists(user.getEmail());
+        boolean userExist = user.resetPassword(user.getEmail());
         if (userExist) {
             return "redirect:/login";
         }
-        user.setUserDAOService(userObj);
-        int userId = user.authenticateUser();
-        if (userId > 0) {
-            String name = user.getUserFirstName(userId);
-            JSONObject userCache = new JSONObject();
-            userCache.put("email", user.getEmail());
-            userCache.put("userId", userId);
-            userCache.put("name", name);
-            SessionManager.setSession(session, userCache);
-            return "redirect:/";
-
-        }
-        return null;
+        return "error";
     }
 
     @PostMapping(value = "/login", consumes = "application/x-www-form-urlencoded")
@@ -99,9 +96,11 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping(value = "/process_register", produces = "text/html")
-    public String processRegister(User user) {
-        String encodedPassword = user.encode(user.getPassword());
+    @PostMapping(value = "/process_register")
+    public String processRegister(User user) throws SQLException {
+        user.setUserDAOService(userObj);
+        user.registerUser();
+        String encodedPassword = String.valueOf(user.isPasswordAuthenticated());
         user.setPassword(encodedPassword);
         return "process_register";
     }

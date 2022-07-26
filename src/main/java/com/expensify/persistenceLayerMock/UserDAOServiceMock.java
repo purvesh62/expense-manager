@@ -7,11 +7,9 @@ public class UserDAOServiceMock implements IUserDAOService {
 
 
     @Override
-    public boolean checkIfEmailExists(String email) {
+    public boolean resetPassword(String email) {
         return true;
     }
-
-
 
     @Override
     public boolean updatePassword(String email, String generatedPassword) {
@@ -24,17 +22,17 @@ public class UserDAOServiceMock implements IUserDAOService {
     }
 
     @Override
+    public String getUserPassword(String email) throws SQLException {
+        return null;
+    }
+
+    @Override
     public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         return 1;
     }
 
     @Override
-    public String encryptPassword(String password) {
-        return String.valueOf(true);
-    }
-
-    @Override
-    public int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
+    public int verifyUser(String email) throws SQLException {
         return 1;
     }
 

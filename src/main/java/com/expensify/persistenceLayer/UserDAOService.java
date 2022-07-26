@@ -44,24 +44,17 @@ public class UserDAOService implements IUserDAOService {
         return userId;
     }
 
-    @Override
-    public String encryptPassword(String password) {
-        return password;
-    }
 
 
-    public int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
+    public int verifyUser(String email) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
         try {
             parameterList.add(email);
-
             ResultSet resultSet = database.executeProcedure("CALL get_user_credential(?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-                    if (resultSet.getString("password").equals(password)) {
-                        userId = resultSet.getInt("user_id");
-                    }
+                    return resultSet.getInt("user_id");
                 }
             }
 
@@ -71,6 +64,28 @@ public class UserDAOService implements IUserDAOService {
             database.closeConnection();
         }
         return userId;
+    }
+
+    @Override
+    public String getUserPassword(String email) throws SQLException {
+        List<Object> parameterList = new ArrayList<>();
+        String password = null;
+        try {
+            parameterList.add(email);
+
+            ResultSet resultSet = database.executeProcedure("CALL get_user_credential(?)", parameterList);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    password = resultSet.getString("password");
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.closeConnection();
+        }
+        return password;
     }
 
     @Override
@@ -98,14 +113,16 @@ public class UserDAOService implements IUserDAOService {
     }
 
     @Override
-    public boolean checkIfEmailExists(String email) {
+    public boolean resetPassword(String email) {
         List<Object> parameterList = new ArrayList<>();
         parameterList.add(email);
         boolean userExist = false;
         try {
             ResultSet resultSet = database.executeProcedure("CALL check_user_exist(?)", parameterList);
             if (resultSet != null) {
-                userExist = true;
+                while(resultSet.next()){
+                    userExist = true;
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

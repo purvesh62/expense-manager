@@ -40,14 +40,14 @@ public class SMTPEmailService implements IEmailService {
 
             Session session = Session.getInstance(props, new javax.mail.Authenticator() {
                 protected PasswordAuthentication getPasswordAuthentication() {
-                    return new PasswordAuthentication(userName, password);
+                    return new PasswordAuthentication("expensify2022@gmail.com", "xxyidjhdiekxglrq");
                 }
             });
 
             //create message using session
             MimeMessage message = new MimeMessage(session);
             message.setContent(emailBody, "text/html; charset=utf-8");
-            message.setFrom(new InternetAddress(userName));
+            message.setFrom(new InternetAddress("expensify2022@gmail.com"));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receipentAddress));
             message.setSubject(subject);
 

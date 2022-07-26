@@ -14,16 +14,16 @@ import java.util.List;
 public class UserTest {
 
     @Test
-    public void checkIfEmailExistsTest() throws SQLException {
+    public void resetPasswordSuccessTest() throws SQLException {
         UserDAOServiceMock userDAOServiceMock = new UserDAOServiceMock();
-        boolean result = userDAOServiceMock.checkIfEmailExists("njaishwarya01@gmail.com");
+        boolean result = userDAOServiceMock.resetPassword("njaishwarya01@gmail.com");
         Assertions.assertEquals(true, result);
     }
 
     @Test
-    public void checkIfEmailExistsFailureTest() throws SQLException {
+    public void resetPasswordFailureTest() throws SQLException {
         UserDAOServiceMock userDAOServiceMock = new UserDAOServiceMock();
-        boolean result = userDAOServiceMock.checkIfEmailExists("njaishwarya01gmail.com");
+        boolean result = userDAOServiceMock.resetPassword("njaishwarya01gmail.com");
         Assertions.assertEquals(false, result);
     }
 
@@ -42,13 +42,13 @@ public class UserTest {
 
     public void verifyUserSuccessTest() throws SQLException{
         UserDAOServiceMock userDAOServiceMock = new UserDAOServiceMock();
-        int result = userDAOServiceMock.verifyUser("Aishwarya","N","aishwarya@domain.com","aishwa","0987654321");
+        int result = userDAOServiceMock.verifyUser("aishwarya@domain.com");
         Assertions.assertEquals(14, result);
     }
 
     public void verifyUserFailureTest() throws SQLException{
         UserDAOServiceMock userDAOServiceMock = new UserDAOServiceMock();
-        int result = userDAOServiceMock.verifyUser("Aishwarya","N","aish@domain.com","aishwa","0987654321");
+        int result = userDAOServiceMock.verifyUser("aish@domain.com");
         Assertions.assertEquals(0, result);
     }
 

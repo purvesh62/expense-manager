@@ -5,6 +5,8 @@ import com.expensify.persistenceLayer.IUserDAOService;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 public class User implements IUser {
     private IUserDAOService userDAOService;
 //    private UserDAOService authenticationDAO;
@@ -16,7 +18,6 @@ public class User implements IUser {
 
     private String password;
     private String contact;
-
 
 
     public User() {
@@ -103,14 +104,22 @@ public class User implements IUser {
 
     @Override
     public int registerUser() throws SQLException {
-        return userDAOService.saveUser(firstName,  lastName,  email,  password,  contact);
+        if (userDAOService.verifyUser(email) <= 0) {
+//            password = encryptPassword(password);
+            return userDAOService.saveUser(firstName, lastName, email, password, contact);
+        }
+        return 0;
     }
 
     @Override
     public int authenticateUser() throws SQLException {
-        return userDAOService.verifyUser(firstName, lastName, email, password, contact);
+//        userDAOService.resetPassword(email);
+        int userId = userDAOService.verifyUser(email);
+        if (userId > 0 && isPasswordAuthenticated()) {
+            return userId;
+        }
+        return 0;
     }
-
 
     @Override
     public IUserDAOService getUserDAOService() {
@@ -118,11 +127,13 @@ public class User implements IUser {
     }
 
     @Override
-   public boolean checkIfEmailExists(String email) {
-        boolean userExist = userDAOService.checkIfEmailExists(this.email);
+    public boolean resetPassword(String email) {
+        boolean userExist = userDAOService.resetPassword(this.email);
         if (userExist) {
-            String generatedPassword = UUID.randomUUID().toString().substring(0, 20);
-            if (userDAOService.updatePassword(this.email, generatedPassword)) {
+            String generatedPassword = "UUID.randomUUID().toString().substring(0, 8)";
+            //String  = temporaryPassword.replaceAll("_", "");
+            String encrypted_password = encryptPassword(generatedPassword);
+            if (userDAOService.updatePassword(this.email, encrypted_password)) {
                 SMTPEmailService.instance(this.email, "Your new password is " + generatedPassword, "Expensify reset password").sendEmail();
                 return true;
             }
@@ -131,10 +142,19 @@ public class User implements IUser {
 
     }
 
-    @Override
-        public String encode(String password) {
-        return this.password;
+    public String encryptPassword(String encryptedPassword) {
+        return BCrypt.hashpw(encryptedPassword, BCrypt.gensalt(12));
     }
+
+    public boolean isPasswordAuthenticated() throws SQLException {
+        if (password == null) {
+            return false;
+        }
+//        String encryptedPassword = encryptPassword(password);
+        String userPassword = userDAOService.getUserPassword(email);
+        return userPassword.equals(password);
+    }
+
 
     public String getUserFirstName(int userId) {
         return this.userDAOService.getUserFirstName(userId);

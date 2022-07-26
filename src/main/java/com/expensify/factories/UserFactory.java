@@ -1,5 +1,6 @@
 package com.expensify.factories;
 
+import com.expensify.Validators.UserValidator;
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
 import com.expensify.model.IUser;
@@ -41,7 +42,10 @@ public class UserFactory implements IUserFactory {
     public IUser createUser(int userId, String firstName, String lastName, String email,String password,String contact) {
         return new User(userId, firstName, lastName, email, password, contact);
     }
-
+    @Override
+    public UserValidator createUserValidator() {
+        return new UserValidator();
+    }
 }
 
 
