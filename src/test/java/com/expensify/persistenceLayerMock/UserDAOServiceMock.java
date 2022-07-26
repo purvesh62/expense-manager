@@ -1,7 +1,9 @@
 package com.expensify.persistenceLayerMock;
 
+import com.expensify.model.IUser;
 import com.expensify.persistenceLayer.IUserDAOService;
 import java.sql.SQLException;
+import java.util.List;
 
 public class UserDAOServiceMock implements IUserDAOService {
 
@@ -27,7 +29,7 @@ public class UserDAOServiceMock implements IUserDAOService {
     }
 
     @Override
-    public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
+    public List<IUser> saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         return 1;
     }
 

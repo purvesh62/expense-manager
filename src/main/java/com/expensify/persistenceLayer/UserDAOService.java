@@ -2,6 +2,8 @@ package com.expensify.persistenceLayer;
 
 import com.expensify.database.IDatabase;
 import com.expensify.database.MySqlDatabase;
+import com.expensify.model.IUser;
+import com.expensify.model.IWallet;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,9 +18,9 @@ public class UserDAOService implements IUserDAOService {
         //  this.database = database;
         this.database = MySqlDatabase.instance();
     }
-
     @Override
-    public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
+    public List<IUser> saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
+        List<IUser> userList = new ArrayList<>();
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
         try {
@@ -31,7 +33,6 @@ public class UserDAOService implements IUserDAOService {
             ResultSet resultSet = database.executeProcedure("CALL register_user(?, ?, ?, ?, ?)", parameterList);
             if (resultSet != null) {
                 while (resultSet.next()) {
-
                     userId = resultSet.getInt("user_id");
                 }
             }
@@ -40,11 +41,8 @@ public class UserDAOService implements IUserDAOService {
         } finally {
             database.closeConnection();
         }
-
-        return userId;
+        return userList;
     }
-
-
 
     public int verifyUser(String email) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
@@ -79,7 +77,6 @@ public class UserDAOService implements IUserDAOService {
                     password = resultSet.getString("password");
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -87,7 +84,6 @@ public class UserDAOService implements IUserDAOService {
         }
         return password;
     }
-
     @Override
     public boolean updatePassword(String email, String password) {
         List<Object> parameterList = new ArrayList<>();
