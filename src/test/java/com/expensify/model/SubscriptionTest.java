@@ -53,7 +53,6 @@ public class SubscriptionTest {
         SubscriptionDAOServiceMock subscriptionDAOServiceMock = new SubscriptionDAOServiceMock();
         boolean result = subscriptionDAOServiceMock.updateSubscription(0,"Netflix", "2022-10-01");
         Assertions.assertEquals(false, result);
-
     }
 
     @Test
@@ -69,6 +68,5 @@ public class SubscriptionTest {
         boolean result = subscriptionDAOServiceMock.deleteSubscription(0);
         Assertions.assertEquals(false, result);
     }
-
 
 }

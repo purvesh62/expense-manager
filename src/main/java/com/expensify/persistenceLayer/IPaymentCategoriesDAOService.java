@@ -6,6 +6,5 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IPaymentCategoriesDAOService {
-
     List<IPaymentCategory> getAllPaymentCategories() throws SQLException;
 }

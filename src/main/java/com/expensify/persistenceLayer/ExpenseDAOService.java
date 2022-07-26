@@ -13,7 +13,9 @@ import java.util.List;
 
 
 public class ExpenseDAOService implements IExpenseDOAService {
+
     private final IDatabase database;
+
     public ExpenseDAOService(IDatabase database) {
         this.database = database;
     }
@@ -159,5 +161,4 @@ public class ExpenseDAOService implements IExpenseDOAService {
         }
         return userMonthlyExpense;
     }
-
 }

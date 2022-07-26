@@ -7,17 +7,15 @@ import java.util.List;
 
 public class Subscription implements ISubscription {
 
-
     private ISubscriptionDAOService subscriptionDAOService;
+
     private int userId;
 
     private int subscriptionId;
 
-
     private String subscriptionName;
 
     private String expiryDate;
-
 
     public Subscription(int subscriptionId, String subscriptionName, int userId, String expiryDate) {
         this.userId = userId;
@@ -33,7 +31,6 @@ public class Subscription implements ISubscription {
     public Subscription(ISubscriptionDAOService database) {
         subscriptionDAOService = database;
     }
-
 
     public ISubscriptionDAOService getSubscriptionDAOService() {
         return subscriptionDAOService;

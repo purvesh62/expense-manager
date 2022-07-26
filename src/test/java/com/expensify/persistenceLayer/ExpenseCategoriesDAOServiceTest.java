@@ -33,6 +33,7 @@ public class ExpenseCategoriesDAOServiceTest {
         List<IExpenseCategory> categories = service.getAllExpenseCategories();
         Assertions.assertEquals(0, categories.size());
     }
+
     @Test
     public void testGetAllExpenseCategoriesDetails_ReturnsResultSet() throws SQLException {
         service = new ExpenseCategoriesDAOService(database);
@@ -46,7 +47,6 @@ public class ExpenseCategoriesDAOServiceTest {
 
         List<IExpenseCategory> categories = service.getAllExpenseCategories();
         Assertions.assertEquals(1, categories.size());
-
     }
 
 }

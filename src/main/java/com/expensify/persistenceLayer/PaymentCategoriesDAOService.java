@@ -18,7 +18,6 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
 
     public List<IPaymentCategory> getAllPaymentCategories() throws SQLException {
         List<IPaymentCategory> paymentCategoryList = new ArrayList<>();
-
         try {
             List<Object> parameterList = new ArrayList<>();
             ResultSet resultSet = database.executeProcedure("CALL get_all_payment_categories()", parameterList);
@@ -41,5 +40,4 @@ public class PaymentCategoriesDAOService implements IPaymentCategoriesDAOService
 
         return paymentCategoryList;
     }
-
 }

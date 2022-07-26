@@ -15,6 +15,7 @@ import java.util.List;
 
 public class NotificationDAOService implements INotficationDAOService {
     private final IDatabase database;
+
     DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
     public NotificationDAOService(IDatabase database) {

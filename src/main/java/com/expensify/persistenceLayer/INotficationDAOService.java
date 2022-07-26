@@ -11,6 +11,4 @@ public interface INotficationDAOService {
     INotification getBudgetLimitExceedSubscribedUsers(int userId);
 
     List<INotification> getUsersWhoseSubscriptionIsExpiring(String expiryDate) throws ParseException;
-
-
 }

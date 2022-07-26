@@ -6,8 +6,8 @@ import com.expensify.model.Subscription;
 import java.util.Date;
 
 public class SubscriptionValidator implements IValidator{
-    @Override
 
+    @Override
     public String validate(Object object) {
         Subscription subscription = (Subscription) object;
         Date date = new Date(subscription.getExpiryDate());

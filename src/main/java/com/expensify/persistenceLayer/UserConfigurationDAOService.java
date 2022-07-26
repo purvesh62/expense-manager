@@ -32,9 +32,7 @@ public class UserConfigurationDAOService implements IUserConfigurationDAOService
                         );
                         return userConfiguration;
                     }
-
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
