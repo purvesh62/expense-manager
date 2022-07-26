@@ -9,6 +9,19 @@ import com.expensify.persistenceLayer.UserConfigurationDAOService;
 
 public class UserConfigurationFactory implements IUserConfigurationFactory {
 
+    private static IUserConfigurationFactory userConfigurationFactory = null;
+
+    private UserConfigurationFactory(){
+
+    }
+
+    public static IUserConfigurationFactory instance(){
+        if(userConfigurationFactory == null){
+            return new UserConfigurationFactory();
+        }
+        return userConfigurationFactory;
+    }
+
     @Override
     public IUserConfiguration createUserConfiguration() {
         IDatabase database = MySqlDatabase.instance();
@@ -18,5 +31,10 @@ public class UserConfigurationFactory implements IUserConfigurationFactory {
     @Override
     public IUserConfigurationDAOService createUserConfigurationDAOService(IDatabase database) {
         return new UserConfigurationDAOService(database);
+    }
+
+    @Override
+    public IUserConfiguration createUserConfiguration(int expenseReminder, int budgetExceedNotification, int subscriptionNotification) {
+        return new UserConfiguration(expenseReminder, budgetExceedNotification, subscriptionNotification);
     }
 }

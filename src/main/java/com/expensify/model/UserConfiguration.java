@@ -19,6 +19,11 @@ public class UserConfiguration implements IUserConfiguration {
         userConfigurationDAOService = database;
     }
 
+    public UserConfiguration(int expenseReminder, int budgetExceedNotification, int subscriptionNotification) {
+        this.expenseReminder = expenseReminder;
+        this.budgetExceedNotification = budgetExceedNotification;
+        this.subscriptionNotification = subscriptionNotification;
+    }
 
     @Override
     public UserConfiguration getUserConfiguration(int userId) {
