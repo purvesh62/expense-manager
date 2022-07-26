@@ -48,7 +48,8 @@ public class UserController {
     }
     @GetMapping(value = "/register", produces = "text/html")
     public String register(@ModelAttribute("user") User user, Model model, HttpSession session) {
-        try {
+        try
+        {
             model.addAttribute("user", UserFactory.instance().createUser());
             return "register";
         } catch (Exception exception) {
