@@ -15,8 +15,8 @@ public class NotificationFactory implements INotificationFactory {
 
     }
 
-    public static INotificationFactory instance(){
-        if(notificationFactory == null){
+    public static INotificationFactory instance() {
+        if (notificationFactory == null) {
             notificationFactory = new NotificationFactory();
         }
         return notificationFactory;

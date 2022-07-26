@@ -21,6 +21,7 @@ public class MySqlDatabase implements  IDatabase{
         dbPassword = System.getenv("DB_PASSWORD");
         dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
     }
+
     public static MySqlDatabase instance() {
         if(MySqlDatabase.instance == null){
             MySqlDatabase.instance = new MySqlDatabase();

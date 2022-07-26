@@ -76,7 +76,6 @@ public class WalletController {
         } else {
             return "redirect:/";
         }
-
     }
 
     @PostMapping(value = "/updatewallet")
@@ -91,5 +90,4 @@ public class WalletController {
             return "redirect:/";
         }
     }
-
 }

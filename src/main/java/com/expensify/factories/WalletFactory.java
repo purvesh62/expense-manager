@@ -15,6 +15,7 @@ public class WalletFactory implements IWalletFactory {
     private WalletFactory(){
 
     }
+
     public static WalletFactory instance() {
         if (walletFactory == null) {
             walletFactory = new WalletFactory();

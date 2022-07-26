@@ -18,7 +18,6 @@ public class UserFactory implements IUserFactory {
         return new User(createUserDAOService(database));
     }
 
-
     public static UserFactory instance() {
         if (userFactory == null) {
             userFactory = new UserFactory();

@@ -30,7 +30,6 @@ public class ExpenseController {
         expenseObj = ExpenseFactory.instance().createExpense();
     }
 
-
     @GetMapping(path = "/", produces = "text/html")
     public String userExpenses(Model model, HttpSession session) {
         try {
@@ -100,5 +99,4 @@ public class ExpenseController {
         }
         return "redirect:/login";
     }
-
 }

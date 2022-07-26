@@ -11,7 +11,7 @@ public class PaymentCategoryFactory implements IPaymentCategoryFactory {
 
     private static PaymentCategoryFactory paymentCategoryFactory;
 
-    private PaymentCategoryFactory(){
+    private PaymentCategoryFactory() {
 
     }
 
