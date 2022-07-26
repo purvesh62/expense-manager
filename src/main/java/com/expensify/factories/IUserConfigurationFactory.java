@@ -9,5 +9,5 @@ public interface IUserConfigurationFactory {
     IUserConfiguration createUserConfiguration();
     IUserConfigurationDAOService createUserConfigurationDAOService(IDatabase database);
 
-    IUserConfiguration createUserConfiguration(int expenseReminder, int budgetExceedNotification, int subscriptionNotification);
+    IUserConfiguration createUserConfiguration(boolean expenseReminder, boolean budgetExceedNotification, boolean subscriptionNotification);
 }

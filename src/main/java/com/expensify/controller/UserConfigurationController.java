@@ -43,7 +43,7 @@ public class UserConfigurationController {
             int userId = (Integer) userCache.get("userId");
             userConfiguration.setUserConfigurationDAOService(userConfigurationObj);
             userConfiguration.setUserConfiguration(userId);
-            return "redirect:/configuration";
+            return "redirect:/configurations";
         }
         return "redirect:/login";
     }

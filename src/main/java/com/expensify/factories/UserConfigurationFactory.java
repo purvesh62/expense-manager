@@ -34,7 +34,7 @@ public class UserConfigurationFactory implements IUserConfigurationFactory {
     }
 
     @Override
-    public IUserConfiguration createUserConfiguration(int expenseReminder, int budgetExceedNotification, int subscriptionNotification) {
+    public IUserConfiguration createUserConfiguration(boolean expenseReminder, boolean budgetExceedNotification, boolean subscriptionNotification) {
         return new UserConfiguration(expenseReminder, budgetExceedNotification, subscriptionNotification);
     }
 }

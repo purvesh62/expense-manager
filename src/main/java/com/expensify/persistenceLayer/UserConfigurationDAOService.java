@@ -26,9 +26,9 @@ public class UserConfigurationDAOService implements IUserConfigurationDAOService
                 if (resultSet != null) {
                     while (resultSet.next()){
                         IUserConfiguration userConfiguration = UserConfigurationFactory.instance().createUserConfiguration(
-                                resultSet.getInt("expense_notification_status"),
-                                resultSet.getInt("budget_notification_status"),
-                                resultSet.getInt("subscription_notification_status")
+                                resultSet.getInt("expense_notification_status") == 1,
+                                resultSet.getInt("budget_notification_status") == 1,
+                                resultSet.getInt("subscription_notification_status") == 1
                         );
                         return userConfiguration;
                     }
