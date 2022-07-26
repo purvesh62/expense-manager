@@ -23,6 +23,7 @@
 <body>
 <header th:insert="fragments/sidebar"></header>
 <div class="container">
+    <h3>User Configurations</h3>
     <form action="#" th:action="@{/configurations}" th:object="${userConfiguration}" method="POST">
         <div class="p-4">
             <div class="form-check">

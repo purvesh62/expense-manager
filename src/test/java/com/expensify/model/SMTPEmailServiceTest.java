@@ -1,5 +1,6 @@
 package com.expensify.model;
 
+import com.expensify.persistenceLayerMock.SMTPEmailServiceMock;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -14,6 +15,7 @@ import static org.junit.Assert.assertThrows;
 public class SMTPEmailServiceTest {
     @Test
     public void sendMailSuccessTest(){
+        SMTPEmailServiceMock.instance("test@gmail.com", "Test Email", "Test Email Subject").sendEmail();
         assert(true);
     }
 
