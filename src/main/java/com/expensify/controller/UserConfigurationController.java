@@ -1,5 +1,7 @@
 package com.expensify.controller;
 
+import com.expensify.factories.UserConfigurationFactory;
+import com.expensify.model.IUserConfiguration;
 import com.expensify.model.SessionManager;
 import com.expensify.model.UserConfiguration;
 import org.json.simple.JSONObject;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.servlet.http.HttpSession;
@@ -14,22 +17,32 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class UserConfigurationController {
 
+    private IUserConfiguration userConfigurationObj;
+
+    public UserConfigurationController() {
+        userConfigurationObj = UserConfigurationFactory.instance().createUserConfiguration();
+    }
+
     @GetMapping(value = "/configurations", produces = "text/html")
     public String userConfigurations(Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
-            model.addAttribute("userConfiguration", "");
+            UserConfiguration userConfiguration = (UserConfiguration) userConfigurationObj.getUserConfiguration((Integer) userCache.get("userId"));
+            model.addAttribute("userConfigurationValue", userConfiguration);
+            model.addAttribute("userConfiguration", UserConfigurationFactory.instance().createUserConfiguration());
+            model.addAttribute("name", userCache.get("name"));
+            model.addAttribute("email", userCache.get("email"));
             return "user_configurations";
         }
         return "redirect:/login";
     }
 
-    @PutMapping(value = "/configurations", produces = "text/html")
+    @PostMapping(value = "/configurations", produces = "text/html")
     public String userConfigurations(@ModelAttribute("userConfiguration") UserConfiguration userConfiguration, Model model, HttpSession session) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
-            model.addAttribute("userConfiguration", "");
-            return "user_configurations";
+
+            return "redirect:/configuration";
         }
         return "redirect:/login";
     }

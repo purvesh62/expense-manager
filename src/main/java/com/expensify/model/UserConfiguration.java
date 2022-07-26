@@ -1,6 +1,5 @@
 package com.expensify.model;
 
-import com.expensify.persistenceLayer.IBudgetDAOService;
 import com.expensify.persistenceLayer.IUserConfigurationDAOService;
 
 public class UserConfiguration implements IUserConfiguration {
@@ -10,10 +9,6 @@ public class UserConfiguration implements IUserConfiguration {
     private int subscriptionNotification;
 
     private IUserConfigurationDAOService userConfigurationDAOService;
-
-    public UserConfiguration() {
-
-    }
 
     public UserConfiguration(IUserConfigurationDAOService database) {
         userConfigurationDAOService = database;
@@ -26,7 +21,7 @@ public class UserConfiguration implements IUserConfiguration {
     }
 
     @Override
-    public UserConfiguration getUserConfiguration(int userId) {
-        return userConfigurationDAOService.getUserConfiguration(userId, expenseReminder, budgetExceedNotification, subscriptionNotification);
+    public IUserConfiguration getUserConfiguration(int userId) {
+        return userConfigurationDAOService.getUserConfigurations(userId);
     }
 }
