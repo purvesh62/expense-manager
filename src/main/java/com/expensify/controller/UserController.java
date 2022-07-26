@@ -36,16 +36,14 @@ public class UserController {
 
     @PostMapping(value = "/register", consumes = "application/x-www-form-urlencoded")
     public String registerUser(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
+        user.setUserDAOService(userObj);
         int userId = user.registerUser();
         if (userId > 0) {
             JSONObject userCache = new JSONObject();
             userCache.put("email", user.getEmail());
             userCache.put("userId", userId);
+            userCache.put("name", user.getFirstName());
             SessionManager.setSession(session, userCache);
-            String firstName = user.getFirstName();
-            String lastName = user.getLastName();
-            String email = user.getEmail();
-            String contact = user.getContact();
             return "redirect:/login";
         }
         return "register";
@@ -65,6 +63,7 @@ public class UserController {
 
     @PostMapping(value = "/reset", consumes = "application/x-www-form-urlencoded")
     public String resetPassword(@ModelAttribute("user") User user, HttpSession session) throws SQLException {
+        user.setUserDAOService(userObj);
         boolean userExist = user.checkIfEmailExists(user.getEmail());
         if (userExist) {
             return "redirect:/login";
@@ -78,9 +77,11 @@ public class UserController {
         user.setUserDAOService(userObj);
         int userId = user.authenticateUser();
         if (userId > 0) {
+            String name = user.getUserFirstName(userId);
             JSONObject userCache = new JSONObject();
             userCache.put("email", user.getEmail());
             userCache.put("userId", userId);
+            userCache.put("name", name);
             SessionManager.setSession(session, userCache);
             return "redirect:/";
         }

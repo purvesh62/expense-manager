@@ -33,6 +33,8 @@ public class ExportDataController {
             DateRange dateRangeForPDF = new DateRange();
             model.addAttribute("csvDateRange", dateRangeForCSV);
             model.addAttribute("pdfDateRange", dateRangeForPDF);
+            model.addAttribute("name", userCache.get("name"));
+
             return "exportData";
         } else {
             return "error";

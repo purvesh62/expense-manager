@@ -49,6 +49,7 @@ public class ExpenseController {
                 List<IWallet> walletList = WalletFactory.instance().createWallet().getAllWalletDetails((Integer) userCache.get("userId"));
                 model.addAttribute("walletList", walletList);
                 model.addAttribute("expense", expenseObj);
+                model.addAttribute("name", userCache.get("name"));
 
                 return "home";
             } else {

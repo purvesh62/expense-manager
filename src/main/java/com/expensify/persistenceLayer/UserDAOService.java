@@ -1,4 +1,5 @@
 package com.expensify.persistenceLayer;
+
 import com.expensify.database.IDatabase;
 
 import java.sql.ResultSet;
@@ -7,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class UserDAOService implements IUserDAOService {
     private final IDatabase database;
 
     public UserDAOService(IDatabase database) {
-      //  this.database = database;
+        //  this.database = database;
         this.database = database;
     }
+
     @Override
     public int saveUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
@@ -47,6 +48,7 @@ public class UserDAOService implements IUserDAOService {
 
         return password;
     }
+
     public int verifyUser(String firstName, String lastName, String email, String password, String contact) throws SQLException {
         List<Object> parameterList = new ArrayList<>();
         int userId = 0;
@@ -70,7 +72,8 @@ public class UserDAOService implements IUserDAOService {
         return userId;
     }
 
-    public boolean updatePassword(String email, String password)  {
+    @Override
+    public boolean updatePassword(String email, String password) {
         List<Object> parameterList = new ArrayList<>();
         boolean passwordUpdated = false;
         try {
@@ -79,7 +82,7 @@ public class UserDAOService implements IUserDAOService {
             ResultSet resultSet = database.executeProcedure("CALL update_user_password(?,?)", parameterList);
             if (resultSet != null) {
                 passwordUpdated = true;
-                }
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -90,10 +93,8 @@ public class UserDAOService implements IUserDAOService {
                 throw new RuntimeException(e);
             }
         }
-
         return passwordUpdated;
     }
-
 
     @Override
     public boolean checkIfEmailExists(String email) {
@@ -103,7 +104,7 @@ public class UserDAOService implements IUserDAOService {
         try {
             ResultSet resultSet = database.executeProcedure("CALL check_user_exist(?)", parameterList);
             if (resultSet != null) {
-               userExist = true;
+                userExist = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -114,10 +115,30 @@ public class UserDAOService implements IUserDAOService {
                 throw new RuntimeException(e);
             }
         }
-
         return userExist;
     }
 
-
-
+    @Override
+    public String getUserFirstName(int userId) {
+        List<Object> parameterList = new ArrayList<>();
+        parameterList.add(userId);
+        String name = null;
+        try {
+            ResultSet resultSet = database.executeProcedure("CALL get_user_firstname(?)", parameterList);
+            if (resultSet != null) {
+                while (resultSet.next()){
+                    name = resultSet.getString("first_name");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                database.closeConnection();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return name;
+    }
 }
