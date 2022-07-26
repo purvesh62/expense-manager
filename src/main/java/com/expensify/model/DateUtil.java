@@ -56,6 +56,7 @@ public class DateUtil {
     }
 
     public static Date parseDate(String date) {
+        Date start = null;
         try {
             return formatter.parse(date);
         } catch (ParseException e) {
@@ -66,5 +67,15 @@ public class DateUtil {
     public static java.sql.Date convertDate (String date) {
         Date start = parseDate(date);
         return new java.sql.Date(start.getTime());
+    }
+
+    public static String getStartDateFromMonth(String month) {
+        LocalDate date = LocalDate.now();
+        return getFirstDayOfMonth(date.withMonth(Integer.parseInt(month)));
+    }
+
+    public static String getLastDateFromMonth(String month) {
+        LocalDate date = LocalDate.now();
+        return getLastDayOfMonth(date.withMonth(Integer.parseInt(month)));
     }
 }
