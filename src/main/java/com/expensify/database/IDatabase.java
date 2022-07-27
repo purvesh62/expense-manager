@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IDatabase {
-    Connection connectDB();
+    Connection   connectDB();
 
     ResultSet executeProcedure(String procQuery, List<Object> parameterList) throws SQLException;
 
