@@ -62,7 +62,7 @@ public class ExpenseController {
 
     @RequestMapping(value = "expense", method = RequestMethod.GET, produces = "application/json")
     @ResponseBody
-    List<IExpense> getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session, RedirectAttributes rm) {
+    List<IExpense>  getExpenses(@RequestParam(value = "start_date") String startDate, @RequestParam(value = "end_date") String endDate, HttpSession session, RedirectAttributes rm) {
         JSONObject userCache = SessionManager.getSession(session);
         if (userCache.containsKey("userId")) {
             int userId = (Integer) userCache.get("userId");

@@ -18,7 +18,7 @@ build-job:
   only:
     - develop
     - test
-    - production
+    - main
 
 test-job:
   stage: test
@@ -30,7 +30,7 @@ test-job:
   only:
     - develop
     - test
-    - production
+    - main
 
 deploy-test:
   stage: deploy
