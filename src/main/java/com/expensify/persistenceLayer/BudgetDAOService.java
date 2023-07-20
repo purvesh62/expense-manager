@@ -37,19 +37,21 @@ public class BudgetDAOService implements IBudgetDAOService {
             parameterList.add(budgetEndDate);
 
             ResultSet resultSet = database.executeProcedure("CALL get_all_budget(?,?,?)", parameterList);
-            while (resultSet.next()) {
-                IBudget budget = BudgetFactory.instance().createBudget(
-                        resultSet.getInt("budget_id"),
-                        resultSet.getInt("wallet_id"),
-                        resultSet.getString("wallet_label"),
-                        resultSet.getInt("user_id"),
-                        resultSet.getFloat("budget_limit"),
-                        resultSet.getFloat("total_expenses"),
-                        String.valueOf(LocalDate.parse(resultSet.getDate("start_date").toString()).getMonthValue())
-                );
-                budgetList.add(budget);
+            if (resultSet != null) {
+                while (resultSet.next()) {
+                    IBudget budget = BudgetFactory.instance().createBudget(
+                            resultSet.getInt("budget_id"),
+                            resultSet.getInt("wallet_id"),
+                            resultSet.getString("wallet_label"),
+                            resultSet.getInt("user_id"),
+                            resultSet.getFloat("budget_limit"),
+                            resultSet.getFloat("total_expenses"),
+                            String.valueOf(LocalDate.parse(resultSet.getDate("start_date").toString()).getMonthValue())
+                    );
+                    budgetList.add(budget);
+                }
+                return budgetList;
             }
-            return budgetList;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
